@@ -3,7 +3,7 @@
     justify-content: space-between;
     align-items: center;
     padding: var(--spacing-sm, 0.5rem) var(--spacing-lg, 2rem);
-    background-color: var(--primary-700, #ff8d0b);
+    background-color: var(--primary-800, #ff8d0b);
     color: var(--gray-100, white);
 }
 
@@ -26,5 +26,5 @@
 }
 
 .link:hover {
-    background-color: var(--primary-500, rgba(255, 255, 255, 0.1));
+    background-color: var(--primary-700, rgba(255, 255, 255, 0.1));
 }

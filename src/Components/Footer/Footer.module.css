@@ -1,3 +1,18 @@
-.footer{
-    color: var(--primary-color-400);
+.footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: var(--spacing-lg, 2rem);
+    background-color: var(--gray-600, #555);
+    color: var(--color-text-light, white);
+    margin-top: auto;
+}
+
+.content {
+    text-align: center;
+}
+
+.content p {
+    margin: 0;
+    font-size: var(--font-size-sm, 0.9rem);
 }

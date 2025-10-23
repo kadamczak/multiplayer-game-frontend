@@ -1,10 +1,14 @@
 import React from 'react'
+import styles from './HomePage.module.css'
 
-type Props = {}
-
-const HomePage = (props: Props) => {
+const HomePage = () => {
   return (
-    <div>HomePage</div>
+    <div className={styles.container}>
+      <h1 className={styles.title}>Welcome to Multiplayer Game</h1>
+      <p className={styles.description}>
+        Join players from around the world in an exciting gaming experience.
+      </p>
+    </div>
   )
 }
 
