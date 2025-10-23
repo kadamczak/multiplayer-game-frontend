@@ -1,3 +1,30 @@
-.navbar{
-    color: var(--primary-color-600);
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--spacing-sm, 0.5rem) var(--spacing-lg, 2rem);
+    background-color: var(--primary-700, #ff8d0b);
+    color: var(--gray-100, white);
+}
+
+.leftLinks {
+    display: flex;
+    gap: var(--spacing-md, 1.5rem);
+}
+
+.rightLinks {
+    display: flex;
+    gap: var(--spacing-sm, 1rem);
+}
+
+.link {
+    color: var(--text-color-light, white);
+    text-decoration: none;
+    padding: var(--spacing-sm, 0.5rem) var(--spacing-sm, 1rem);
+    border-radius: var(--border-radius, 4px);
+    transition: background-color var(--transition-duration, 0.3s) ease;
+}
+
+.link:hover {
+    background-color: var(--primary-500, rgba(255, 255, 255, 0.1));
 }
