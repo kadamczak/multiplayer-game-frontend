@@ -36,8 +36,8 @@ const RegisterPage = () => {
 
         console.log(result.errors)
 
-        if (result.errors.Username) {
-          setUsernameError(result.errors.Username.join('\n'))
+        if (result.errors.UserName) {
+          setUsernameError(result.errors.UserName.join('\n'))
         }
         if (result.errors.Email) {
           setEmailError(result.errors.Email.join('\n'))
@@ -137,7 +137,6 @@ const RegisterPage = () => {
           </div>
 
           {generalError && <p className={styles.error}>{generalError}</p>}
-
           {success && <p className={styles.success}>Registration successful!</p>}
 
           <button type="submit" className={styles.submitButton} disabled={success}>

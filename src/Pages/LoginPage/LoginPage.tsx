@@ -1,15 +1,39 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import styles from './LoginPage.module.css'
+import { USER_VALIDATION_RULES } from '../../Constants/Validation/UserValidationRules'
+import { login } from '../../Services/AuthService'
+
 
 const LoginPage = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const [generalError, setGeneralError] = useState('')
+  const [success, setSuccess] = useState(false)
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // TODO: Implement login logic
-    console.log('Login attempt:', { username, password })
+    clearAllErrors()
+
+    const result = await login({ username, password })
+
+    if (!result.success) {
+      setGeneralError(result.title || 'Login failed')
+      return
+    }
+
+    // Successful login
+    setSuccess(true)
+
+    // Save access token in memory (refreshToken is in cookie)
+
+    // Redirect to home page
+    window.location.href = '/'
+  }
+
+  const clearAllErrors = () => {
+    setGeneralError('')
   }
 
   return (
@@ -29,6 +53,8 @@ const LoginPage = () => {
               onChange={(e) => setUsername(e.target.value)}
               className={styles.input}
               required
+              minLength={USER_VALIDATION_RULES.USERNAME.MIN_LENGTH}
+              maxLength={USER_VALIDATION_RULES.USERNAME.MAX_LENGTH}
             />
           </div>
 
@@ -43,10 +69,14 @@ const LoginPage = () => {
               onChange={(e) => setPassword(e.target.value)}
               className={styles.input}
               required
+              maxLength={USER_VALIDATION_RULES.PASSWORD.MAX_LENGTH}
             />
           </div>
 
-          <button type="submit" className={styles.submitButton}>
+          {generalError && <p className={styles.error}>{generalError}</p>}
+          {success && <p className={styles.success}>Login successful!</p>}
+
+          <button type="submit" className={styles.submitButton} disabled={success}>
             Login
           </button>
         </form>
