@@ -10,7 +10,7 @@ export type TokenResponseDto = {
 }
 
 export type RegisterRequestDto = {
-    username: string
+    userName: string
     email: string
     password: string
 }

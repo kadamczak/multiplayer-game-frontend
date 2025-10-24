@@ -1,86 +1,33 @@
 import type { LoginRequestDto, RegisterRequestDto, TokenResponseDto } from "../Models/Identity";
+import type { ApiResponse } from "../Models/ApiResponse";
+import { apiRequest } from "./ApiMethods";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL
 
-export const register = async (
+export const registerAPI = async (
   data: RegisterRequestDto
-): Promise<{ 
-  success: boolean; 
-  title?: string;
-  errors?: Record<string, string[]>;
-}> => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/v1/identity/register`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
+): Promise<ApiResponse<void>> => {
 
-    if (response.ok) {
-      return { success: true };
-    }
-
-    const responseData = await response.json();
-    
-    if (responseData.errors) {
-      return {
-        success: false,
-        title: responseData.title || 'Validation failed.',
-        errors: responseData.errors
-      };
-    }
-
-    return {
-      success: false,
-      title: responseData.title || 'Registration failed.'
-    };
-
-  } catch (error) {
-    return { success: false, title: 'Unknown error. Please try again.' };
-  }
+  return apiRequest<void>(`${API_BASE_URL}/v1/identity/register`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(data),
+  });
 };
 
-export const login = async (
+export const loginAPI = async (
   data: LoginRequestDto
-): Promise<{ 
-  success: boolean; 
-  title?: string;
-  errors?: Record<string, string[]>;
-  body?: TokenResponseDto;
-}> => {
-  try {
-    const response = await fetch(`${API_BASE_URL}/v1/identity/login`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Client-Type': 'Browser'
-      },
-      credentials: "include",
-      body: JSON.stringify(data),
-    });
+): Promise<ApiResponse<TokenResponseDto>> => {
 
-    const responseData = await response.json();
-
-    if (response.ok) {
-      return { success: true, body: responseData.body };
-    }
-    
-    if (responseData.errors) {
-      return {
-        success: false,
-        title: responseData.title || 'Validation failed.',
-        errors: responseData.errors
-      };
-    }
-
-    return {
-      success: false,
-      title: responseData.title || 'Login failed.'
-    };
-
-  } catch (error) {
-    return { success: false, title: 'Unknown error. Please try again.' };
-  }
+  return apiRequest<TokenResponseDto>(`${API_BASE_URL}/v1/identity/login`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Client-Type': 'Browser'
+    },
+    credentials: 'include',
+    body: JSON.stringify(data),
+  });
 };

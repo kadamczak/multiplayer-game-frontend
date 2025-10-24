@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import styles from './LoginPage.module.css'
 import { USER_VALIDATION_RULES } from '../../Constants/Validation/UserValidationRules'
-import { login } from '../../Services/AuthService'
+import { loginAPI } from '../../Services/AuthService'
 
 
 const LoginPage = () => {
+  const navigate = useNavigate();
+
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
 
@@ -16,20 +18,22 @@ const LoginPage = () => {
     e.preventDefault()
     clearAllErrors()
 
-    const result = await login({ username, password })
+    const result = await loginAPI({ username, password })
 
-    if (!result.success) {
-      setGeneralError(result.title || 'Login failed')
-      return
-    }
+    // if (!result.success) {
+    //   setGeneralError(result.title || 'Login failed')
+    //   return
+    // }
 
     // Successful login
     setSuccess(true)
 
-    // Save access token in memory (refreshToken is in cookie)
+    // Save accessToken in memory
+    // (refreshToken is in cookie)
+
 
     // Redirect to home page
-    window.location.href = '/'
+    navigate("/")
   }
 
   const clearAllErrors = () => {
