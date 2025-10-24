@@ -1,65 +1,90 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import styles from './LoginPage.module.css'
 import { USER_VALIDATION_RULES } from '../../Constants/Validation/UserValidationRules'
-import { loginAPI } from '../../Services/AuthService'
+import { useAuth } from '../../Context/useAuth'
+import { useForm } from 'react-hook-form'
+import { getFieldErrors } from '../../Models/ApiResponse'
+import { applyServerFieldErrors } from '../../Helpers/FormHelpers'
+
+type LoginFormData = {
+  userName: string
+  password: string
+}
 
 
 const LoginPage = () => {
   const navigate = useNavigate();
-
-  const [username, setUsername] = useState('')
-  const [password, setPassword] = useState('')
-
+  const {loginUser} = useAuth();
   const [generalError, setGeneralError] = useState('')
   const [success, setSuccess] = useState(false)
+  
+  const {
+      register,
+      handleSubmit,
+      setError,
+      formState: { errors, isSubmitting }
+    } = useForm<LoginFormData>({
+      mode: 'onBlur',
+    })
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    clearAllErrors()
+  const onSubmit = async (data: LoginFormData) => {
 
-    const result = await loginAPI({ username, password })
+    const result = await loginUser({
+      username: data.userName,
+      password: data.password,
+    })
 
-    // if (!result.success) {
-    //   setGeneralError(result.title || 'Login failed')
-    //   return
-    // }
+    if (!result.success) {
+      const fieldErrors = getFieldErrors(result.problem)
+
+      if (fieldErrors) {
+        applyServerFieldErrors(setError, fieldErrors)
+        setGeneralError('')
+      } else {
+        setGeneralError(result.problem.title)
+      }
+      return
+    }
 
     // Successful login
     setSuccess(true)
-
-    // Save accessToken in memory
-    // (refreshToken is in cookie)
-
-
-    // Redirect to home page
-    navigate("/")
+    
+    // Redirect to home page after 1 second
+    setTimeout(() => {
+      navigate('/')
+    }, 1000)
   }
 
-  const clearAllErrors = () => {
-    setGeneralError('')
-  }
 
   return (
     <div className={styles.container}>
       <div className={styles.formWrapper}>
         <h1 className={styles.title}>Login</h1>
         
-        <form onSubmit={handleSubmit} className={styles.form}>
+        <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
           <div className={styles.inputGroup}>
-            <label htmlFor="username" className={styles.label}>
+            <label htmlFor="userName" className={styles.label}>
               Username
             </label>
             <input
               type="text"
-              id="username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              id="userName"
+              {...register('userName', {
+                required: 'Username is required',
+                // pattern: regex
+                minLength: {
+                  value: USER_VALIDATION_RULES.USERNAME.MIN_LENGTH,
+                  message: `Username must be at least ${USER_VALIDATION_RULES.USERNAME.MIN_LENGTH} characters`
+                },
+                maxLength: {
+                  value: USER_VALIDATION_RULES.USERNAME.MAX_LENGTH,
+                  message: `Username must not exceed ${USER_VALIDATION_RULES.USERNAME.MAX_LENGTH} characters`
+                }
+              })}
               className={styles.input}
-              required
-              minLength={USER_VALIDATION_RULES.USERNAME.MIN_LENGTH}
-              maxLength={USER_VALIDATION_RULES.USERNAME.MAX_LENGTH}
             />
+            {errors.userName && <p className={styles.fieldError}>{errors.userName.message}</p>}
           </div>
 
           <div className={styles.inputGroup}>
@@ -69,19 +94,23 @@ const LoginPage = () => {
             <input
               type="password"
               id="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              {...register('password', {
+                required: 'Password is required',
+                maxLength: {
+                  value: USER_VALIDATION_RULES.PASSWORD.MAX_LENGTH,
+                  message: `Password must not exceed ${USER_VALIDATION_RULES.PASSWORD.MAX_LENGTH} characters`
+                }
+              })}
               className={styles.input}
-              required
-              maxLength={USER_VALIDATION_RULES.PASSWORD.MAX_LENGTH}
             />
+            {errors.password && <p className={styles.fieldError}>{errors.password.message}</p>}
           </div>
 
           {generalError && <p className={styles.error}>{generalError}</p>}
           {success && <p className={styles.success}>Login successful!</p>}
 
-          <button type="submit" className={styles.submitButton} disabled={success}>
-            Login
+          <button type="submit" className={styles.submitButton} disabled={isSubmitting || success}>
+            {isSubmitting ? 'Logging in...' : 'Login'}
           </button>
         </form>
 

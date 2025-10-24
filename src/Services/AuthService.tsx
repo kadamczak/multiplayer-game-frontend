@@ -1,6 +1,6 @@
 import type { LoginRequestDto, RegisterRequestDto, TokenResponseDto } from "../Models/Identity";
 import type { ApiResponse } from "../Models/ApiResponse";
-import { apiRequest } from "./ApiMethods";
+import { apiRequest } from "./ApiMethodHelpers";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL
 

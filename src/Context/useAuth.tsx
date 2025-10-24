@@ -20,7 +20,7 @@ const UserContext = createContext<UserContextType>({} as UserContextType);
 export const UserProvider = ({children}: Props) => {
     const [user, setUser] = useState<UserProfile | null>(null);
     const [accessToken, setAccessToken] = useState<string | null>(null);
-    const [isReady] = useState(true); // Set to true to show content immediately
+    const [isReady] = useState(true); //for now
 
     const registerUser = async (data: RegisterRequestDto): Promise<ApiResponse<void>> => {
         const result = await registerAPI(data)
@@ -31,11 +31,10 @@ export const UserProvider = ({children}: Props) => {
         const result = await loginAPI(data)
         
         if (result.success) {
-            // Store access token in memory
-            setAccessToken(result.data.accessToken)
+            setAccessToken(result.data.accessToken) // access token -> in memory
             // TODO: Fetch user profile and set user state
         }
-        
+    
         return result
     }
 

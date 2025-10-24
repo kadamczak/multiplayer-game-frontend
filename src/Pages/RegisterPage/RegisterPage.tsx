@@ -5,6 +5,7 @@ import styles from './RegisterPage.module.css'
 import { useAuth } from '../../Context/useAuth'
 import { USER_VALIDATION_RULES } from '../../Constants/Validation/UserValidationRules'
 import { getFieldErrors } from '../../Models/ApiResponse'
+import { applyServerFieldErrors } from '../../Helpers/FormHelpers'
 
 type RegisterFormData = {
   userName: string
@@ -22,7 +23,7 @@ const RegisterPage = () => {
   const {
     register,
     handleSubmit,
-    watch,
+    watch, // for dependent validation (e.g., confirm password)
     setError,
     formState: { errors, isSubmitting }
   } = useForm<RegisterFormData>({
@@ -41,20 +42,11 @@ const RegisterPage = () => {
     })
 
     if (!result.success) {
-      // Handle field-specific errors from ASP.NET validation
       const fieldErrors = getFieldErrors(result.problem)
-      console.log(fieldErrors)
-      
+
       if (fieldErrors) {
-        // Set errors for each field
-        Object.entries(fieldErrors).forEach(([field, message]) => {
-          setError(field as keyof RegisterFormData, {
-            type: 'server',
-            message: message
-          })
-        })
+        applyServerFieldErrors(setError, fieldErrors)
       } else {
-        // Set general error if no field-specific errors
         setGeneralError(result.problem.title)
       }
       return
