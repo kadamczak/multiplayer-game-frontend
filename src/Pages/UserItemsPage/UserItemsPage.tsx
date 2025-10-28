@@ -3,9 +3,11 @@ import styles from './UserItemsPage.module.css'
 import { useAuth } from '../../Context/useAuth'
 import { getCurrentUserItemsAPI } from '../../Services/UserItemService'
 import type { UserItemResponse } from '../../Models/UserItem'
+import { useNavigate } from 'react-router-dom'
 
 const UserItemsPage = () => {
-  const { accessToken } = useAuth();
+  const navigate = useNavigate();
+  const { accessToken, setAccessToken } = useAuth();
   const [items, setItems] = useState<UserItemResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -15,19 +17,21 @@ const UserItemsPage = () => {
       setLoading(true);
       setError('');
 
-      const result = await getCurrentUserItemsAPI(accessToken);
+      const result = await getCurrentUserItemsAPI(accessToken, (newToken) => {
+        setAccessToken(newToken); // Update token in context on refresh
+      });
 
       if (result.success) {
         setItems(result.data);
       } else {
-        setError(result.problem.title);
+        setError(result.problem.title || 'Failed to load items');
       }
 
       setLoading(false);
     }
 
     fetchItems();
-  }, [])
+  }, [accessToken, setAccessToken]);
 
   if (loading) {
     return <div className={styles.container}>Loading...</div>;

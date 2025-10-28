@@ -1,6 +1,7 @@
 import type { ApiResponse, ProblemDetails } from "../Models/ApiResponse";
 import { refreshTokenAPI } from "./AuthService";
 
+
 // Helper function to parse error responses
 const parseProblemDetails = async (response: Response): Promise<ProblemDetails> => {
   const contentType = response.headers.get('content-type');
@@ -83,28 +84,30 @@ export const authenticatedRequest = async <T>(
   });
 };
 
+// implement request with automatic refresh
 export const authenticatedRequestWithRefresh = async <T>(
   url: string,
   accessToken: string | null,
-  options: RequestInit = {},
-  refreshCallback: (newToken: string) => void
+  onTokenRefresh: (newToken: string) => void,
+  options: RequestInit = {}
 ): Promise<ApiResponse<T>> => {
-  // First attempt with current token
-  let result = await authenticatedRequest<T>(url, accessToken, options);
+  let response = await authenticatedRequest<T>(url, accessToken, options);
 
-  // If unauthorized (401), try to refresh and retry
-  if (!result.success && result.problem.status === 401) {
+  // If unauthorized, attempt to refresh token and retry once
+  if (!response.success && response.problem.status === 401) {
     const refreshResult = await refreshTokenAPI();
 
     if (refreshResult.success) {
-      // Update token and retry the original request
       const newToken = refreshResult.data.accessToken;
-      refreshCallback(newToken);
-      
-      // Retry with new token
-      result = await authenticatedRequest<T>(url, newToken, options);
+      onTokenRefresh(newToken); // Update token in context
+
+      // Retry original request with new token
+      response = await authenticatedRequest<T>(url, newToken, options);
+    } else {
+      // Refresh failed, return original unauthorized response
+      return response;
     }
   }
 
-  return result;
-};
+  return response;
+}

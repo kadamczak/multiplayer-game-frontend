@@ -41,6 +41,7 @@ export const refreshTokenAPI = async (): Promise<ApiResponse<TokenResponseDto>> 
       'X-Client-Type': 'Browser'
     },
     credentials: 'include',
+    body: '""', // Add empty JSON string for optional [FromBody] string? parameter
   });
 }
 

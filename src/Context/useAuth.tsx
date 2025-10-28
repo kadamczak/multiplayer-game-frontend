@@ -25,6 +25,7 @@ export const UserProvider = ({children}: Props) => {
     const [accessToken, setAccessToken] = useState<string | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const hasInitialized = useRef(false);
+    const refreshPromise = useRef<Promise<boolean> | null>(null);
 
     // Attempt to refresh token on mount (page reload)
     useEffect(() => {
@@ -32,6 +33,7 @@ export const UserProvider = ({children}: Props) => {
             if (hasInitialized.current) return;
             hasInitialized.current = true;
             
+            console.log('useAuth: Initializing authentication...');
             await refresh();
             setIsLoading(false);
         };
@@ -55,20 +57,38 @@ export const UserProvider = ({children}: Props) => {
     }
 
     const refresh = async (): Promise<boolean> => {
-        const result = await refreshTokenAPI();
-        
-        if (result.success) {
-            setAccessToken(result.data.accessToken);
-            // TODO: Extract username from token or fetch user profile
-            // For now, you might need to decode the JWT or make another API call
-            setUserName("REFRESHED USER");
-            return true;
+        // If a refresh is already in progress, wait for it
+        if (refreshPromise.current) {
+            console.log('useAuth: Refresh already in progress, waiting...');
+            return refreshPromise.current;
         }
         
-        // Clear state if refresh fails
-        setAccessToken(null);
-        setUserName(null);
-        return false;
+        // Create and store the refresh promise
+        refreshPromise.current = (async () => {
+            try {
+                const result = await refreshTokenAPI();
+                
+                if (result.success) {
+                    console.log('useAuth: Token refresh succeeded');
+                    setAccessToken(result.data.accessToken);
+                    const payload = JSON.parse(atob(result.data.accessToken.split('.')[1]));
+                    const username = payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] || data.username;
+                    
+                    setUserName(username);
+                    return true;
+                }
+                
+                setAccessToken(null);
+                setUserName(null);
+                return false;
+            } finally {
+                setTimeout(() => {
+                    refreshPromise.current = null;
+                }, 1000);
+            }
+        })();
+        
+        return refreshPromise.current;
     }
 
     const logout = async () => {
