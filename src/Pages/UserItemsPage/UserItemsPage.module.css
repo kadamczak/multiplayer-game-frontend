@@ -1,0 +1,24 @@
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--spacing-2xl);
+}
+
+.container h1 {
+  font-size: var(--font-size-3xl);
+  color: var(--primary-500);
+  margin-bottom: var(--spacing-xl);
+}
+
+.container ul {
+  list-style: none;
+  padding: 0;
+}
+
+.container li {
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  color: var(--gray-100);
+}

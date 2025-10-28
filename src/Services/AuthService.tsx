@@ -1,6 +1,6 @@
 import type { LoginRequestDto, RegisterRequestDto, TokenResponseDto } from "../Models/Identity";
 import type { ApiResponse } from "../Models/ApiResponse";
-import { apiRequest } from "./ApiMethodHelpers";
+import { apiRequest, authenticatedRequest } from "./ApiMethodHelpers";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL
 
@@ -30,4 +30,32 @@ export const loginAPI = async (
     credentials: 'include',
     body: JSON.stringify(data),
   });
+};
+
+
+export const refreshTokenAPI = async (): Promise<ApiResponse<TokenResponseDto>> => {
+  return apiRequest<TokenResponseDto>(`${API_BASE_URL}/v1/identity/refresh`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Client-Type': 'Browser'
+    },
+    credentials: 'include',
+  });
+}
+
+
+export const logoutAPI = async (): Promise<ApiResponse<void>> => {
+  return authenticatedRequest<void>(
+    `${API_BASE_URL}/v1/identity/logout`,
+    null,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Client-Type': 'Browser'
+      },
+      body: JSON.stringify(null)
+    }
+  );
 };

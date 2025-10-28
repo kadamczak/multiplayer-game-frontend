@@ -4,8 +4,9 @@ export const applyServerFieldErrors = <TFieldValues extends FieldValues = Record
   setError: UseFormSetError<TFieldValues>,
   fieldErrors?: Record<string, string>
 ) => {
-  if (!fieldErrors) return
+  if (!fieldErrors) return;
+  
   Object.entries(fieldErrors).forEach(([field, message]) => {
     setError(field as any, { type: 'server', message })
-  })
+  });
 }

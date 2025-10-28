@@ -15,10 +15,10 @@ type RegisterFormData = {
 }
 
 const RegisterPage = () => {
-  const navigate = useNavigate()
-  const { registerUser } = useAuth()
-  const [generalError, setGeneralError] = useState('')
-  const [success, setSuccess] = useState(false)
+  const navigate = useNavigate();
+  const { registerUser } = useAuth();
+  const [generalError, setGeneralError] = useState('');
+  const [success, setSuccess] = useState(false);
 
   const {
     register,
@@ -28,37 +28,37 @@ const RegisterPage = () => {
     formState: { errors, isSubmitting }
   } = useForm<RegisterFormData>({
     mode: 'onBlur',
-  })
+  });
 
-  const password = watch('password')
+  const password = watch('password');
 
   const onSubmit = async (data: RegisterFormData) => {
-    setGeneralError('')
+    setGeneralError('');
 
     const result = await registerUser({
       userName: data.userName,
       email: data.email,
       password: data.password,
-    })
+    });
 
     if (!result.success) {
-      const fieldErrors = getFieldErrors(result.problem)
+      const fieldErrors = getFieldErrors(result.problem);
 
       if (fieldErrors) {
-        applyServerFieldErrors(setError, fieldErrors)
+        applyServerFieldErrors(setError, fieldErrors);
       } else {
-        setGeneralError(result.problem.title)
+        setGeneralError(result.problem.title);
       }
       return
     }
 
     // Successful registration
-    setSuccess(true)
+    setSuccess(true);
     
     // Redirect to login page after 2 seconds
     setTimeout(() => {
       navigate('/login')
-    }, 2000)
+    }, 2000);
   }
 
 
@@ -169,4 +169,4 @@ const RegisterPage = () => {
   )
 }
 
-export default RegisterPage
+export default RegisterPage;

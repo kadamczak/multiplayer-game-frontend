@@ -26,34 +26,34 @@ const LoginPage = () => {
       formState: { errors, isSubmitting }
     } = useForm<LoginFormData>({
       mode: 'onBlur',
-    })
+    });
 
   const onSubmit = async (data: LoginFormData) => {
 
     const result = await loginUser({
       username: data.userName,
       password: data.password,
-    })
+    });
 
     if (!result.success) {
-      const fieldErrors = getFieldErrors(result.problem)
+      const fieldErrors = getFieldErrors(result.problem);
 
       if (fieldErrors) {
-        applyServerFieldErrors(setError, fieldErrors)
-        setGeneralError('')
+        applyServerFieldErrors(setError, fieldErrors);
+        setGeneralError('');
       } else {
-        setGeneralError(result.problem.title)
+        setGeneralError(result.problem.title);
       }
-      return
+      return;
     }
 
     // Successful login
-    setSuccess(true)
+    setSuccess(true);
     
     // Redirect to home page after 1 second
     setTimeout(() => {
       navigate('/')
-    }, 1000)
+    }, 1000);
   }
 
 
@@ -125,4 +125,4 @@ const LoginPage = () => {
   )
 }
 
-export default LoginPage
+export default LoginPage;
