@@ -1,4 +1,4 @@
-import type { LoginRequestDto, RegisterRequestDto, TokenResponseDto } from "../Models/Identity";
+import type { LoginRequestDto, RegisterRequestDto, TokenResponseDto } from "../Models/IdentityModels";
 import type { ApiResponse } from "../Models/ApiResponse";
 import { apiRequest, authenticatedRequest } from "./ApiMethodHelpers";
 

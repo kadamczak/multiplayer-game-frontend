@@ -1,5 +1,5 @@
 import { createContext, useContext, useState, useEffect, useRef } from "react";
-import type { RegisterRequestDto, LoginRequestDto, TokenResponseDto } from "../Models/Identity"
+import type { RegisterRequestDto, LoginRequestDto, TokenResponseDto } from "../Models/IdentityModels"
 import type { ApiResponse } from "../Models/ApiResponse"
 import { registerAPI, loginAPI, logoutAPI, refreshTokenAPI } from "../Services/AuthService";
 import { useNavigate } from "react-router-dom";
@@ -72,7 +72,7 @@ export const UserProvider = ({children}: Props) => {
                     console.log('useAuth: Token refresh succeeded');
                     setAccessToken(result.data.accessToken);
                     const payload = JSON.parse(atob(result.data.accessToken.split('.')[1]));
-                    const username = payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] || data.username;
+                    const username = payload['http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name'] as string;
                     
                     setUserName(username);
                     return true;

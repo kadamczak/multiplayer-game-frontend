@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import styles from './UserItemsPage.module.css'
 import { useAuth } from '../../Context/useAuth'
-import { getCurrentUserItemsAPI } from '../../Services/UserItemService'
-import type { UserItemResponse } from '../../Models/UserItem'
+import { getCurrentUserItemsAPI } from '../../Services/ItemService'
+import { type UserItemSimplifiedResponse, ItemTypeDisplay } from '../../Models/ItemModels'
 import { useNavigate } from 'react-router-dom'
 
 const UserItemsPage = () => {
   const navigate = useNavigate();
   const { accessToken, setAccessToken } = useAuth();
-  const [items, setItems] = useState<UserItemResponse[]>([]);
+  const [items, setItems] = useState<UserItemSimplifiedResponse[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
@@ -50,7 +50,11 @@ const UserItemsPage = () => {
       ) : (
         <ul>
           {items.map((userItem) => (
-            <li key={userItem.id}>{userItem.item.name}</li>
+            <li key={userItem.id}>
+              <strong>{userItem.item.name}</strong>
+              <p>{ItemTypeDisplay[userItem.item.type]}</p>
+              <p>{userItem.item.description}</p>
+            </li>
           ))}
         </ul>
       )}

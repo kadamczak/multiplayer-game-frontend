@@ -10,6 +10,7 @@ const Navbar = () => {
       <div className={styles.leftLinks}>
         <Link to="/" className={styles.link}>Home</Link>
         <Link to="/my-items" className={styles.link}>My Items</Link>
+        <Link to="/offers" className={styles.link}>Offers</Link>
       </div>
       <div className={styles.rightLinks}>
         {isLoggedIn() ? (

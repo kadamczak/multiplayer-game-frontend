@@ -6,6 +6,8 @@ import UserItemsPage from "../Pages/UserItemsPage/UserItemsPage";
 import RegisterPage from "../Pages/RegisterPage/RegisterPage";
 import ProtectedRoute from "./ProtectedRoute";
 import ProfilePage from "../Pages/ProfilePage/ProfilePage";
+import ItemsPage from "../Pages/ItemsPage/ItemsPage";
+import OffersPage from "../Pages/OffersPage/OffersPage";
 
 export const router = createBrowserRouter([
   {
@@ -23,6 +25,22 @@ export const router = createBrowserRouter([
           </ProtectedRoute>
         )
       },
+
+      { path: "offers",
+        element: (
+          <ProtectedRoute>
+            <OffersPage />
+          </ProtectedRoute>
+        )
+      },
+
+      // { path: "items",
+      //   element: (
+      //     <ProtectedRoute>
+      //       <ItemsPage />
+      //     </ProtectedRoute>
+      //   )
+      // },
 
       { path: "profile",
         element: (

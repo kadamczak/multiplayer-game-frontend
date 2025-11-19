@@ -1,15 +1,15 @@
 import type { ApiResponse } from "../Models/ApiResponse";
-import type { UserItemResponse } from "../Models/UserItem";
+import type { UserGameInfoResponse } from "../Models/UserModels";
 import { authenticatedRequestWithRefresh } from "./ApiMethodHelpers";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
 
-export const getCurrentUserItemsAPI = async (
+export const getUserGameInfoAPI = async (
   accessToken: string | null,
   onTokenRefresh: (newToken: string) => void
-): Promise<ApiResponse<UserItemResponse[]>> => {
-  return authenticatedRequestWithRefresh<UserItemResponse[]>(
-    `${API_BASE_URL}/v1/users/me/items`,
+): Promise<ApiResponse<UserGameInfoResponse>> => {
+  return authenticatedRequestWithRefresh<UserGameInfoResponse>(
+    `${API_BASE_URL}/v1/users/me/game-info`,
     accessToken,
     onTokenRefresh,
     {
