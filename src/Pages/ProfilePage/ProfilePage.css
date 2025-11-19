@@ -1,0 +1,48 @@
+.profile-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: var(--spacing-2xl);
+}
+
+.profile-container h1 {
+  font-size: var(--font-size-3xl);
+  color: var(--primary-800);
+  margin-bottom: var(--spacing-xl);
+}
+
+.profile-card {
+  background-color: var(--bg-secondary);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-xl);
+  box-shadow: var(--shadow-md);
+}
+
+.profile-section {
+  margin-bottom: var(--spacing-lg);
+}
+
+.profile-section:last-child {
+  margin-bottom: 0;
+}
+
+.profile-section label {
+  display: block;
+  font-size: var(--font-size-sm);
+  color: var(--gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: var(--spacing-xs);
+}
+
+.profile-value {
+  font-size: var(--font-size-xl);
+  color: var(--gray-100);
+  margin: 0;
+  font-weight: 500;
+}
+
+.profile-value.balance {
+  color: var(--primary-500);
+  font-size: var(--font-size-2xl);
+  font-weight: 600;
+}
