@@ -23,4 +23,5 @@ export type ItemResponse = {
 export type UserItemSimplifiedResponse = {
   id: string;
   item: ItemResponse;
+  offerId: string | null;
 }

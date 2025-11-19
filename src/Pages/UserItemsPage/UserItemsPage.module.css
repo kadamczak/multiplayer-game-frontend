@@ -22,3 +22,10 @@
   border-radius: var(--radius-md);
   color: var(--gray-100);
 }
+
+.offerStatus {
+  color: var(--primary-500);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  margin-top: var(--spacing-xs);
+}
