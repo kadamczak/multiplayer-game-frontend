@@ -1,5 +1,5 @@
 import type { ApiResponse } from "../Models/ApiResponse";
-import type { ItemResponse, UserItemOfferResponse, UserItemSimplifiedResponse } from "../Models/ItemModels";
+import type { ItemResponse, ActiveUserItemOfferResponse, UserItemSimplifiedResponse, CreateUserItemOfferRequest } from "../Models/ItemModels";
 import { authenticatedRequestWithRefresh } from "./ApiMethodHelpers";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
@@ -83,8 +83,8 @@ export const getCurrentUserItemsAPI = async (
 export const getOffersAPI = async (
   accessToken: string | null,
   onTokenRefresh: (newToken: string) => void
-): Promise<ApiResponse<UserItemOfferResponse[]>> => {
-  return authenticatedRequestWithRefresh<UserItemOfferResponse[]>(
+): Promise<ApiResponse<ActiveUserItemOfferResponse[]>> => {
+  return authenticatedRequestWithRefresh<ActiveUserItemOfferResponse[]>(
     `${API_BASE_URL}/v1/users/offers`,
     accessToken,
     onTokenRefresh,
@@ -96,9 +96,8 @@ export const getOffersAPI = async (
 
 export const createUserItemOfferAPI = async (
   accessToken: string | null,
-  onTokenRefresh: (newToken: string,
+  onTokenRefresh: (newToken: string) => void,
   itemData: CreateUserItemOfferRequest
-  ) => void
 ): Promise<ApiResponse<void>> => {
   return authenticatedRequestWithRefresh<void>(
     `${API_BASE_URL}/v1/users/offers`,
@@ -107,6 +106,21 @@ export const createUserItemOfferAPI = async (
     {
       method: 'POST',
       body: JSON.stringify(itemData),
+    }
+  );
+};
+
+export const purchaseUserItemOfferAPI = async (
+  accessToken: string | null,
+  onTokenRefresh: (newToken: string) => void,
+  offerId: string
+): Promise<ApiResponse<void>> => {
+  return authenticatedRequestWithRefresh<void>(
+    `${API_BASE_URL}/v1/users/offers/${offerId}/purchase`,
+    accessToken,
+    onTokenRefresh,
+    {
+      method: 'POST'
     }
   );
 };
