@@ -55,7 +55,7 @@ const ProfilePage = () => {
 
         <div className="profile-section">
           <label>Account Balance</label>
-          <p className="profile-value balance">{userInfo.balance}</p>
+          <p className="profile-value balance">{userInfo.balance} Gems</p>
         </div>
       </div>
     </div>

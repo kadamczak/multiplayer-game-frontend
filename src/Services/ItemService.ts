@@ -1,5 +1,5 @@
 import type { ApiResponse } from "../Models/ApiResponse";
-import type { ItemResponse, UserItemSimplifiedResponse } from "../Models/ItemModels";
+import type { ItemResponse, UserItemOfferResponse, UserItemSimplifiedResponse } from "../Models/ItemModels";
 import { authenticatedRequestWithRefresh } from "./ApiMethodHelpers";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
@@ -72,6 +72,20 @@ export const getCurrentUserItemsAPI = async (
 ): Promise<ApiResponse<UserItemSimplifiedResponse[]>> => {
   return authenticatedRequestWithRefresh<UserItemSimplifiedResponse[]>(
     `${API_BASE_URL}/v1/users/me/items`,
+    accessToken,
+    onTokenRefresh,
+    {
+      method: 'GET',
+    }
+  );
+};
+
+export const getOffersAPI = async (
+  accessToken: string | null,
+  onTokenRefresh: (newToken: string) => void
+): Promise<ApiResponse<UserItemOfferResponse[]>> => {
+  return authenticatedRequestWithRefresh<UserItemOfferResponse[]>(
+    `${API_BASE_URL}/v1/users/offers`,
     accessToken,
     onTokenRefresh,
     {

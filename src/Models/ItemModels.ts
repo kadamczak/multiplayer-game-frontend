@@ -25,3 +25,17 @@ export type UserItemSimplifiedResponse = {
   item: ItemResponse;
   offerId: string | null;
 }
+
+export type UserItemResponse = {
+  id: string;
+  item: ItemResponse;
+  userId: string;
+  userName: string;
+  offerId: string | null;
+}
+
+export type UserItemOfferResponse = {
+  id: string;
+  userItem: UserItemResponse;
+  price: number;
+}
