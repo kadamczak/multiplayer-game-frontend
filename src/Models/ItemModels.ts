@@ -23,7 +23,7 @@ export type ItemResponse = {
 export type UserItemSimplifiedResponse = {
   id: string;
   item: ItemResponse;
-  offerId: string | null;
+  hasActiveOffer: boolean;
 }
 
 export type UserItemResponse = {
@@ -31,11 +31,16 @@ export type UserItemResponse = {
   item: ItemResponse;
   userId: string;
   userName: string;
-  offerId: string | null;
+  hasActiveOffer: boolean;
 }
 
-export type UserItemOfferResponse = {
+export type ActiveUserItemOfferResponse = {
   id: string;
   userItem: UserItemResponse;
   price: number;
+}
+
+export type CreateUserItemOfferRequest = {
+  userItemId: string
+  price: number
 }

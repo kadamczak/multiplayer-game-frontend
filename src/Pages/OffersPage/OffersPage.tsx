@@ -3,7 +3,7 @@ import styles from './OffersPage.module.css'
 import { useAuth } from '../../Context/useAuth'
 import { getOffersAPI } from '../../Services/ItemService'
 import { getUserGameInfoAPI } from '../../Services/UserService'
-import { type UserItemOfferResponse, ItemTypeDisplay } from '../../Models/ItemModels'
+import { type ActiveUserItemOfferResponse, ItemTypeDisplay } from '../../Models/ItemModels'
 import type { UserGameInfoResponse } from '../../Models/UserModels'
 
 const OffersPage = () => {

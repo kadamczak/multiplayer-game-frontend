@@ -93,3 +93,20 @@ export const getOffersAPI = async (
     }
   );
 };
+
+export const createUserItemOfferAPI = async (
+  accessToken: string | null,
+  onTokenRefresh: (newToken: string,
+  itemData: CreateUserItemOfferRequest
+  ) => void
+): Promise<ApiResponse<void>> => {
+  return authenticatedRequestWithRefresh<void>(
+    `${API_BASE_URL}/v1/users/offers`,
+    accessToken,
+    onTokenRefresh,
+    {
+      method: 'POST',
+      body: JSON.stringify(itemData),
+    }
+  );
+};

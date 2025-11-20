@@ -54,7 +54,7 @@ const UserItemsPage = () => {
               <strong>{userItem.item.name}</strong>
               <p>{ItemTypeDisplay[userItem.item.type]}</p>
               <p>{userItem.item.description}</p>
-              {userItem.offerId && (
+              {userItem.hasActiveOffer && (
                 <p className={styles.offerStatus}>Awaiting Trade</p>
               )}
             </li>
