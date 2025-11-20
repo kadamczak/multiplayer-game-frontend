@@ -63,6 +63,14 @@
   gap: var(--spacing-lg);
 }
 
+.thumbnail {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  flex-shrink: 0;
+}
+
 .itemInfo {
   flex: 1;
 }

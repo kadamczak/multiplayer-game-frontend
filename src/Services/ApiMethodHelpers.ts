@@ -1,5 +1,6 @@
 import type { ApiResponse, ProblemDetails } from "../Models/ApiResponse";
 import { refreshTokenAPI } from "./AuthService";
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 
 
 // Helper function to parse error responses
@@ -111,3 +112,76 @@ export const authenticatedRequestWithRefresh = async <T>(
 
   return response;
 }
+
+// Image cache storage
+// Key: URL, Value: { blob: string, etag: string, lastModified: string }
+const imageCache: Map<string, { blob: string; etag: string; lastModified: string }> = new Map();
+
+
+export const fetchImageWithCache = async (
+  thumbnail_url: string,
+  accessToken: string | null
+): Promise<string | null> => {
+  try {
+    const url = API_BASE_URL + thumbnail_url;
+    const headers: Record<string, string> = {};
+
+    if (accessToken) {
+      headers['Authorization'] = `Bearer ${accessToken}`;
+    }
+
+    // Check if we have cached version and add conditional headers
+    if (imageCache.has(url)) {
+      const cacheEntry = imageCache.get(url)!;
+      if (cacheEntry.etag) {
+        headers['If-None-Match'] = cacheEntry.etag;
+      }
+      if (cacheEntry.lastModified) {
+        headers['If-Modified-Since'] = cacheEntry.lastModified;
+      }
+    }
+
+    const response = await fetch(url, {
+      headers,
+      credentials: 'include',
+    });
+
+    // 304 Not Modified - return cached blob
+    if (response.status === 304) {
+      if (imageCache.has(url)) {
+        return imageCache.get(url)!.blob;
+      }
+      return null;
+    }
+
+    if (!response.ok) {
+      return null;
+    }
+
+    // Get the new image and extract caching headers from response
+    const blob = await response.blob();
+    const objectUrl = URL.createObjectURL(blob);
+
+    const etag = response.headers.get('ETag') || '';
+    const lastModified = response.headers.get('Last-Modified') || '';
+
+    // Cache the blob with headers
+    imageCache.set(url, {
+      blob: objectUrl,
+      etag: etag,
+      lastModified: lastModified
+    });
+
+    return objectUrl;
+  } catch (error) {
+    console.error('Failed to fetch image:', error);
+    return null;
+  }
+};
+
+export const clearImageCache = (): void => {
+  imageCache.forEach((entry) => {
+    URL.revokeObjectURL(entry.blob);
+  });
+  imageCache.clear();
+};

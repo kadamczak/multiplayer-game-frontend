@@ -3,6 +3,7 @@ import styles from './OffersPage.module.css'
 import { useAuth } from '../../Context/useAuth'
 import { getOffersAPI, getCurrentUserItemsAPI, createUserItemOfferAPI, purchaseUserItemOfferAPI } from '../../Services/ItemService'
 import { getUserGameInfoAPI } from '../../Services/UserService'
+import { fetchImageWithCache } from '../../Services/ApiMethodHelpers'
 import { type ActiveUserItemOfferResponse, type UserItemSimplifiedResponse, ItemTypeDisplay } from '../../Models/ItemModels'
 import type { UserGameInfoResponse } from '../../Models/UserModels'
 
@@ -16,6 +17,7 @@ const OffersPage = () => {
   const [isCreating, setIsCreating] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState('');
   const [offerPrice, setOfferPrice] = useState('');
+  const [thumbnails, setThumbnails] = useState<Map<string, string>>(new Map());
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,6 +38,18 @@ const OffersPage = () => {
 
       if (offersResult.success) {
         setOffers(offersResult.data);
+        
+        // Load thumbnails for all offers
+        const newThumbnails = new Map<string, string>();
+        await Promise.all(
+          offersResult.data.map(async (offer) => {
+            const thumbnailUrl = await fetchImageWithCache(offer.userItem.item.thumbnailUrl, accessToken);
+            if (thumbnailUrl) {
+              newThumbnails.set(offer.id, thumbnailUrl);
+            }
+          })
+        );
+        setThumbnails(newThumbnails);
       } else {
         setError(offersResult.problem.title || 'Failed to load offers');
       }
@@ -205,6 +219,13 @@ const OffersPage = () => {
 
             return (
               <li key={offer.id}>
+                {thumbnails.get(offer.id) && (
+                  <img 
+                    src={thumbnails.get(offer.id)} 
+                    alt={offer.userItem.item.name}
+                    className={styles.thumbnail}
+                  />
+                )}
                 <div className={styles.itemInfo}>
                   <strong>{offer.userItem.item.name}</strong>
                   <p>{ItemTypeDisplay[offer.userItem.item.type]}</p>
