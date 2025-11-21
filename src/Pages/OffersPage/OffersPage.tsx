@@ -15,22 +15,25 @@ import type { PagedResponse } from '../../Models/PagedResponse'
 const OffersPage = () => {
   const { accessToken, setAccessToken } = useAuth();
   const { setIsLoading } = useLoading();
+
   const [offers, setOffers] = useState<ActiveUserItemOfferResponse[]>([]);
   const [pagedResponse, setPagedResponse] = useState<PagedResponse<ActiveUserItemOfferResponse> | null>(null);
+
   const [userInfo, setUserInfo] = useState<UserGameInfoResponse | null>(null);
   const [userItems, setUserItems] = useState<UserItemSimplifiedResponse[]>([]);
-  const [initialLoading, setInitialLoading] = useState(true);
-  const [showLoading, setShowLoading] = useState(false);
-  const [isRefreshing, setIsRefreshing] = useState(false);
-  const [error, setError] = useState('');
-  const [isCreating, setIsCreating] = useState(false);
+  
   const [selectedItemId, setSelectedItemId] = useState('');
   const [offerPrice, setOfferPrice] = useState('');
   const [thumbnails, setThumbnails] = useState<Map<string, string>>(new Map());
   
-  // Pagination state
   const [query, setQuery] = useState<PagedQuery>({ ...defaultPagedQuery });
   const [searchInput, setSearchInput] = useState('');
+  
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [showLoading, setShowLoading] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
+  const [isCreating, setIsCreating] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     let loadingTimer: ReturnType<typeof setTimeout> | null = null;

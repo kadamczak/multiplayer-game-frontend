@@ -8,7 +8,9 @@ import type { UserGameInfoResponse } from '../../Models/UserModels'
 const ProfilePage = () => {
   const { accessToken, setAccessToken } = useAuth();
   const { setIsLoading } = useLoading();
+
   const [userInfo, setUserInfo] = useState<UserGameInfoResponse | null>(null);
+
   const [showLoading, setShowLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -17,7 +19,6 @@ const ProfilePage = () => {
       setIsLoading(true);
       setError('');
       
-      // Only show loading indicator if request takes longer than 200ms
       const loadingTimer = setTimeout(() => setShowLoading(true), 200);
 
       const result = await getUserGameInfoAPI(accessToken, (newToken) => {

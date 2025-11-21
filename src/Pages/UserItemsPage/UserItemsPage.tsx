@@ -9,27 +9,27 @@ import { type UserItemSimplifiedResponse, ItemTypeDisplay } from '../../Models/I
 const UserItemsPage = () => {
   const { accessToken, setAccessToken } = useAuth();
   const { isLoading, setIsLoading } = useLoading();
+
   const [items, setItems] = useState<UserItemSimplifiedResponse[]>([]);
+  const [thumbnails, setThumbnails] = useState<Map<string, string>>(new Map());
+
   const [showLoading, setShowLoading] = useState(false);
   const [error, setError] = useState('');
-  const [thumbnails, setThumbnails] = useState<Map<string, string>>(new Map());
 
   useEffect(() => {
     const fetchItems = async () => {
       setIsLoading(true);
       setError('');
       
-      // Only show loading indicator if request takes longer than 200ms
       const loadingTimer = setTimeout(() => setShowLoading(true), 200);
 
       const result = await getCurrentUserItemsAPI(accessToken, (newToken) => {
-        setAccessToken(newToken); // Update token in context on refresh
+        setAccessToken(newToken);
       });
 
       if (result.success) {
         setItems(result.data);
-        
-        // Load thumbnails for all items
+
         const newThumbnails = new Map<string, string>();
         await Promise.all(
           result.data.map(async (userItem) => {

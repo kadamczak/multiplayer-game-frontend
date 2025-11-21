@@ -113,7 +113,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
                 isLoggedIn
             }
         }>
-            {isLoading ? <div>Loading...</div> : children}
+            {isLoading ? <div>Loading user...</div> : children}
         </UserContext.Provider>
     )
 }
