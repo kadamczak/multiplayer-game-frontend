@@ -9,16 +9,18 @@ const ItemsPage = () => {
   const { accessToken, setAccessToken } = useAuth();
   const { setIsLoading } = useLoading();
   const [items, setItems] = useState<ItemResponse[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [showLoading, setShowLoading] = useState(false);
   const [error, setError] = useState('');
   const [isCreating, setIsCreating] = useState(false);
   const [editingId, setEditingId] = useState<number | null>(null);
   const [formData, setFormData] = useState({ name: '', description: '' });
 
   const fetchItems = async () => {
-    setLoading(true);
     setIsLoading(true);
     setError('');
+    
+    // Only show loading indicator if request takes longer than 200ms
+    const loadingTimer = setTimeout(() => setShowLoading(true), 200);
 
     const result = await getItemsAPI(accessToken, (newToken) => {
       setAccessToken(newToken);
@@ -30,7 +32,8 @@ const ItemsPage = () => {
       setError(result.problem.title || 'Failed to load items');
     }
 
-    setLoading(false);
+    clearTimeout(loadingTimer);
+    setShowLoading(false);
     setIsLoading(false);
   }
 
@@ -92,7 +95,7 @@ const ItemsPage = () => {
     setFormData({ name: '', description: '' });
   };
 
-  if (loading) {
+  if (showLoading) {
     return <div className={styles.container}>Loading...</div>;
   }
 

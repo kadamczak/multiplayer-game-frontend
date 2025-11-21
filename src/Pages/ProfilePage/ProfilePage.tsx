@@ -7,14 +7,18 @@ import type { UserGameInfoResponse } from '../../Models/UserModels'
 
 const ProfilePage = () => {
   const { accessToken, setAccessToken } = useAuth();
-  const { isLoading, setIsLoading } = useLoading();
+  const { setIsLoading } = useLoading();
   const [userInfo, setUserInfo] = useState<UserGameInfoResponse | null>(null);
+  const [showLoading, setShowLoading] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchUserInfo = async () => {
       setIsLoading(true);
       setError('');
+      
+      // Only show loading indicator if request takes longer than 200ms
+      const loadingTimer = setTimeout(() => setShowLoading(true), 200);
 
       const result = await getUserGameInfoAPI(accessToken, (newToken) => {
         setAccessToken(newToken);
@@ -26,13 +30,15 @@ const ProfilePage = () => {
         setError(result.problem.title || 'Failed to load user information');
       }
 
+      clearTimeout(loadingTimer);
+      setShowLoading(false);
       setIsLoading(false);
     }
 
     fetchUserInfo();
   }, [accessToken, setAccessToken]);
 
-  if (isLoading) {
+  if (showLoading) {
     return <div className="profile-container">Loading...</div>;
   }
 

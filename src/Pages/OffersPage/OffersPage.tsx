@@ -20,6 +20,7 @@ const OffersPage = () => {
   const [userInfo, setUserInfo] = useState<UserGameInfoResponse | null>(null);
   const [userItems, setUserItems] = useState<UserItemSimplifiedResponse[]>([]);
   const [initialLoading, setInitialLoading] = useState(true);
+  const [showLoading, setShowLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState('');
   const [isCreating, setIsCreating] = useState(false);
@@ -32,10 +33,14 @@ const OffersPage = () => {
   const [searchInput, setSearchInput] = useState('');
 
   useEffect(() => {
+    let loadingTimer: ReturnType<typeof setTimeout> | null = null;
+    
     const fetchData = async () => {
       if (initialLoading) {
         setInitialLoading(true);
         setIsLoading(true);
+        // Only show loading indicator if request takes longer than 200ms
+        loadingTimer = setTimeout(() => setShowLoading(true), 200);
       } else {
         setIsRefreshing(true);
       }
@@ -80,6 +85,10 @@ const OffersPage = () => {
         setUserItems(userItemsResult.data.filter(item => !item.hasActiveOffer));
       }
 
+      if (initialLoading && loadingTimer) {
+        clearTimeout(loadingTimer);
+        setShowLoading(false);
+      }
       setInitialLoading(false);
       setIsRefreshing(false);
       setIsLoading(false);
@@ -161,7 +170,7 @@ const OffersPage = () => {
     setError('');
   };
 
-  if (initialLoading) {
+  if (showLoading) {
     return <div className={styles.container}>Loading...</div>;
   }
 

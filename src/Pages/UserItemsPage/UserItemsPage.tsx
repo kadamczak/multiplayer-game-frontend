@@ -8,8 +8,9 @@ import { type UserItemSimplifiedResponse, ItemTypeDisplay } from '../../Models/I
 
 const UserItemsPage = () => {
   const { accessToken, setAccessToken } = useAuth();
-  const { isLoading, setIsLoading } = useLoading();
+  const { setIsLoading } = useLoading();
   const [items, setItems] = useState<UserItemSimplifiedResponse[]>([]);
+  const [showLoading, setShowLoading] = useState(false);
   const [error, setError] = useState('');
   const [thumbnails, setThumbnails] = useState<Map<string, string>>(new Map());
 
@@ -17,6 +18,9 @@ const UserItemsPage = () => {
     const fetchItems = async () => {
       setIsLoading(true);
       setError('');
+      
+      // Only show loading indicator if request takes longer than 200ms
+      const loadingTimer = setTimeout(() => setShowLoading(true), 200);
 
       const result = await getCurrentUserItemsAPI(accessToken, (newToken) => {
         setAccessToken(newToken); // Update token in context on refresh
@@ -40,13 +44,15 @@ const UserItemsPage = () => {
         setError(result.problem.title || 'Failed to load items');
       }
 
+      clearTimeout(loadingTimer);
+      setShowLoading(false);
       setIsLoading(false);
     }
 
     fetchItems();
   }, [accessToken, setAccessToken]);
 
-  if (isLoading) {
+  if (showLoading) {
     return <div className={styles.container}>Loading...</div>;
   }
 
