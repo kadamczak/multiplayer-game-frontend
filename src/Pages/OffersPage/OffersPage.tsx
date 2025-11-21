@@ -189,12 +189,12 @@ const OffersPage = () => {
               Create Offer
             </button>
           )}
-          {userInfo && (
-            <div className={styles.balanceDisplay}>
-              <span className={styles.balanceLabel}>Your Balance:</span>
-              <span className={styles.balanceValue}>{userInfo.balance} Gems</span>
-            </div>
-          )}
+          <div className={styles.balanceDisplay}>
+            <span className={styles.balanceLabel}>Your Balance:</span>
+            <span className={styles.balanceValue}>
+              {userInfo ? `${userInfo.balance} Gems` : 'Gems'}
+            </span>
+          </div>
         </div>
       </div>
 
