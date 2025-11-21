@@ -17,7 +17,8 @@ const OffersPage = () => {
   const [pagedResponse, setPagedResponse] = useState<PagedResponse<ActiveUserItemOfferResponse> | null>(null);
   const [userInfo, setUserInfo] = useState<UserGameInfoResponse | null>(null);
   const [userItems, setUserItems] = useState<UserItemSimplifiedResponse[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [initialLoading, setInitialLoading] = useState(true);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState('');
   const [isCreating, setIsCreating] = useState(false);
   const [selectedItemId, setSelectedItemId] = useState('');
@@ -30,7 +31,11 @@ const OffersPage = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
+      if (initialLoading) {
+        setInitialLoading(true);
+      } else {
+        setIsRefreshing(true);
+      }
       setError('');
 
       const [offersResult, userInfoResult, userItemsResult] = await Promise.all([
@@ -72,7 +77,8 @@ const OffersPage = () => {
         setUserItems(userItemsResult.data.filter(item => !item.hasActiveOffer));
       }
 
-      setLoading(false);
+      setInitialLoading(false);
+      setIsRefreshing(false);
     }
 
     fetchData();
@@ -151,16 +157,17 @@ const OffersPage = () => {
     setError('');
   };
 
-  if (loading) {
+  if (initialLoading) {
     return <div className={styles.container}>Loading...</div>;
-  }
-
-  if (error) {
-    return <div className={styles.container}>Error: {error}</div>;
   }
 
   return (
     <div className={styles.container}>
+      {isRefreshing && (
+        <div className={styles.refreshIndicator}>
+          Updating...
+        </div>
+      )}
       <div className={styles.header}>
         <h1>Active Offers</h1>
         <div className={styles.headerRight}>
