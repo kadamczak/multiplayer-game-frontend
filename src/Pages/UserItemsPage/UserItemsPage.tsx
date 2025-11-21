@@ -1,22 +1,21 @@
 import { useEffect, useState } from 'react'
 import styles from './UserItemsPage.module.css'
 import { useAuth } from '../../Context/useAuth'
+import { useLoading } from '../../Context/useLoading'
 import { getCurrentUserItemsAPI } from '../../Services/ItemService'
 import { fetchImageWithCache } from '../../Services/ApiMethodHelpers'
 import { type UserItemSimplifiedResponse, ItemTypeDisplay } from '../../Models/ItemModels'
-import { useNavigate } from 'react-router-dom'
 
 const UserItemsPage = () => {
-  const navigate = useNavigate();
   const { accessToken, setAccessToken } = useAuth();
+  const { isLoading, setIsLoading } = useLoading();
   const [items, setItems] = useState<UserItemSimplifiedResponse[]>([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [thumbnails, setThumbnails] = useState<Map<string, string>>(new Map());
 
   useEffect(() => {
     const fetchItems = async () => {
-      setLoading(true);
+      setIsLoading(true);
       setError('');
 
       const result = await getCurrentUserItemsAPI(accessToken, (newToken) => {
@@ -41,13 +40,13 @@ const UserItemsPage = () => {
         setError(result.problem.title || 'Failed to load items');
       }
 
-      setLoading(false);
+      setIsLoading(false);
     }
 
     fetchItems();
   }, [accessToken, setAccessToken]);
 
-  if (loading) {
+  if (isLoading) {
     return <div className={styles.container}>Loading...</div>;
   }
 

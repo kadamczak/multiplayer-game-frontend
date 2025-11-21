@@ -1,8 +1,9 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import styles from './LoginPage.module.css'
 import { USER_VALIDATION_RULES } from '../../Constants/Validation/UserValidationRules'
 import { useAuth } from '../../Context/useAuth'
+import { useLoading } from '../../Context/useLoading'
 import { useForm } from 'react-hook-form'
 import { getFieldErrors } from '../../Models/ApiResponse'
 import { applyServerFieldErrors } from '../../Helpers/FormHelpers'
@@ -16,8 +17,13 @@ type LoginFormData = {
 const LoginPage = () => {
   const navigate = useNavigate();
   const {loginUser} = useAuth();
+  const { setIsLoading } = useLoading();
   const [generalError, setGeneralError] = useState('')
   const [success, setSuccess] = useState(false)
+  
+  useEffect(() => {
+    setIsLoading(false);
+  }, [setIsLoading]);
   
   const {
       register,

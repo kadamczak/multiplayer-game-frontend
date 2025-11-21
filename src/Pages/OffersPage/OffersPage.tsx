@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import styles from './OffersPage.module.css'
 import { useAuth } from '../../Context/useAuth'
+import { useLoading } from '../../Context/useLoading'
 import { getOffersAPI, getCurrentUserItemsAPI, createUserItemOfferAPI, purchaseUserItemOfferAPI } from '../../Services/ItemService'
 import { getUserGameInfoAPI } from '../../Services/UserService'
 import { fetchImageWithCache } from '../../Services/ApiMethodHelpers'
@@ -13,6 +14,7 @@ import type { PagedResponse } from '../../Models/PagedResponse'
 
 const OffersPage = () => {
   const { accessToken, setAccessToken } = useAuth();
+  const { setIsLoading } = useLoading();
   const [offers, setOffers] = useState<ActiveUserItemOfferResponse[]>([]);
   const [pagedResponse, setPagedResponse] = useState<PagedResponse<ActiveUserItemOfferResponse> | null>(null);
   const [userInfo, setUserInfo] = useState<UserGameInfoResponse | null>(null);
@@ -33,6 +35,7 @@ const OffersPage = () => {
     const fetchData = async () => {
       if (initialLoading) {
         setInitialLoading(true);
+        setIsLoading(true);
       } else {
         setIsRefreshing(true);
       }
@@ -79,6 +82,7 @@ const OffersPage = () => {
 
       setInitialLoading(false);
       setIsRefreshing(false);
+      setIsLoading(false);
     }
 
     fetchData();

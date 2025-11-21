@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect, useRef } from "react";
+import { createContext, useContext, useState, useEffect, useRef, type ReactNode } from "react";
 import type { RegisterRequestDto, LoginRequestDto, TokenResponseDto } from "../Models/IdentityModels"
 import type { ApiResponse } from "../Models/ApiResponse"
 import { registerAPI, loginAPI, logoutAPI, refreshTokenAPI } from "../Services/AuthService";
@@ -16,10 +16,9 @@ type UserContextType = {
     isLoggedIn: () => boolean;
 }
 
-type Props = {children: React.ReactNode}
 const UserContext = createContext<UserContextType>({} as UserContextType);
 
-export const UserProvider = ({children}: Props) => {
+export const UserProvider = ({ children }: { children: ReactNode }) => {
     const navigate = useNavigate();
     const [userName, setUserName] = useState<string | null>(null);
     const [accessToken, setAccessToken] = useState<string | null>(null);

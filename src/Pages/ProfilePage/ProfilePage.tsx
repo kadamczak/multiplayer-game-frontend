@@ -1,18 +1,19 @@
 import { useEffect, useState } from 'react'
 import './ProfilePage.css'
 import { useAuth } from '../../Context/useAuth'
+import { useLoading } from '../../Context/useLoading'
 import { getUserGameInfoAPI } from '../../Services/UserService'
 import type { UserGameInfoResponse } from '../../Models/UserModels'
 
 const ProfilePage = () => {
   const { accessToken, setAccessToken } = useAuth();
+  const { isLoading, setIsLoading } = useLoading();
   const [userInfo, setUserInfo] = useState<UserGameInfoResponse | null>(null);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
   useEffect(() => {
     const fetchUserInfo = async () => {
-      setLoading(true);
+      setIsLoading(true);
       setError('');
 
       const result = await getUserGameInfoAPI(accessToken, (newToken) => {
@@ -25,13 +26,13 @@ const ProfilePage = () => {
         setError(result.problem.title || 'Failed to load user information');
       }
 
-      setLoading(false);
+      setIsLoading(false);
     }
 
     fetchUserInfo();
   }, [accessToken, setAccessToken]);
 
-  if (loading) {
+  if (isLoading) {
     return <div className="profile-container">Loading...</div>;
   }
 
