@@ -18,10 +18,8 @@ const OffersPage = () => {
 
   const [offers, setOffers] = useState<ActiveUserItemOfferResponse[]>([]);
   const [pagedResponse, setPagedResponse] = useState<PagedResponse<ActiveUserItemOfferResponse> | null>(null);
-
   const [userInfo, setUserInfo] = useState<UserGameInfoResponse | null>(null);
   const [userItems, setUserItems] = useState<UserItemSimplifiedResponse[]>([]);
-  
   const [selectedItemId, setSelectedItemId] = useState('');
   const [offerPrice, setOfferPrice] = useState('');
   const [thumbnails, setThumbnails] = useState<Map<string, string>>(new Map());

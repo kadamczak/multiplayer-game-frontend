@@ -1,6 +1,6 @@
-import type { LoginRequestDto, RegisterRequestDto, TokenResponseDto } from "../Models/IdentityModels";
+import type { ChangePasswordRequest, DeleteAccountRequest, LoginRequestDto, RegisterRequestDto, TokenResponseDto } from "../Models/IdentityModels";
 import type { ApiResponse } from "../Models/ApiResponse";
-import { apiRequest, authenticatedRequest } from "./ApiMethodHelpers";
+import { apiRequest, authenticatedRequest, authenticatedRequestWithRefresh } from "./ApiMethodHelpers";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL
 
@@ -46,10 +46,14 @@ export const refreshTokenAPI = async (): Promise<ApiResponse<TokenResponseDto>> 
 }
 
 
-export const logoutAPI = async (): Promise<ApiResponse<void>> => {
-  return authenticatedRequest<void>(
+export const logoutAPI = async (
+  accessToken: string | null,
+  onTokenRefresh: (newToken: string) => void,
+): Promise<ApiResponse<void>> => {
+  return authenticatedRequestWithRefresh<void>(
     `${API_BASE_URL}/v1/identity/logout`,
-    null,
+    accessToken,
+    onTokenRefresh,
     {
       method: 'POST',
       headers: {
@@ -57,6 +61,48 @@ export const logoutAPI = async (): Promise<ApiResponse<void>> => {
         'X-Client-Type': 'Browser'
       },
       body: JSON.stringify(null)
+    }
+  );
+};
+
+
+export const changePasswordAPI = async (
+  accessToken: string | null,
+  onTokenRefresh: (newToken: string) => void,
+  data: ChangePasswordRequest,
+): Promise<ApiResponse<void>> => {
+  return authenticatedRequestWithRefresh<void>(
+    `${API_BASE_URL}/v1/identity/change-password`,
+    accessToken,
+    onTokenRefresh,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Client-Type': 'Browser'
+      },
+      body: JSON.stringify(data)
+    }
+  );
+};
+
+
+export const deleteAccountAPI = async (
+  accessToken: string | null,
+  onTokenRefresh: (newToken: string) => void,
+  data: DeleteAccountRequest,
+): Promise<ApiResponse<void>> => {
+  return authenticatedRequestWithRefresh<void>(
+    `${API_BASE_URL}/v1/identity/delete-account`,
+    accessToken,
+    onTokenRefresh,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Client-Type': 'Browser'
+      },
+      body: JSON.stringify(data)
     }
   );
 };
