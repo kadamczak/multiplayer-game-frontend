@@ -299,13 +299,17 @@ const OffersPage = () => {
 
             return (
               <li key={offer.id}>
-                {thumbnails.get(offer.id) && (
-                  <img 
-                    src={thumbnails.get(offer.id)} 
-                    alt={offer.userItem.item.name}
-                    className={styles.thumbnail}
-                  />
-                )}
+                <div className={styles.thumbnailContainer}>
+                  {thumbnails.get(offer.id) ? (
+                    <img 
+                      src={thumbnails.get(offer.id)} 
+                      alt={offer.userItem.item.name}
+                      className={styles.thumbnail}
+                    />
+                  ) : (
+                    <div className={styles.thumbnailPlaceholder} />
+                  )}
+                </div>
                 <div className={styles.itemInfo}>
                   <strong>{offer.userItem.item.name}</strong>
                   <p>{ItemTypeDisplay[offer.userItem.item.type]}</p>
