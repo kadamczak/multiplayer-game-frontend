@@ -8,7 +8,7 @@ import { type UserItemSimplifiedResponse, ItemTypeDisplay } from '../../Models/I
 
 const UserItemsPage = () => {
   const { accessToken, setAccessToken } = useAuth();
-  const { setIsLoading } = useLoading();
+  const { isLoading, setIsLoading } = useLoading();
   const [items, setItems] = useState<UserItemSimplifiedResponse[]>([]);
   const [showLoading, setShowLoading] = useState(false);
   const [error, setError] = useState('');
@@ -64,19 +64,21 @@ const UserItemsPage = () => {
     <div className={styles.container}>
       <h1>My Items</h1>
       
-      {items.length === 0 ? (
+      {!isLoading && items.length === 0 ? (
         <p>No items found.</p>
       ) : (
         <ul>
           {items.map((userItem) => (
             <li key={userItem.id}>
-              {thumbnails.get(userItem.id) && (
-                <img 
-                  src={thumbnails.get(userItem.id)} 
-                  alt={userItem.item.name}
-                  className={styles.thumbnail}
-                />
-              )}
+              <div className={styles.thumbnailWrapper}>
+                {thumbnails.get(userItem.id) && (
+                  <img 
+                    src={thumbnails.get(userItem.id)} 
+                    alt={userItem.item.name}
+                    className={styles.thumbnail}
+                  />
+                )}
+              </div>
               <div className={styles.itemContent}>
                 <strong>{userItem.item.name}</strong>
                 <p>{ItemTypeDisplay[userItem.item.type]}</p>
