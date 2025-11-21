@@ -1,5 +1,8 @@
 import type { ApiResponse } from "../Models/ApiResponse";
 import type { ItemResponse, ActiveUserItemOfferResponse, UserItemSimplifiedResponse, CreateUserItemOfferRequest } from "../Models/ItemModels";
+import type { PagedResponse } from "../Models/PagedResponse";
+import type { PagedQuery } from "../Models/PagedQuery";
+import { pagedQueryToParams } from "../Models/PagedQuery";
 import { authenticatedRequestWithRefresh } from "./ApiMethodHelpers";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
@@ -82,10 +85,12 @@ export const getCurrentUserItemsAPI = async (
 
 export const getOffersAPI = async (
   accessToken: string | null,
-  onTokenRefresh: (newToken: string) => void
-): Promise<ApiResponse<ActiveUserItemOfferResponse[]>> => {
-  return authenticatedRequestWithRefresh<ActiveUserItemOfferResponse[]>(
-    `${API_BASE_URL}/v1/users/offers`,
+  onTokenRefresh: (newToken: string) => void,
+  query: PagedQuery
+): Promise<ApiResponse<PagedResponse<ActiveUserItemOfferResponse>>> => {
+  const params = pagedQueryToParams(query);
+  return authenticatedRequestWithRefresh<PagedResponse<ActiveUserItemOfferResponse>>(
+    `${API_BASE_URL}/v1/users/offers?${params.toString()}`,
     accessToken,
     onTokenRefresh,
     {
