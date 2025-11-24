@@ -83,6 +83,24 @@
   opacity: 0.6;
 }
 
+.forgotPasswordPrompt {
+  text-align: center;
+  margin-top: var(--spacing-lg);
+  font-size: var(--font-size-sm);
+}
+
+.forgotPasswordLink {
+  color: var(--gray-400);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.forgotPasswordLink:hover {
+  color: var(--primary-500);
+  text-decoration: underline;
+}
+
 .registerPrompt {
   text-align: center;
   margin-top: var(--spacing-xl);

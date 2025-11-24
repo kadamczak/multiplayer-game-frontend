@@ -120,6 +120,12 @@ const LoginPage = () => {
           </button>
         </form>
 
+        <p className={styles.forgotPasswordPrompt}>
+          <Link to="/forgot-password" className={styles.forgotPasswordLink}>
+            Forgot your password?
+          </Link>
+        </p>
+
         <p className={styles.registerPrompt}>
           Don't have an account?{' '}
           <Link to="/register" className={styles.registerLink}>

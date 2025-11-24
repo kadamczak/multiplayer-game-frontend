@@ -83,7 +83,6 @@ const RegisterPage = () => {
               id="userName"
               {...register('userName', {
                 required: 'Username is required',
-                // pattern: regex
                 minLength: {
                   value: USER_VALIDATION_RULES.USERNAME.MIN_LENGTH,
                   message: `Username must be at least ${USER_VALIDATION_RULES.USERNAME.MIN_LENGTH} characters`
