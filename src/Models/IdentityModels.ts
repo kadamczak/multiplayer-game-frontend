@@ -18,8 +18,9 @@ export type RegisterRequestDto = {
 export type ChangePasswordRequest = {
     currentPassword: string;
     newPassword: string;
+    //refreshToken: null; // only used by Game clients
 }
 
 export type DeleteAccountRequest = {
-    currentPassword: string;
+    password: string;
 }

@@ -47,13 +47,9 @@ export const refreshTokenAPI = async (): Promise<ApiResponse<TokenResponseDto>> 
 
 
 export const logoutAPI = async (
-  accessToken: string | null,
-  onTokenRefresh: (newToken: string) => void,
 ): Promise<ApiResponse<void>> => {
-  return authenticatedRequestWithRefresh<void>(
+  return apiRequest<void>(
     `${API_BASE_URL}/v1/identity/logout`,
-    accessToken,
-    onTokenRefresh,
     {
       method: 'POST',
       headers: {
@@ -97,7 +93,7 @@ export const deleteAccountAPI = async (
     accessToken,
     onTokenRefresh,
     {
-      method: 'POST',
+      method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         'X-Client-Type': 'Browser'

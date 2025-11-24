@@ -8,6 +8,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import ProfilePage from "../Pages/ProfilePage/ProfilePage";
 import ItemsPage from "../Pages/ItemsPage/ItemsPage";
 import OffersPage from "../Pages/OffersPage/OffersPage";
+import AccountActionsPage from "../Pages/AccountActionsPage/AccountActionsPage";
 
 export const router = createBrowserRouter([
   {
@@ -46,6 +47,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <ProfilePage />
+          </ProtectedRoute>
+        )
+      },
+
+      { path: "account-actions",
+        element: (
+          <ProtectedRoute>
+            <AccountActionsPage />
           </ProtectedRoute>
         )
       },

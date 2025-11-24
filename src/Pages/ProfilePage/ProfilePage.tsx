@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import './ProfilePage.css'
 import { useAuth } from '../../Context/useAuth'
 import { useLoading } from '../../Context/useLoading'
@@ -6,7 +7,7 @@ import { getUserGameInfoAPI } from '../../Services/UserService'
 import type { UserGameInfoResponse } from '../../Models/UserModels'
 
 const ProfilePage = () => {
-  const { accessToken, setAccessToken } = useAuth();
+  const { accessToken, setAccessToken, userName } = useAuth();
   const { setIsLoading } = useLoading();
 
   const [userInfo, setUserInfo] = useState<UserGameInfoResponse | null>(null);
@@ -53,7 +54,14 @@ const ProfilePage = () => {
 
   return (
     <div className="profile-container">
-      <h1>Profile</h1>
+      <div className="profile-header">
+        <h1>Profile</h1>
+        {userName === userInfo.userName && (
+          <Link to="/account-actions" className="manage-account-link">
+            Manage Account
+          </Link>
+        )}
+      </div>
       
       <div className="profile-card">
         <div className="profile-section">

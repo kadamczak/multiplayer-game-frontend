@@ -4,10 +4,33 @@
   padding: var(--spacing-2xl);
 }
 
+.profile-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-xl);
+}
+
 .profile-container h1 {
   font-size: var(--font-size-3xl);
   color: var(--primary-800);
-  margin-bottom: var(--spacing-xl);
+  margin: 0;
+}
+
+.manage-account-link {
+  color: var(--secondary-500);
+  text-decoration: none;
+  font-size: var(--font-size-base);
+  font-weight: 600;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
+  border: 1px solid var(--secondary-500);
+}
+
+.manage-account-link:hover {
+  background-color: var(--secondary-500);
+  color: var(--gray-900);
 }
 
 .profile-card {
