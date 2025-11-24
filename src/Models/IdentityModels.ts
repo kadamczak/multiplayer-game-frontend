@@ -24,3 +24,13 @@ export type ChangePasswordRequest = {
 export type DeleteAccountRequest = {
     password: string;
 }
+
+export type ForgotPasswordRequest = {
+    email: string;
+}
+
+export type ResetPasswordRequest = {
+    email: string;
+    resetToken: string;
+    newPassword: string;
+}

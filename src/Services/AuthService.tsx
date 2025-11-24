@@ -1,4 +1,4 @@
-import type { ChangePasswordRequest, DeleteAccountRequest, LoginRequestDto, RegisterRequestDto, TokenResponseDto } from "../Models/IdentityModels";
+import type { ChangePasswordRequest, DeleteAccountRequest, ForgotPasswordRequest, LoginRequestDto, RegisterRequestDto, ResetPasswordRequest, TokenResponseDto } from "../Models/IdentityModels";
 import type { ApiResponse } from "../Models/ApiResponse";
 import { apiRequest, authenticatedRequest, authenticatedRequestWithRefresh } from "./ApiMethodHelpers";
 
@@ -102,3 +102,35 @@ export const deleteAccountAPI = async (
     }
   );
 };
+
+
+export const forgotPasswordAPI = async (
+  data: ForgotPasswordRequest
+): Promise<ApiResponse<void>> => {
+  return apiRequest<void>(
+    `${API_BASE_URL}/v1/identity/forgot-password`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
+    }
+  );
+};
+
+
+export const resetPasswordAPI = async (
+  data: ResetPasswordRequest
+): Promise<ApiResponse<void>> => {
+  return apiRequest<void>(
+    `${API_BASE_URL}/v1/identity/reset-password`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
+    }
+  );
+}

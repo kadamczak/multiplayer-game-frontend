@@ -9,6 +9,7 @@ import ProfilePage from "../Pages/ProfilePage/ProfilePage";
 import ItemsPage from "../Pages/ItemsPage/ItemsPage";
 import OffersPage from "../Pages/OffersPage/OffersPage";
 import AccountActionsPage from "../Pages/AccountActionsPage/AccountActionsPage";
+import ForgotPasswordPage from "../Pages/ForgotPasswordPage/ForgotPasswordPage";
 
 export const router = createBrowserRouter([
   {
@@ -18,6 +19,7 @@ export const router = createBrowserRouter([
       { path: "", element: <HomePage /> },
       { path: "login", element: <LoginPage /> },
       { path: "register", element: <RegisterPage /> },
+      { path: "forgot-password", element: <ForgotPasswordPage /> },
 
       { path: "my-items",
         element: (
