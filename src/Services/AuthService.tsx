@@ -56,6 +56,7 @@ export const logoutAPI = async (
         'Content-Type': 'application/json',
         'X-Client-Type': 'Browser'
       },
+      credentials: 'include',
       body: JSON.stringify(null)
     }
   );

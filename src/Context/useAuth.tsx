@@ -91,9 +91,9 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
     }
 
     const logout = async () => {
+        await logoutAPI();
         setAccessToken(null);
         setUserName(null);
-        await logoutAPI();
         navigate("/login");
     }
     
