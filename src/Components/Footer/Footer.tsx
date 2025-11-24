@@ -12,7 +12,7 @@ const Footer = () => {
   return (
     <footer className={styles.footer}>
       <div className={styles.content}>
-        <p>&copy; {currentYear} Multiplayer Game. All rights reserved.</p>
+        <p>&copy; {currentYear} Barvon. All rights reserved.</p>
       </div>
     </footer>
   )
