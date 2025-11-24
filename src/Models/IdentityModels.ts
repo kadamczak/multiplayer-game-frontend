@@ -34,3 +34,8 @@ export type ResetPasswordRequest = {
     resetToken: string;
     newPassword: string;
 }
+
+export type ConfirmEmailRequest = {
+    email: string;
+    token: string;
+}

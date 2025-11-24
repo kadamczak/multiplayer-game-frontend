@@ -58,13 +58,11 @@ const RegisterPage = () => {
       return
     }
 
-    // Successful registration
     setSuccess(true);
     
-    // Redirect to login page after 2 seconds
     setTimeout(() => {
       navigate('/login')
-    }, 2000);
+    }, 4000);
   }
 
 
@@ -156,7 +154,7 @@ const RegisterPage = () => {
           </div>
 
           {generalError && <p className={styles.error}>{generalError}</p>}
-          {success && <p className={styles.success}>Registration successful! Redirecting to login...</p>}
+          {success && <p className={styles.success}>Account activation link has been sent to your mail! Redirecting to login...</p>}
 
           <button type="submit" className={styles.submitButton} disabled={isSubmitting || success}>
             {isSubmitting ? 'Registering...' : 'Register'}

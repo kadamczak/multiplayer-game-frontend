@@ -1,4 +1,4 @@
-import type { ChangePasswordRequest, DeleteAccountRequest, ForgotPasswordRequest, LoginRequestDto, RegisterRequestDto, ResetPasswordRequest, TokenResponseDto } from "../Models/IdentityModels";
+import type { ChangePasswordRequest, ConfirmEmailRequest, DeleteAccountRequest, ForgotPasswordRequest, LoginRequestDto, RegisterRequestDto, ResetPasswordRequest, TokenResponseDto } from "../Models/IdentityModels";
 import type { ApiResponse } from "../Models/ApiResponse";
 import { apiRequest, authenticatedRequest, authenticatedRequestWithRefresh } from "./ApiMethodHelpers";
 
@@ -126,6 +126,22 @@ export const resetPasswordAPI = async (
 ): Promise<ApiResponse<void>> => {
   return apiRequest<void>(
     `${API_BASE_URL}/v1/identity/reset-password`,
+    {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data)
+    }
+  );
+}
+
+
+export const confirmEmailAPI = async (
+  data: ConfirmEmailRequest
+): Promise<ApiResponse<void>> => {
+  return apiRequest<void>(
+    `${API_BASE_URL}/v1/identity/confirm-email`,
     {
       method: 'POST',
       headers: {

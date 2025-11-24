@@ -11,6 +11,7 @@ import OffersPage from "../Pages/OffersPage/OffersPage";
 import AccountActionsPage from "../Pages/AccountActionsPage/AccountActionsPage";
 import ForgotPasswordPage from "../Pages/ForgotPasswordPage/ForgotPasswordPage";
 import ResetPasswordPage from "../Pages/ResetPasswordPage/ResetPasswordPage";
+import ConfirmEmailPage from "../Pages/ConfirmEmailPage/ConfirmEmailPage";
 
 export const router = createBrowserRouter([
   {
@@ -22,6 +23,7 @@ export const router = createBrowserRouter([
       { path: "register", element: <RegisterPage /> },
       { path: "forgot-password", element: <ForgotPasswordPage /> },
       { path: "reset-password", element: <ResetPasswordPage /> },
+      { path: "confirm-email", element: <ConfirmEmailPage/>},
 
       { path: "my-items",
         element: (
