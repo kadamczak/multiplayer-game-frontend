@@ -86,13 +86,12 @@ const OffersPage = () => {
     }
 
     fetchData();
-  }, [accessToken, setAccessToken, query]);
+  }, [query]);
 
   const handleBuy = async (offerId: string) => {
     const result = await purchaseUserItemOfferAPI(accessToken, setAccessToken, offerId);
 
     if (result.success) {
-      // Refresh data after successful purchase
       const [offersResult, userInfoResult] = await Promise.all([
         getOffersAPI(accessToken, setAccessToken, query, true),
         getUserGameInfoAPI(accessToken, setAccessToken),
@@ -109,24 +108,6 @@ const OffersPage = () => {
       setError(result.problem.title || 'Failed to purchase offer');
     }
   };
-
-  // const handleCreateOfferSuccess = async () => {
-  //   setIsCreating(false);
-    
-  //   // Refetch all data
-  //   const [offersResult, userItemsResult] = await Promise.all([
-  //     getOffersAPI(accessToken, setAccessToken, query, true),
-  //     getCurrentUserItemsAPI(accessToken, setAccessToken)
-  //   ]);
-
-  //   if (offersResult.success) {
-  //     setPagedResponse(offersResult.data);
-  //     setOffers(offersResult.data.items);
-  //   }
-  //   if (userItemsResult.success) {
-  //     setUserItems(userItemsResult.data.filter(item => !item.hasActiveOffer));
-  //   }
-  // };
 
 
   if (showLoading) {

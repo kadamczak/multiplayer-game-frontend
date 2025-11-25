@@ -73,10 +73,10 @@ export const getCurrentUserItemsAPI = async (
   accessToken: string | null,
   onTokenRefresh: (newToken: string) => void,
   query: PagedQuery
-): Promise<ApiResponse<UserItemResponse[]>> => {
+): Promise<ApiResponse<PagedResponse<UserItemResponse>>> => {
   const params = pagedQueryToParams(query, true);
 
-  return authenticatedRequestWithRefresh<UserItemResponse[]>(
+  return authenticatedRequestWithRefresh<PagedResponse<UserItemResponse>>(
     `${API_BASE_URL}/v1/users/me/items?${params.toString()}`,
     accessToken,
     onTokenRefresh,

@@ -5,34 +5,49 @@ import { useLoading } from '../../Context/useLoading'
 import { getCurrentUserItemsAPI } from '../../Services/ItemService'
 import { fetchImageWithCache } from '../../Services/ApiMethodHelpers'
 import { type UserItemResponse, ItemTypeDisplay } from '../../Models/ItemModels'
+import type { PagedResponse } from '../../Models/PagedResponse'
+import { defaultPagedQuery, type PagedQuery } from '../../Models/PagedQuery'
+import { SortDirection } from '../../Constants/SortDirection'
 
 const UserItemsPage = () => {
   const { accessToken, setAccessToken } = useAuth();
-  const { isLoading, setIsLoading } = useLoading();
+  const { setIsLoading } = useLoading();
 
   const [items, setItems] = useState<UserItemResponse[]>([]);
+  const [pagedResponse, setPagedResponse] = useState<PagedResponse<UserItemResponse> | null>(null);
   const [thumbnails, setThumbnails] = useState<Map<string, string>>(new Map());
 
+  const [query, setQuery] = useState<PagedQuery>({ ...defaultPagedQuery, sortBy: 'Name' });
+  const [searchInput, setSearchInput] = useState('');
+
+  const [initialLoading, setInitialLoading] = useState(true);
   const [showLoading, setShowLoading] = useState(false);
+  const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
+    let loadingTimer: ReturnType<typeof setTimeout> | null = null;
+    
     const fetchItems = async () => {
-      setIsLoading(true);
+      if (initialLoading) {
+        setInitialLoading(true);
+        setIsLoading(true);
+        loadingTimer = setTimeout(() => setShowLoading(true), 200);
+        query.sortBy = "Name"
+      } else {
+        setIsRefreshing(true);
+      }
       setError('');
-      
-      const loadingTimer = setTimeout(() => setShowLoading(true), 200);
 
-      const result = await getCurrentUserItemsAPI(accessToken, (newToken) => {
-        setAccessToken(newToken);
-      });
+      const result = await getCurrentUserItemsAPI(accessToken, setAccessToken, query);
 
       if (result.success) {
-        setItems(result.data);
+        setPagedResponse(result.data);
+        setItems(result.data.items);
 
         const newThumbnails = new Map<string, string>();
         await Promise.all(
-          result.data.map(async (userItem) => {
+          result.data.items.map(async (userItem) => {
             const thumbnailUrl = await fetchImageWithCache(userItem.item.thumbnailUrl, accessToken);
             if (thumbnailUrl) {
               newThumbnails.set(userItem.id, thumbnailUrl);
@@ -44,27 +59,94 @@ const UserItemsPage = () => {
         setError(result.problem.title || 'Failed to load items');
       }
 
-      clearTimeout(loadingTimer);
-      setShowLoading(false);
+      if (initialLoading && loadingTimer) {
+        clearTimeout(loadingTimer);
+        setShowLoading(false);
+      }
+      setInitialLoading(false);
+      setIsRefreshing(false);
       setIsLoading(false);
     }
 
     fetchItems();
-  }, [accessToken, setAccessToken]);
+  }, [query]);
 
   if (showLoading) {
     return <div className={styles.container}>Loading...</div>;
   }
 
-  if (error) {
-    return <div className={styles.container}>Error: {error}</div>;
-  }
-
   return (
     <div className={styles.container}>
-      <h1>My Items</h1>
+      {isRefreshing && (
+        <div className={styles.refreshIndicator}>
+          Updating...
+        </div>
+      )}
       
-      {!isLoading && items.length === 0 ? (
+      <h1>My Items</h1>
+
+      {error && <div className={styles.error}>{error}</div>}
+
+      {/* Filters and Search */}
+      <div className={styles.filtersSection}>
+        <div className={styles.searchGroup}>
+          <input
+            type="text"
+            placeholder="Search items..."
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            className={styles.searchInput}
+          />
+          <button
+            onClick={() => setQuery({ ...query, searchPhrase: searchInput, pageNumber: 1 })}
+            className={styles.searchButton}
+          >
+            Search
+          </button>
+        </div>
+
+        <div className={styles.filterControls}>
+          <div className={styles.filterGroup}>
+            <label>Sort By:</label>
+            <select
+              value={query.sortBy || ''}
+              onChange={(e) => setQuery({ ...query, sortBy: e.target.value || null, pageNumber: 1 })}
+              className={styles.select}
+            >
+              <option value="Name">Name</option>
+              <option value="Type">Type</option>
+              <option value="Description">Description</option>
+            </select>
+          </div>
+
+          <div className={styles.filterGroup}>
+            <label>Direction:</label>
+            <select
+              value={query.sortDirection || SortDirection.Ascending}
+              onChange={(e) => setQuery({ ...query, sortDirection: e.target.value as SortDirection })}
+              className={styles.select}
+            >
+              <option value={SortDirection.Ascending}>Ascending</option>
+              <option value={SortDirection.Descending}>Descending</option>
+            </select>
+          </div>
+
+          <div className={styles.filterGroup}>
+            <label>Per Page:</label>
+            <select
+              value={query.pageSize || 10}
+              onChange={(e) => setQuery({ ...query, pageSize: parseInt(e.target.value), pageNumber: 1 })}
+              className={styles.select}
+            >
+              <option value={5}>5</option>
+              <option value={10}>10</option>
+              <option value={15}>15</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      
+      {items.length === 0 ? (
         <p>No items found.</p>
       ) : (
         <ul>
@@ -90,6 +172,31 @@ const UserItemsPage = () => {
             </li>
           ))}
         </ul>
+      )}
+
+      {pagedResponse && pagedResponse.totalPages > 1 && (
+        <div className={styles.pagination}>
+          <button
+            onClick={() => setQuery({ ...query, pageNumber: (query.pageNumber || 1) - 1 })}
+            disabled={(query.pageNumber || 1) <= 1}
+            className={styles.pageButton}
+          >
+            Previous
+          </button>
+          
+          <span className={styles.pageInfo}>
+            Page {query.pageNumber || 1} of {pagedResponse.totalPages}
+            {' '}({pagedResponse.itemsFrom}-{pagedResponse.itemsTo} of {pagedResponse.totalItemsCount} items)
+          </span>
+          
+          <button
+            onClick={() => setQuery({ ...query, pageNumber: (query.pageNumber || 1) + 1 })}
+            disabled={(query.pageNumber || 1) >= pagedResponse.totalPages}
+            className={styles.pageButton}
+          >
+            Next
+          </button>
+        </div>
       )}
     </div>
   )
