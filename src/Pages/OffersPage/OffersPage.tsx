@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import styles from './OffersPage.module.css'
 import { useAuth } from '../../Context/useAuth'
 import { useLoading } from '../../Context/useLoading'
-import { getOffersAPI, getCurrentUserItemsAPI, createUserItemOfferAPI, purchaseUserItemOfferAPI } from '../../Services/ItemService'
+import { getOffersAPI, getCurrentUserItemsAPI, purchaseUserItemOfferAPI } from '../../Services/ItemService'
 import { getUserGameInfoAPI } from '../../Services/UserService'
 import { fetchImageWithCache } from '../../Services/ApiMethodHelpers'
 import { type UserItemOfferResponse, type UserItemResponse, ItemTypeDisplay } from '../../Models/ItemModels'
@@ -11,6 +11,7 @@ import type { PagedQuery } from '../../Models/PagedQuery'
 import { defaultPagedQuery } from '../../Models/PagedQuery'
 import { SortDirection } from '../../Constants/SortDirection'
 import type { PagedResponse } from '../../Models/PagedResponse'
+import CreateOfferComponent from '../../Components/Offers/CreateOfferComponent'
 
 const OffersPage = () => {
   const { accessToken, setAccessToken } = useAuth();
@@ -20,8 +21,6 @@ const OffersPage = () => {
   const [pagedResponse, setPagedResponse] = useState<PagedResponse<UserItemOfferResponse> | null>(null);
   const [userInfo, setUserInfo] = useState<UserGameInfoResponse | null>(null);
   const [userItems, setUserItems] = useState<UserItemResponse[]>([]);
-  const [selectedItemId, setSelectedItemId] = useState('');
-  const [offerPrice, setOfferPrice] = useState('');
   const [thumbnails, setThumbnails] = useState<Map<string, string>>(new Map());
   
   const [query, setQuery] = useState<PagedQuery>({ ...defaultPagedQuery });
@@ -124,50 +123,26 @@ const OffersPage = () => {
     }
   };
 
-  const handleCreateOffer = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!selectedItemId || !offerPrice) return;
+  const handleCreateOfferSuccess = async () => {
+    setIsCreating(false);
+    
+    // Refetch all data
+    const [offersResult, userItemsResult] = await Promise.all([
+      getOffersAPI(accessToken, setAccessToken, query, true),
+      getCurrentUserItemsAPI(accessToken, setAccessToken)
+    ]);
 
-    const price = parseFloat(offerPrice);
-    if (isNaN(price) || price <= 0) {
-      setError('Please enter a valid price');
-      return;
+    if (offersResult.success) {
+      setPagedResponse(offersResult.data);
+      setOffers(offersResult.data.items);
     }
-
-    const result = await createUserItemOfferAPI(
-      accessToken,
-      setAccessToken,
-      { userItemId: selectedItemId, price }
-    );
-
-    if (result.success) {
-      // Refresh data
-      setIsCreating(false);
-      setSelectedItemId('');
-      setOfferPrice('');
-      
-      // Refetch all data
-      const [offersResult, userItemsResult] = await Promise.all([
-        getOffersAPI(accessToken, setAccessToken, query, true),
-        getCurrentUserItemsAPI(accessToken, setAccessToken)
-      ]);
-
-      if (offersResult.success) {
-        setPagedResponse(offersResult.data);
-        setOffers(offersResult.data.items);
-      }
-      if (userItemsResult.success) {
-        setUserItems(userItemsResult.data.filter(item => !item.hasActiveOffer));
-      }
-    } else {
-      setError(result.problem.title || 'Failed to create offer');
+    if (userItemsResult.success) {
+      setUserItems(userItemsResult.data.filter(item => !item.hasActiveOffer));
     }
   };
 
-  const cancelCreate = () => {
+  const handleCreateOfferCancel = () => {
     setIsCreating(false);
-    setSelectedItemId('');
-    setOfferPrice('');
     setError('');
   };
 
@@ -263,44 +238,11 @@ const OffersPage = () => {
       </div>
 
       {isCreating && (
-        <form className={styles.createForm} onSubmit={handleCreateOffer}>
-          <h2>Create New Offer</h2>
-          <div className={styles.formGroup}>
-            <label htmlFor="itemSelect">Select Item:</label>
-            <select
-              id="itemSelect"
-              value={selectedItemId}
-              onChange={(e) => setSelectedItemId(e.target.value)}
-              className={styles.select}
-              required
-            >
-              <option value="">-- Choose an item --</option>
-              {userItems.map((userItem) => (
-                <option key={userItem.id} value={userItem.id}>
-                  {userItem.item.name} ({ItemTypeDisplay[userItem.item.type]})
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className={styles.formGroup}>
-            <label htmlFor="priceInput">Price (Gems):</label>
-            <input
-              id="priceInput"
-              type="number"
-              min="0"
-              step="1"
-              value={offerPrice}
-              onChange={(e) => setOfferPrice(e.target.value)}
-              className={styles.input}
-              placeholder="Enter price"
-              required
-            />
-          </div>
-          <div className={styles.formActions}>
-            <button type="submit" className={styles.publishButton}>Publish Offer</button>
-            <button type="button" onClick={cancelCreate} className={styles.cancelButton}>Cancel</button>
-          </div>
-        </form>
+        <CreateOfferComponent
+          userItems={userItems}
+          onSuccess={handleCreateOfferSuccess}
+          onCancel={handleCreateOfferCancel}
+        />
       )}
       
       {offers.length === 0 ? (
