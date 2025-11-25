@@ -1,8 +1,8 @@
 import { useState } from 'react'
 import styles from './CreateOfferComponent.module.css'
-import { useAuth } from '../../Context/useAuth'
-import { createUserItemOfferAPI } from '../../Services/ItemService'
-import { type UserItemResponse, ItemTypeDisplay } from '../../Models/ItemModels'
+import { useAuth } from '../../../Context/useAuth'
+import { createUserItemOfferAPI } from '../../../Services/ItemService'
+import { type UserItemResponse, ItemTypeDisplay } from '../../../Models/ItemModels'
 
 type CreateOfferComponentProps = {
   userItems: UserItemResponse[]

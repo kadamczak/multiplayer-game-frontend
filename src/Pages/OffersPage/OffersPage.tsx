@@ -11,7 +11,7 @@ import type { PagedQuery } from '../../Models/PagedQuery'
 import { defaultPagedQuery } from '../../Models/PagedQuery'
 import { SortDirection } from '../../Constants/SortDirection'
 import type { PagedResponse } from '../../Models/PagedResponse'
-import CreateOfferComponent from '../../Components/Offers/CreateOfferComponent'
+import CreateOfferComponent from '../../Components/Offers/CreateOfferComponent/CreateOfferComponent'
 
 const OffersPage = () => {
   const { accessToken, setAccessToken } = useAuth();
