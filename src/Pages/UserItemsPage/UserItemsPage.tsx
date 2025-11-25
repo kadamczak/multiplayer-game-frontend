@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import styles from './UserItemsPage.module.css'
 import { useAuth } from '../../Context/useAuth'
 import { useLoading } from '../../Context/useLoading'
-import { getCurrentUserItemsAPI } from '../../Services/ItemService'
+import { getCurrentUserItemsAPI, createUserItemOfferAPI } from '../../Services/ItemService'
 import { fetchImageWithCache } from '../../Services/ApiMethodHelpers'
 import { type UserItemResponse, ItemTypeDisplay } from '../../Models/ItemModels'
 import type { PagedResponse } from '../../Models/PagedResponse'
@@ -24,6 +24,10 @@ const UserItemsPage = () => {
   const [showLoading, setShowLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState('');
+
+  const [sellingItemId, setSellingItemId] = useState<string | null>(null);
+  const [sellPrice, setSellPrice] = useState('');
+  const [sellError, setSellError] = useState('');
 
   useEffect(() => {
     let loadingTimer: ReturnType<typeof setTimeout> | null = null;
@@ -70,6 +74,47 @@ const UserItemsPage = () => {
 
     fetchItems();
   }, [query]);
+
+  const handleSellClick = (itemId: string) => {
+    setSellingItemId(itemId);
+    setSellPrice('');
+    setSellError('');
+  };
+
+  const handleCancelSell = () => {
+    setSellingItemId(null);
+    setSellPrice('');
+    setSellError('');
+  };
+
+  const handleAcceptSell = async (userItemId: string) => {
+    const price = parseFloat(sellPrice);
+    if (isNaN(price) || price <= 0) {
+      setSellError('Please enter a valid price');
+      return;
+    }
+
+    const result = await createUserItemOfferAPI(
+      accessToken,
+      setAccessToken,
+      { userItemId, price }
+    );
+
+    if (result.success) {
+      setSellingItemId(null);
+      setSellPrice('');
+      setSellError('');
+      
+      // Refresh items
+      const itemsResult = await getCurrentUserItemsAPI(accessToken, setAccessToken, query);
+      if (itemsResult.success) {
+        setPagedResponse(itemsResult.data);
+        setItems(itemsResult.data.items);
+      }
+    } else {
+      setSellError(result.problem.title || 'Failed to create offer');
+    }
+  };
 
   if (showLoading) {
     return <div className={styles.container}>Loading...</div>;
@@ -167,6 +212,48 @@ const UserItemsPage = () => {
                 <p>{userItem.item.description}</p>
                 {userItem.hasActiveOffer && (
                   <p className={styles.offerStatus}>Awaiting Trade</p>
+                )}
+                
+                {!userItem.hasActiveOffer && sellingItemId !== userItem.id && (
+                  <button 
+                    className={styles.sellButton}
+                    onClick={() => handleSellClick(userItem.id)}
+                  >
+                    Sell
+                  </button>
+                )}
+
+                {sellingItemId === userItem.id && (
+                  <div className={styles.sellBox}>
+                    <div className={styles.sellInputGroup}>
+                      <label htmlFor={`price-${userItem.id}`}>Price (Gems):</label>
+                      <input
+                        id={`price-${userItem.id}`}
+                        type="number"
+                        min="0"
+                        step="1"
+                        value={sellPrice}
+                        onChange={(e) => setSellPrice(e.target.value)}
+                        className={styles.sellInput}
+                        placeholder="Enter price"
+                      />
+                    </div>
+                    {sellError && <p className={styles.sellError}>{sellError}</p>}
+                    <div className={styles.sellActions}>
+                      <button 
+                        className={styles.acceptButton}
+                        onClick={() => handleAcceptSell(userItem.id)}
+                      >
+                        Accept
+                      </button>
+                      <button 
+                        className={styles.cancelButton}
+                        onClick={handleCancelSell}
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </div>
                 )}
               </div>
             </li>
