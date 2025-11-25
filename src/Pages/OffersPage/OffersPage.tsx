@@ -5,7 +5,7 @@ import { useLoading } from '../../Context/useLoading'
 import { getOffersAPI, getCurrentUserItemsAPI, createUserItemOfferAPI, purchaseUserItemOfferAPI } from '../../Services/ItemService'
 import { getUserGameInfoAPI } from '../../Services/UserService'
 import { fetchImageWithCache } from '../../Services/ApiMethodHelpers'
-import { type ActiveUserItemOfferResponse, type UserItemSimplifiedResponse, ItemTypeDisplay } from '../../Models/ItemModels'
+import { type UserItemOfferResponse, type UserItemResponse, ItemTypeDisplay } from '../../Models/ItemModels'
 import type { UserGameInfoResponse } from '../../Models/UserModels'
 import type { PagedQuery } from '../../Models/PagedQuery'
 import { defaultPagedQuery } from '../../Models/PagedQuery'
@@ -16,10 +16,10 @@ const OffersPage = () => {
   const { accessToken, setAccessToken } = useAuth();
   const { setIsLoading } = useLoading();
 
-  const [offers, setOffers] = useState<ActiveUserItemOfferResponse[]>([]);
-  const [pagedResponse, setPagedResponse] = useState<PagedResponse<ActiveUserItemOfferResponse> | null>(null);
+  const [offers, setOffers] = useState<UserItemOfferResponse[]>([]);
+  const [pagedResponse, setPagedResponse] = useState<PagedResponse<UserItemOfferResponse> | null>(null);
   const [userInfo, setUserInfo] = useState<UserGameInfoResponse | null>(null);
-  const [userItems, setUserItems] = useState<UserItemSimplifiedResponse[]>([]);
+  const [userItems, setUserItems] = useState<UserItemResponse[]>([]);
   const [selectedItemId, setSelectedItemId] = useState('');
   const [offerPrice, setOfferPrice] = useState('');
   const [thumbnails, setThumbnails] = useState<Map<string, string>>(new Map());
@@ -50,7 +50,7 @@ const OffersPage = () => {
       const [offersResult, userInfoResult, userItemsResult] = await Promise.all([
         getOffersAPI(accessToken, (newToken) => {
           setAccessToken(newToken);
-        }, query),
+        }, query, true),
         getUserGameInfoAPI(accessToken, (newToken) => {
           setAccessToken(newToken);
         }),
@@ -104,7 +104,7 @@ const OffersPage = () => {
     if (result.success) {
       // Refresh data after successful purchase
       const [offersResult, userInfoResult, userItemsResult] = await Promise.all([
-        getOffersAPI(accessToken, setAccessToken, query),
+        getOffersAPI(accessToken, setAccessToken, query, true),
         getUserGameInfoAPI(accessToken, setAccessToken),
         getCurrentUserItemsAPI(accessToken, setAccessToken)
       ]);
@@ -148,7 +148,7 @@ const OffersPage = () => {
       
       // Refetch all data
       const [offersResult, userItemsResult] = await Promise.all([
-        getOffersAPI(accessToken, setAccessToken, query),
+        getOffersAPI(accessToken, setAccessToken, query, true),
         getCurrentUserItemsAPI(accessToken, setAccessToken)
       ]);
 
@@ -230,7 +230,7 @@ const OffersPage = () => {
               <option value="">None</option>
               <option value="Name">Name</option>
               <option value="Type">Type</option>
-              <option value="UserName">Seller</option>
+              <option value="SellerUserName">Seller</option>
               <option value="Price">Price</option>
             </select>
           </div>
@@ -308,7 +308,7 @@ const OffersPage = () => {
       ) : (
         <ul className={styles.offersList}>
           {offers.map((offer) => {
-            const isOwnOffer = userInfo?.id === offer.userItem.userId;
+            const isOwnOffer = userInfo?.id === offer.sellerId;
             const canAfford = userInfo ? userInfo.balance >= offer.price : false;
 
             return (
@@ -328,7 +328,7 @@ const OffersPage = () => {
                   <strong>{offer.userItem.item.name}</strong>
                   <p>{ItemTypeDisplay[offer.userItem.item.type]}</p>
                   <p>{offer.userItem.item.description}</p>
-                  <p className={styles.seller}>Seller: {offer.userItem.userName}</p>
+                  <p className={styles.seller}>Seller: {offer.sellerUsername}</p>
                 </div>
                 <div className={styles.priceSection}>
                   <span className={styles.priceLabel}>Price</span>

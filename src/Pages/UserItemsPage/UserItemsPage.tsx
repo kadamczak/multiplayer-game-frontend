@@ -4,13 +4,13 @@ import { useAuth } from '../../Context/useAuth'
 import { useLoading } from '../../Context/useLoading'
 import { getCurrentUserItemsAPI } from '../../Services/ItemService'
 import { fetchImageWithCache } from '../../Services/ApiMethodHelpers'
-import { type UserItemSimplifiedResponse, ItemTypeDisplay } from '../../Models/ItemModels'
+import { type UserItemResponse, ItemTypeDisplay } from '../../Models/ItemModels'
 
 const UserItemsPage = () => {
   const { accessToken, setAccessToken } = useAuth();
   const { isLoading, setIsLoading } = useLoading();
 
-  const [items, setItems] = useState<UserItemSimplifiedResponse[]>([]);
+  const [items, setItems] = useState<UserItemResponse[]>([]);
   const [thumbnails, setThumbnails] = useState<Map<string, string>>(new Map());
 
   const [showLoading, setShowLoading] = useState(false);

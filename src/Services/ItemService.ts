@@ -1,5 +1,5 @@
 import type { ApiResponse } from "../Models/ApiResponse";
-import type { ItemResponse, ActiveUserItemOfferResponse, UserItemSimplifiedResponse, CreateUserItemOfferRequest } from "../Models/ItemModels";
+import type { ItemResponse, UserItemOfferResponse, UserItemResponse, CreateUserItemOfferRequest } from "../Models/ItemModels";
 import type { PagedResponse } from "../Models/PagedResponse";
 import type { PagedQuery } from "../Models/PagedQuery";
 import { pagedQueryToParams } from "../Models/PagedQuery";
@@ -72,8 +72,8 @@ export const deleteItemAPI = async (
 export const getCurrentUserItemsAPI = async (
   accessToken: string | null,
   onTokenRefresh: (newToken: string) => void
-): Promise<ApiResponse<UserItemSimplifiedResponse[]>> => {
-  return authenticatedRequestWithRefresh<UserItemSimplifiedResponse[]>(
+): Promise<ApiResponse<UserItemResponse[]>> => {
+  return authenticatedRequestWithRefresh<UserItemResponse[]>(
     `${API_BASE_URL}/v1/users/me/items`,
     accessToken,
     onTokenRefresh,
@@ -86,11 +86,12 @@ export const getCurrentUserItemsAPI = async (
 export const getOffersAPI = async (
   accessToken: string | null,
   onTokenRefresh: (newToken: string) => void,
-  query: PagedQuery
-): Promise<ApiResponse<PagedResponse<ActiveUserItemOfferResponse>>> => {
+  query: PagedQuery,
+  showActive: boolean
+): Promise<ApiResponse<PagedResponse<UserItemOfferResponse>>> => {
   const params = pagedQueryToParams(query);
-  return authenticatedRequestWithRefresh<PagedResponse<ActiveUserItemOfferResponse>>(
-    `${API_BASE_URL}/v1/users/offers?${params.toString()}`,
+  return authenticatedRequestWithRefresh<PagedResponse<UserItemOfferResponse>>(
+    `${API_BASE_URL}/v1/users/offers?${params.toString()}&showActive=${showActive}`,
     accessToken,
     onTokenRefresh,
     {

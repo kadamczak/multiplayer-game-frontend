@@ -1,6 +1,6 @@
 import type { ChangePasswordRequest, ConfirmEmailRequest, DeleteAccountRequest, ForgotPasswordRequest, LoginRequestDto, RegisterRequestDto, ResetPasswordRequest, TokenResponseDto } from "../Models/IdentityModels";
 import type { ApiResponse } from "../Models/ApiResponse";
-import { apiRequest, authenticatedRequest, authenticatedRequestWithRefresh } from "./ApiMethodHelpers";
+import { apiRequest, authenticatedRequestWithRefresh } from "./ApiMethodHelpers";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL
 

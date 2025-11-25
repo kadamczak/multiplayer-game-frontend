@@ -20,24 +20,24 @@ export type ItemResponse = {
   thumbnailUrl: string;
 }
 
-export type UserItemSimplifiedResponse = {
-  id: string;
-  item: ItemResponse;
-  hasActiveOffer: boolean;
-}
-
 export type UserItemResponse = {
   id: string;
   item: ItemResponse;
-  userId: string;
-  userName: string;
   hasActiveOffer: boolean;
 }
 
-export type ActiveUserItemOfferResponse = {
+export type UserItemOfferResponse = {
   id: string;
   userItem: UserItemResponse;
   price: number;
+
+  sellerId: string;
+  sellerUsername: string;
+  publishedAt: string;
+
+  buyerId?: string;
+  buyerUsername?: string;
+  boughtAt?: string;
 }
 
 export type CreateUserItemOfferRequest = {
