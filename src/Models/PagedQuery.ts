@@ -16,23 +16,33 @@ export const defaultPagedQuery: PagedQuery = {
   pageSize: 10
 };
 
-export const pagedQueryToParams = (query: PagedQuery): URLSearchParams => {
+export const pagedQueryToParams = (query: PagedQuery, addPrefix: boolean): URLSearchParams => {
   const params = new URLSearchParams();
 
   if (query.searchPhrase !== null && query.searchPhrase !== undefined) {
-    params.append('searchPhrase', query.searchPhrase);
+    addPrefix
+    ? params.append('PagedQuery.searchPhrase', query.searchPhrase)
+    : params.append('searchPhrase', query.searchPhrase);
   }
   if (query.sortBy !== null && query.sortBy !== undefined) {
-    params.append('sortBy', query.sortBy);
+    addPrefix
+    ? params.append('PagedQuery.sortBy', query.sortBy)
+    : params.append('sortBy', query.sortBy);
   }
   if (query.sortDirection !== undefined) {
-    params.append('sortDirection', query.sortDirection);
+    addPrefix
+    ? params.append('PagedQuery.sortDirection', query.sortDirection)
+    : params.append('sortDirection', query.sortDirection);
   }
   if (query.pageNumber !== undefined) {
-    params.append('pageNumber', query.pageNumber.toString());
+    addPrefix
+    ? params.append('PagedQuery.pageNumber', query.pageNumber.toString())
+    : params.append('pageNumber', query.pageNumber.toString());
   }
   if (query.pageSize !== undefined) {
-    params.append('pageSize', query.pageSize.toString());
+    addPrefix
+    ? params.append('PagedQuery.pageSize', query.pageSize.toString())
+    : params.append('pageSize', query.pageSize.toString());
   }
 
   return params;

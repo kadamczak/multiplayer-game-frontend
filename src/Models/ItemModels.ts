@@ -1,3 +1,5 @@
+import type { PagedQuery } from "./PagedQuery";
+
 export const ItemType = {
   Consumable: "Consumable",
   EquippableOnHead: "EquippableOnHead",
@@ -41,6 +43,11 @@ export type UserItemOfferResponse = {
 }
 
 export type CreateUserItemOfferRequest = {
-  userItemId: string
-  price: number
+  userItemId: string;
+  price: number;
+}
+
+export type GetOffersRequest = {
+  pagedQuery: PagedQuery;
+  showActive: boolean;
 }

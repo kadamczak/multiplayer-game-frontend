@@ -89,7 +89,7 @@ export const getOffersAPI = async (
   query: PagedQuery,
   showActive: boolean
 ): Promise<ApiResponse<PagedResponse<UserItemOfferResponse>>> => {
-  const params = pagedQueryToParams(query);
+  const params = pagedQueryToParams(query, true);
   return authenticatedRequestWithRefresh<PagedResponse<UserItemOfferResponse>>(
     `${API_BASE_URL}/v1/users/offers?${params.toString()}&showActive=${showActive}`,
     accessToken,

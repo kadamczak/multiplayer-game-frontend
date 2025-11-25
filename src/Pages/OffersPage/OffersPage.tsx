@@ -202,7 +202,6 @@ const OffersPage = () => {
               onChange={(e) => setQuery({ ...query, sortBy: e.target.value || null, pageNumber: 1 })}
               className={styles.select}
             >
-              <option value="">None</option>
               <option value="Name">Name</option>
               <option value="Type">Type</option>
               <option value="SellerUserName">Seller</option>
