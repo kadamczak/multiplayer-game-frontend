@@ -71,10 +71,13 @@ export const deleteItemAPI = async (
 
 export const getCurrentUserItemsAPI = async (
   accessToken: string | null,
-  onTokenRefresh: (newToken: string) => void
+  onTokenRefresh: (newToken: string) => void,
+  query: PagedQuery
 ): Promise<ApiResponse<UserItemResponse[]>> => {
+  const params = pagedQueryToParams(query, true);
+
   return authenticatedRequestWithRefresh<UserItemResponse[]>(
-    `${API_BASE_URL}/v1/users/me/items`,
+    `${API_BASE_URL}/v1/users/me/items?${params.toString()}`,
     accessToken,
     onTokenRefresh,
     {
@@ -90,6 +93,7 @@ export const getOffersAPI = async (
   showActive: boolean
 ): Promise<ApiResponse<PagedResponse<UserItemOfferResponse>>> => {
   const params = pagedQueryToParams(query, true);
+
   return authenticatedRequestWithRefresh<PagedResponse<UserItemOfferResponse>>(
     `${API_BASE_URL}/v1/users/offers?${params.toString()}&showActive=${showActive}`,
     accessToken,

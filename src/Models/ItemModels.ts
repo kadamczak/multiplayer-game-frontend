@@ -51,3 +51,7 @@ export type GetOffersRequest = {
   pagedQuery: PagedQuery;
   showActive: boolean;
 }
+
+export type GetUserItemsRequest = {
+  pagedQuery: PagedQuery;
+}

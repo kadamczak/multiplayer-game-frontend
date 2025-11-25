@@ -2,16 +2,15 @@ import { useEffect, useState } from 'react'
 import styles from './OffersPage.module.css'
 import { useAuth } from '../../Context/useAuth'
 import { useLoading } from '../../Context/useLoading'
-import { getOffersAPI, getCurrentUserItemsAPI, purchaseUserItemOfferAPI } from '../../Services/ItemService'
+import { getOffersAPI, purchaseUserItemOfferAPI } from '../../Services/ItemService'
 import { getUserGameInfoAPI } from '../../Services/UserService'
 import { fetchImageWithCache } from '../../Services/ApiMethodHelpers'
-import { type UserItemOfferResponse, type UserItemResponse, ItemTypeDisplay } from '../../Models/ItemModels'
+import { type UserItemOfferResponse, ItemTypeDisplay } from '../../Models/ItemModels'
 import type { UserGameInfoResponse } from '../../Models/UserModels'
 import type { PagedQuery } from '../../Models/PagedQuery'
 import { defaultPagedQuery } from '../../Models/PagedQuery'
 import { SortDirection } from '../../Constants/SortDirection'
 import type { PagedResponse } from '../../Models/PagedResponse'
-import CreateOfferComponent from '../../Components/Offers/CreateOfferComponent/CreateOfferComponent'
 
 const OffersPage = () => {
   const { accessToken, setAccessToken } = useAuth();
@@ -20,7 +19,6 @@ const OffersPage = () => {
   const [offers, setOffers] = useState<UserItemOfferResponse[]>([]);
   const [pagedResponse, setPagedResponse] = useState<PagedResponse<UserItemOfferResponse> | null>(null);
   const [userInfo, setUserInfo] = useState<UserGameInfoResponse | null>(null);
-  const [userItems, setUserItems] = useState<UserItemResponse[]>([]);
   const [thumbnails, setThumbnails] = useState<Map<string, string>>(new Map());
   
   const [query, setQuery] = useState<PagedQuery>({ ...defaultPagedQuery });
@@ -29,7 +27,6 @@ const OffersPage = () => {
   const [initialLoading, setInitialLoading] = useState(true);
   const [showLoading, setShowLoading] = useState(false);
   const [isRefreshing, setIsRefreshing] = useState(false);
-  const [isCreating, setIsCreating] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -40,21 +37,18 @@ const OffersPage = () => {
         setInitialLoading(true);
         setIsLoading(true);
         loadingTimer = setTimeout(() => setShowLoading(true), 200);
-        
+
         query.sortBy = "Name";
       } else {
         setIsRefreshing(true);
       }
       setError('');
 
-      const [offersResult, userInfoResult, userItemsResult] = await Promise.all([
+      const [offersResult, userInfoResult] = await Promise.all([
         getOffersAPI(accessToken, (newToken) => {
           setAccessToken(newToken);
         }, query, true),
         getUserGameInfoAPI(accessToken, (newToken) => {
-          setAccessToken(newToken);
-        }),
-        getCurrentUserItemsAPI(accessToken, (newToken) => {
           setAccessToken(newToken);
         })
       ]);
@@ -82,10 +76,6 @@ const OffersPage = () => {
         setUserInfo(userInfoResult.data);
       }
 
-      if (userItemsResult.success) {
-        setUserItems(userItemsResult.data.filter(item => !item.hasActiveOffer));
-      }
-
       if (initialLoading && loadingTimer) {
         clearTimeout(loadingTimer);
         setShowLoading(false);
@@ -103,10 +93,9 @@ const OffersPage = () => {
 
     if (result.success) {
       // Refresh data after successful purchase
-      const [offersResult, userInfoResult, userItemsResult] = await Promise.all([
+      const [offersResult, userInfoResult] = await Promise.all([
         getOffersAPI(accessToken, setAccessToken, query, true),
         getUserGameInfoAPI(accessToken, setAccessToken),
-        getCurrentUserItemsAPI(accessToken, setAccessToken)
       ]);
 
       if (offersResult.success) {
@@ -116,36 +105,29 @@ const OffersPage = () => {
       if (userInfoResult.success) {
         setUserInfo(userInfoResult.data);
       }
-      if (userItemsResult.success) {
-        setUserItems(userItemsResult.data.filter(item => !item.hasActiveOffer));
-      }
     } else {
       setError(result.problem.title || 'Failed to purchase offer');
     }
   };
 
-  const handleCreateOfferSuccess = async () => {
-    setIsCreating(false);
+  // const handleCreateOfferSuccess = async () => {
+  //   setIsCreating(false);
     
-    // Refetch all data
-    const [offersResult, userItemsResult] = await Promise.all([
-      getOffersAPI(accessToken, setAccessToken, query, true),
-      getCurrentUserItemsAPI(accessToken, setAccessToken)
-    ]);
+  //   // Refetch all data
+  //   const [offersResult, userItemsResult] = await Promise.all([
+  //     getOffersAPI(accessToken, setAccessToken, query, true),
+  //     getCurrentUserItemsAPI(accessToken, setAccessToken)
+  //   ]);
 
-    if (offersResult.success) {
-      setPagedResponse(offersResult.data);
-      setOffers(offersResult.data.items);
-    }
-    if (userItemsResult.success) {
-      setUserItems(userItemsResult.data.filter(item => !item.hasActiveOffer));
-    }
-  };
+  //   if (offersResult.success) {
+  //     setPagedResponse(offersResult.data);
+  //     setOffers(offersResult.data.items);
+  //   }
+  //   if (userItemsResult.success) {
+  //     setUserItems(userItemsResult.data.filter(item => !item.hasActiveOffer));
+  //   }
+  // };
 
-  const handleCreateOfferCancel = () => {
-    setIsCreating(false);
-    setError('');
-  };
 
   if (showLoading) {
     return <div className={styles.container}>Loading...</div>;
@@ -161,11 +143,7 @@ const OffersPage = () => {
       <div className={styles.header}>
         <h1>Active Offers</h1>
         <div className={styles.headerRight}>
-          {!isCreating && (
-            <button className={styles.createButton} onClick={() => setIsCreating(true)}>
-              Create Offer
-            </button>
-          )}
+
           <div className={styles.balanceDisplay}>
             <span className={styles.balanceLabel}>Your Balance:</span>
             <span className={styles.balanceValue}>
@@ -236,15 +214,7 @@ const OffersPage = () => {
           </div>
         </div>
       </div>
-
-      {isCreating && (
-        <CreateOfferComponent
-          userItems={userItems}
-          onSuccess={handleCreateOfferSuccess}
-          onCancel={handleCreateOfferCancel}
-        />
-      )}
-      
+  
       {offers.length === 0 ? (
         <p>No active offers available.</p>
       ) : (
