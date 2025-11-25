@@ -39,8 +39,9 @@ const OffersPage = () => {
       if (initialLoading) {
         setInitialLoading(true);
         setIsLoading(true);
-        // Only show loading indicator if request takes longer than 200ms
         loadingTimer = setTimeout(() => setShowLoading(true), 200);
+        
+        query.sortBy = "Name";
       } else {
         setIsRefreshing(true);
       }
