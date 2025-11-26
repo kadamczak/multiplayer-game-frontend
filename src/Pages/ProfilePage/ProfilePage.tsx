@@ -4,6 +4,7 @@ import styles from './ProfilePage.module.css'
 import { useAuth } from '../../Context/useAuth'
 import { useLoading } from '../../Context/useLoading'
 import { getUserGameInfoAPI } from '../../Services/UserService'
+import { fetchImageWithCache } from '../../Services/ApiMethodHelpers'
 import type { UserGameInfoResponse } from '../../Models/UserModels'
 
 const ProfilePage = () => {
@@ -11,6 +12,7 @@ const ProfilePage = () => {
   const { setIsLoading } = useLoading();
 
   const [userInfo, setUserInfo] = useState<UserGameInfoResponse | null>(null);
+  const [profilePictureUrl, setProfilePictureUrl] = useState<string | null>(null);
 
   const [showLoading, setShowLoading] = useState(false);
   const [error, setError] = useState('');
@@ -28,6 +30,14 @@ const ProfilePage = () => {
 
       if (result.success) {
         setUserInfo(result.data);
+        
+        // Load profile picture
+        if (result.data.profilePictureUrl) {
+          const imageUrl = await fetchImageWithCache(result.data.profilePictureUrl, accessToken);
+          setProfilePictureUrl(imageUrl);
+        } else {
+          setProfilePictureUrl('/emptyprofilepicture.png');
+        }
       } else {
         setError(result.problem.title || 'Failed to load user information');
       }
@@ -64,14 +74,24 @@ const ProfilePage = () => {
       </div>
       
       <div className={styles.profileCard}>
-        <div className={styles.profileSection}>
-          <label>Username</label>
-          <p className={styles.profileValue}>{userInfo.userName}</p>
+        <div className={styles.profilePictureContainer}>
+          <img 
+            src={profilePictureUrl || '/emptyprofilepicture.png'} 
+            alt="Profile Picture"
+            className={styles.profilePicture}
+          />
         </div>
+        
+        <div className={styles.profileInfo}>
+          <div className={styles.profileSection}>
+            <label>Username</label>
+            <p className={styles.profileValue}>{userInfo.userName}</p>
+          </div>
 
-        <div className={styles.profileSection}>
-          <label>Account Balance</label>
-          <p className={`${styles.profileValue} ${styles.balance}`}>{userInfo.balance} Gems</p>
+          <div className={styles.profileSection}>
+            <label>Account Balance</label>
+            <p className={`${styles.profileValue} ${styles.balance}`}>{userInfo.balance} Gems</p>
+          </div>
         </div>
       </div>
     </div>
