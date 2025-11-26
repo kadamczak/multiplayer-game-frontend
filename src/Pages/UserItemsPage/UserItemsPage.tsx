@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import styles from './UserItemsPage.module.css'
 import { useAuth } from '../../Context/useAuth'
 import { useLoading } from '../../Context/useLoading'
-import { getCurrentUserItemsAPI, createUserItemOfferAPI } from '../../Services/ItemService'
+import { getCurrentUserItemsAPI, createUserItemOfferAPI, deleteUserItemOfferAPI } from '../../Services/ItemService'
 import { fetchImageWithCache } from '../../Services/ApiMethodHelpers'
 import { type UserItemResponse, ItemTypeDisplay } from '../../Models/ItemModels'
 import type { PagedResponse } from '../../Models/PagedResponse'
@@ -116,6 +116,26 @@ const UserItemsPage = () => {
     }
   };
 
+  const handleCancelOffer = async (offerId: string) => {
+    setError('');
+    setIsLoading(true);
+
+    const result = await deleteUserItemOfferAPI(accessToken, setAccessToken, offerId);
+
+    if (result.success) {
+      // Refresh items
+      const itemsResult = await getCurrentUserItemsAPI(accessToken, setAccessToken, query);
+      if (itemsResult.success) {
+        setPagedResponse(itemsResult.data);
+        setItems(itemsResult.data.items);
+      }
+    } else {
+      setError(result.problem.title || 'Failed to cancel offer');
+    }
+
+    setIsLoading(false);
+  };
+
   if (showLoading) {
     return <div className={styles.container}>Loading...</div>;
   }
@@ -216,6 +236,12 @@ const UserItemsPage = () => {
                 <div className={styles.priceSection}>
                   <span className={styles.priceLabel}>Awaiting Trade</span>
                   <span className={styles.price}>{userItem.activeOfferPrice} Gems</span>
+                  <button 
+                    className={styles.cancelOfferButton}
+                    onClick={() => handleCancelOffer(userItem.activeOfferId!)}
+                  >
+                    Cancel
+                  </button>
                 </div>
               )}
 
