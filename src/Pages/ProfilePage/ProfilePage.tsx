@@ -61,7 +61,6 @@ const ProfilePage = () => {
     if (!file) return;
 
     setUploadError('');
-    setIsLoading(true);
 
     const result = await uploadProfilePictureAPI(accessToken, setAccessToken, file);
 
@@ -80,7 +79,6 @@ const ProfilePage = () => {
       setUploadError(result.problem.title || 'Failed to upload picture');
     }
 
-    setIsLoading(false);
     // Reset file input
     if (fileInputRef.current) {
       fileInputRef.current.value = '';
@@ -89,7 +87,6 @@ const ProfilePage = () => {
 
   const handleRemovePicture = async () => {
     setUploadError('');
-    setIsLoading(true);
 
     const result = await deleteProfilePictureAPI(accessToken, setAccessToken);
 
@@ -105,8 +102,6 @@ const ProfilePage = () => {
     } else {
       setUploadError(result.problem.title || 'Failed to remove picture');
     }
-
-    setIsLoading(false);
   };
 
   if (showLoading) {
