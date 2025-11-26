@@ -1,9 +1,9 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import styles from './ProfilePage.module.css'
 import { useAuth } from '../../Context/useAuth'
 import { useLoading } from '../../Context/useLoading'
-import { getUserGameInfoAPI } from '../../Services/UserService'
+import { getUserGameInfoAPI, uploadProfilePictureAPI, deleteProfilePictureAPI } from '../../Services/UserService'
 import { fetchImageWithCache } from '../../Services/ApiMethodHelpers'
 import type { UserGameInfoResponse } from '../../Models/UserModels'
 
@@ -13,9 +13,11 @@ const ProfilePage = () => {
 
   const [userInfo, setUserInfo] = useState<UserGameInfoResponse | null>(null);
   const [profilePictureUrl, setProfilePictureUrl] = useState<string | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const [showLoading, setShowLoading] = useState(false);
   const [error, setError] = useState('');
+  const [uploadError, setUploadError] = useState('');
 
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -50,6 +52,63 @@ const ProfilePage = () => {
     fetchUserInfo();
   }, [accessToken, setAccessToken]);
 
+  const handleChangePicture = () => {
+    fileInputRef.current?.click();
+  };
+
+  const handleFileSelect = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setUploadError('');
+    setIsLoading(true);
+
+    const result = await uploadProfilePictureAPI(accessToken, setAccessToken, file);
+
+    if (result.success) {
+      // Refresh user info to get new profile picture URL
+      const userInfoResult = await getUserGameInfoAPI(accessToken, setAccessToken);
+      if (userInfoResult.success) {
+        setUserInfo(userInfoResult.data);
+        
+        if (userInfoResult.data.profilePictureUrl) {
+          const imageUrl = await fetchImageWithCache(userInfoResult.data.profilePictureUrl, accessToken);
+          setProfilePictureUrl(imageUrl);
+        }
+      }
+    } else {
+      setUploadError(result.problem.title || 'Failed to upload picture');
+    }
+
+    setIsLoading(false);
+    // Reset file input
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const handleRemovePicture = async () => {
+    setUploadError('');
+    setIsLoading(true);
+
+    const result = await deleteProfilePictureAPI(accessToken, setAccessToken);
+
+    if (result.success) {
+      // Update userInfo to reflect removed profile picture
+      if (userInfo) {
+        setUserInfo({
+          ...userInfo,
+          profilePictureUrl: undefined
+        });
+      }
+      setProfilePictureUrl('/emptyprofilepicture.png');
+    } else {
+      setUploadError(result.problem.title || 'Failed to remove picture');
+    }
+
+    setIsLoading(false);
+  };
+
   if (showLoading) {
     return <div className={styles.profileContainer}>Loading...</div>;
   }
@@ -80,6 +139,26 @@ const ProfilePage = () => {
             alt="Profile Picture"
             className={styles.profilePicture}
           />
+          {userName === userInfo.userName && (
+            <div className={styles.pictureActions}>
+              <input
+                type="file"
+                ref={fileInputRef}
+                onChange={handleFileSelect}
+                accept="image/*"
+                className={styles.fileInput}
+              />
+              <button onClick={handleChangePicture} className={styles.changePictureButton}>
+                Change Picture
+              </button>
+              {userInfo.profilePictureUrl && (
+                <button onClick={handleRemovePicture} className={styles.removePictureButton}>
+                  Remove
+                </button>
+              )}
+              {uploadError && <p className={styles.uploadError}>{uploadError}</p>}
+            </div>
+          )}
         </div>
         
         <div className={styles.profileInfo}>

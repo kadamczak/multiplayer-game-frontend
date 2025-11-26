@@ -45,6 +45,10 @@
 
 .profilePictureContainer {
   flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
 }
 
 .profilePicture {
@@ -54,6 +58,48 @@
   object-fit: cover;
   object-position: center;
   border: 3px solid var(--primary-500);
+}
+
+.pictureActions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.fileInput {
+  display: none;
+}
+
+.changePictureButton,
+.removePictureButton {
+  background: none;
+  border: none;
+  color: var(--primary-500);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  text-decoration: underline;
+  padding: var(--spacing-xs);
+  transition: color 0.2s ease;
+}
+
+.changePictureButton:hover {
+  color: var(--primary-400);
+}
+
+.removePictureButton {
+  color: var(--error-500);
+}
+
+.removePictureButton:hover {
+  color: var(--error-400);
+}
+
+.uploadError {
+  color: var(--error-500);
+  font-size: var(--font-size-sm);
+  margin: 0;
+  text-align: center;
 }
 
 .profileInfo {

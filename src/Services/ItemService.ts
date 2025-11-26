@@ -32,6 +32,9 @@ export const createItemAPI = async (
     onTokenRefresh,
     {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(itemData),
     }
   );
@@ -49,6 +52,9 @@ export const updateItemAPI = async (
     onTokenRefresh,
     {
       method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(itemData),
     }
   );
@@ -115,6 +121,9 @@ export const createUserItemOfferAPI = async (
     onTokenRefresh,
     {
       method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify(itemData),
     }
   );
