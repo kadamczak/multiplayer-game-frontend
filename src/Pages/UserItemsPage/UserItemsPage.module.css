@@ -20,11 +20,11 @@
 .container li {
   padding: var(--spacing-md);
   margin-bottom: var(--spacing-sm);
-  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
+  background: linear-gradient(135deg, #1a1612 0%, #221d19 100%);
   background-image: 
     var(--texture-pattern),
     linear-gradient(135deg, rgba(255, 255, 255, 0.01) 0%, transparent 100%),
-    linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
+    linear-gradient(135deg, #1a1612 0%, #221d19 100%);
   border-radius: var(--radius-lg);
   color: var(--gray-100);
   display: flex;
@@ -275,7 +275,7 @@
 
 /* Filters and Search */
 .filtersSection {
-  background-color: var(--bg-secondary);
+  background-color: #1a1612;
   padding: var(--spacing-lg);
   border-radius: var(--radius-md);
   margin-bottom: var(--spacing-xl);
@@ -360,7 +360,7 @@
   gap: var(--spacing-lg);
   margin-top: var(--spacing-xl);
   padding: var(--spacing-lg);
-  background-color: var(--bg-secondary);
+  background-color: #1a1612;
   border-radius: var(--radius-md);
 }
 

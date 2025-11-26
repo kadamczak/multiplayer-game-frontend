@@ -39,8 +39,8 @@
 }
 
 .profileCard {
-  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%);
-  background-image: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-card) 100%), var(--texture-pattern);
+  background: linear-gradient(135deg, #1a1612 0%, #221d19 100%);
+  background-image: linear-gradient(135deg, #1a1612 0%, #221d19 100%), var(--texture-pattern);
   border-radius: var(--radius-xl);
   padding: var(--spacing-xl);
   box-shadow: var(--shadow-lg);
