@@ -17,3 +17,38 @@ export const getUserGameInfoAPI = async (
     }
   );
 };
+
+
+export const deleteProfilePictureAPI = async (
+  accessToken: string | null,
+  onTokenRefresh: (newToken: string) => void
+): Promise<ApiResponse<UserGameInfoResponse>> => {
+  return authenticatedRequestWithRefresh<UserGameInfoResponse>(
+    `${API_BASE_URL}/v1/users/me/profile-picture`,
+    accessToken,
+    onTokenRefresh,
+    {
+      method: 'DELETE',
+    }
+  );
+};
+
+
+export const uploadProfilePictureAPI = async (
+  accessToken: string | null,
+  onTokenRefresh: (newToken: string) => void,
+  file: File
+): Promise<ApiResponse<void>> => {
+  const formData = new FormData();
+  formData.append('file', file);
+
+  return authenticatedRequestWithRefresh<void>(
+    `${API_BASE_URL}/v1/users/me/profile-picture`,
+    accessToken,
+    onTokenRefresh,
+    {
+      method: 'POST',
+      body: formData,
+    }
+  );
+};

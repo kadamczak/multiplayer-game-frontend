@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import './ProfilePage.css'
+import styles from './ProfilePage.module.css'
 import { useAuth } from '../../Context/useAuth'
 import { useLoading } from '../../Context/useLoading'
 import { getUserGameInfoAPI } from '../../Services/UserService'
@@ -41,37 +41,37 @@ const ProfilePage = () => {
   }, [accessToken, setAccessToken]);
 
   if (showLoading) {
-    return <div className="profile-container">Loading...</div>;
+    return <div className={styles.profileContainer}>Loading...</div>;
   }
 
   if (error) {
-    return <div className="profile-container">Error: {error}</div>;
+    return <div className={styles.profileContainer}>Error: {error}</div>;
   }
 
   if (!userInfo) {
-    return <div className="profile-container">No user information available</div>;
+    return <div className={styles.profileContainer}>No user information available</div>;
   }
 
   return (
-    <div className="profile-container">
-      <div className="profile-header">
+    <div className={styles.profileContainer}>
+      <div className={styles.profileHeader}>
         <h1>Profile</h1>
         {userName === userInfo.userName && (
-          <Link to="/account-actions" className="manage-account-link">
+          <Link to="/account-actions" className={styles.manageAccountLink}>
             Manage Account
           </Link>
         )}
       </div>
       
-      <div className="profile-card">
-        <div className="profile-section">
+      <div className={styles.profileCard}>
+        <div className={styles.profileSection}>
           <label>Username</label>
-          <p className="profile-value">{userInfo.userName}</p>
+          <p className={styles.profileValue}>{userInfo.userName}</p>
         </div>
 
-        <div className="profile-section">
+        <div className={styles.profileSection}>
           <label>Account Balance</label>
-          <p className="profile-value balance">{userInfo.balance} Gems</p>
+          <p className={`${styles.profileValue} ${styles.balance}`}>{userInfo.balance} Gems</p>
         </div>
       </div>
     </div>

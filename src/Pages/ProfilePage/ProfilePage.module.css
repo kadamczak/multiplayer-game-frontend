@@ -1,23 +1,23 @@
-.profile-container {
+.profileContainer {
   max-width: 800px;
   margin: 0 auto;
   padding: var(--spacing-2xl);
 }
 
-.profile-header {
+.profileHeader {
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: var(--spacing-xl);
 }
 
-.profile-container h1 {
+.profileContainer h1 {
   font-size: var(--font-size-3xl);
   color: var(--primary-800);
   margin: 0;
 }
 
-.manage-account-link {
+.manageAccountLink {
   color: var(--secondary-500);
   text-decoration: none;
   font-size: var(--font-size-base);
@@ -28,27 +28,27 @@
   border: 1px solid var(--secondary-500);
 }
 
-.manage-account-link:hover {
+.manageAccountLink:hover {
   background-color: var(--secondary-500);
   color: var(--gray-900);
 }
 
-.profile-card {
+.profileCard {
   background-color: var(--bg-secondary);
   border-radius: var(--radius-md);
   padding: var(--spacing-xl);
   box-shadow: var(--shadow-md);
 }
 
-.profile-section {
+.profileSection {
   margin-bottom: var(--spacing-lg);
 }
 
-.profile-section:last-child {
+.profileSection:last-child {
   margin-bottom: 0;
 }
 
-.profile-section label {
+.profileSection label {
   display: block;
   font-size: var(--font-size-sm);
   color: var(--gray-500);
@@ -57,14 +57,14 @@
   margin-bottom: var(--spacing-xs);
 }
 
-.profile-value {
+.profileValue {
   font-size: var(--font-size-xl);
   color: var(--gray-100);
   margin: 0;
   font-weight: 500;
 }
 
-.profile-value.balance {
+.profileValue.balance {
   color: var(--primary-500);
   font-size: var(--font-size-2xl);
   font-weight: 600;
