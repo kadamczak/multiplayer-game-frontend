@@ -210,20 +210,28 @@ const UserItemsPage = () => {
                 <strong>{userItem.item.name}</strong>
                 <p>{ItemTypeDisplay[userItem.item.type]}</p>
                 <p>{userItem.item.description}</p>
-                {userItem.activeOfferId && (
-                  <p className={styles.offerStatus}>Awaiting Trade for {userItem.activeOfferPrice} Gems</p>
-                )}
-                
-                {!userItem.activeOfferId && sellingItemId !== userItem.id && (
+              </div>
+              
+              {userItem.activeOfferId && (
+                <div className={styles.priceSection}>
+                  <span className={styles.priceLabel}>Awaiting Trade</span>
+                  <span className={styles.price}>{userItem.activeOfferPrice} Gems</span>
+                </div>
+              )}
+
+              {!userItem.activeOfferId && sellingItemId !== userItem.id && (
+                <div className={styles.priceSection}>
                   <button 
                     className={styles.sellButton}
                     onClick={() => handleSellClick(userItem.id)}
                   >
                     Sell
                   </button>
-                )}
+                </div>
+              )}
 
-                {sellingItemId === userItem.id && (
+              {sellingItemId === userItem.id && (
+                <div className={styles.priceSection}>
                   <div className={styles.sellBox}>
                     <div className={styles.sellInputGroup}>
                       <label htmlFor={`price-${userItem.id}`}>Price (Gems):</label>
@@ -254,8 +262,8 @@ const UserItemsPage = () => {
                       </button>
                     </div>
                   </div>
-                )}
-              </div>
+                </div>
+              )}
             </li>
           ))}
         </ul>
