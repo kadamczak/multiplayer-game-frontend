@@ -1,4 +1,3 @@
-import type { PagedQuery } from "./PagedQuery";
 
 export const ItemType = {
   Consumable: "Consumable",
@@ -25,7 +24,8 @@ export type ItemResponse = {
 export type UserItemResponse = {
   id: string;
   item: ItemResponse;
-  hasActiveOffer: boolean;
+  activeOfferId?: string;
+  activeOfferPrice?: number;
 }
 
 export type UserItemOfferResponse = {
@@ -45,13 +45,4 @@ export type UserItemOfferResponse = {
 export type CreateUserItemOfferRequest = {
   userItemId: string;
   price: number;
-}
-
-export type GetOffersRequest = {
-  pagedQuery: PagedQuery;
-  showActive: boolean;
-}
-
-export type GetUserItemsRequest = {
-  pagedQuery: PagedQuery;
 }

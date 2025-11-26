@@ -210,11 +210,11 @@ const UserItemsPage = () => {
                 <strong>{userItem.item.name}</strong>
                 <p>{ItemTypeDisplay[userItem.item.type]}</p>
                 <p>{userItem.item.description}</p>
-                {userItem.hasActiveOffer && (
-                  <p className={styles.offerStatus}>Awaiting Trade</p>
+                {userItem.activeOfferId && (
+                  <p className={styles.offerStatus}>Awaiting Trade for {userItem.activeOfferPrice} Gems</p>
                 )}
                 
-                {!userItem.hasActiveOffer && sellingItemId !== userItem.id && (
+                {!userItem.activeOfferId && sellingItemId !== userItem.id && (
                   <button 
                     className={styles.sellButton}
                     onClick={() => handleSellClick(userItem.id)}

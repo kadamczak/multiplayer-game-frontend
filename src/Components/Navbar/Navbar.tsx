@@ -10,7 +10,6 @@ const Navbar = () => {
       <div className={styles.leftLinks}>
         <Link to="/" className={styles.link}>Home</Link>
         <Link to="/my-items" className={styles.link}>My Items</Link>
-        <Link to="/my-offers" className={styles.link}>My Offers</Link>
         <Link to="/marketplace" className={styles.link}>Marketplace</Link>
       </div>
       <div className={styles.rightLinks}>
