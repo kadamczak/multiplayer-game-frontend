@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Playfair+Display:wght@400;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Merriweather:wght@400;700&display=swap');
 
 :root {
   /* Primary Colors (Gentle Rose Red) */
@@ -57,8 +57,8 @@
 
   /* Typography */
   --font-sans: 'Roboto', -apple-system, sans-serif;
-  --font-serif: 'Playfair Display', 'Georgia', serif;
-  --font-decorative: 'Cinzel Decorative', 'Times New Roman', serif;
+  --font-serif: 'Merriweather', 'Georgia', serif;
+  --font-decorative: 'Cinzel', 'Times New Roman', serif;
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
@@ -108,12 +108,7 @@ html, body {
 }
 
 body {
-    background: 
-        var(--texture-grain),
-        radial-gradient(ellipse at 20% 30%, rgba(154, 90, 90, 0.15) 0%, transparent 50%),
-        radial-gradient(ellipse at 80% 70%, rgba(107, 61, 65, 0.12) 0%, transparent 50%),
-        linear-gradient(180deg, #1a1612 0%, var(--bg-primary) 30%, var(--bg-primary) 70%, #1f1a17 100%);
-    background-position: calc(50% - 0px) top, 0 0, 20% 30%, 80% 70%, 0 0;
+    background: var(--texture-grain), var(--bg-primary);
     color: var(--gray-100); 
     font-family: var(--font-sans);
     letter-spacing: 0.01em;
