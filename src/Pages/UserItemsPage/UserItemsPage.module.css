@@ -82,8 +82,6 @@
   object-fit: cover;
   border-radius: var(--radius-sm);
   display: block;
-  border: 2px solid var(--primary-700);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 .itemContent {
@@ -107,12 +105,10 @@
   font-weight: 600;
   font-family: var(--font-serif);
   transition: all 0.3s ease;
-  box-shadow: 0 4px 8px rgba(184, 115, 127, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
 }
 
 .sellButton:hover {
   background: linear-gradient(135deg, var(--primary-800) 0%, #5a3040 100%);
-  box-shadow: 0 6px 12px rgba(184, 115, 127, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.2);
   transform: translateY(-1px);
 }
 

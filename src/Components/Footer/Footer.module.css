@@ -3,9 +3,11 @@
     justify-content: center;
     align-items: center;
     padding: var(--spacing-lg, 2rem);
-    background-color: var(--gray-600, #555);
-    color: var(--color-text-light, white);
+    background: linear-gradient(180deg, transparent 0%, rgba(26, 22, 18, 0.6) 20%, rgba(26, 22, 18, 0.9) 100%);
+    color: var(--gray-300);
     margin-top: auto;
+    border-top: 1px solid var(--primary-900);
+    font-family: var(--font-serif);
 }
 
 .content {
