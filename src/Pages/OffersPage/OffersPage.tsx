@@ -33,6 +33,7 @@ const OffersPage = () => {
   }, [query]);
 
   const fetchData = async () => {
+    setError('');
     let loadingTimer: ReturnType<typeof setTimeout> | null = null;
     const isInitialLoad = loadingState === 'initial';
       
@@ -44,8 +45,6 @@ const OffersPage = () => {
       setLoadingState('refreshing');
     }
 
-    setError('');
-
     const [offersResult, userInfoResult] = await fetchOffersAndUserInfo(query);
 
     if (offersResult.success) {
@@ -55,14 +54,8 @@ const OffersPage = () => {
       setError(offersResult.problem.title || 'Failed to load offers');
     }
 
-    if (userInfoResult.success) {
-       setUserInfo(userInfoResult.data);
-    }
-
-    if (loadingTimer) {
-      clearTimeout(loadingTimer);
-    }
-
+    userInfoResult.success && setUserInfo(userInfoResult.data);
+    loadingTimer && clearTimeout(loadingTimer);
     finishLoading();
   };
 
@@ -102,13 +95,8 @@ const OffersPage = () => {
 
     if (result.success) {
       const [offersResult, userInfoResult] = await fetchOffersAndUserInfo(query);
-
-      if (offersResult.success) {
-        setPagedResponse(offersResult.data);
-      }
-      if (userInfoResult.success) {
-        setUserInfo(userInfoResult.data);
-      }
+      offersResult.success && setPagedResponse(offersResult.data);
+      userInfoResult.success && setUserInfo(userInfoResult.data);
     } else {
       setError(result.problem.title || 'Failed to purchase offer');
     }
