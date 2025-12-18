@@ -28,10 +28,6 @@ const AccountActionsPage = () => {
   const [deleteAccountError, setDeleteAccountError] = useState('');
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
 
-  useEffect(() => {
-    setIsLoading(false);
-  }, [setIsLoading]);
-
   // Change Password Form
   const {
     register: registerPassword,
@@ -43,8 +39,14 @@ const AccountActionsPage = () => {
   } = useForm<ChangePasswordFormData>({
     mode: 'onBlur',
   });
-
+  
   const newPassword = watchPassword('newPassword');
+  
+
+  useEffect(() => {
+    setIsLoading(false);
+  }, [setIsLoading]);
+
 
   const onChangePassword = async (data: ChangePasswordFormData) => {
     setChangePasswordError('');
