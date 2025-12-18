@@ -32,6 +32,7 @@ const OffersPage = () => {
     fetchData();
   }, [query]);
 
+
   const fetchData = async () => {
     setError('');
     let loadingTimer: ReturnType<typeof setTimeout> | null = null;
@@ -70,6 +71,7 @@ const OffersPage = () => {
     })
   ]);
 
+
   const loadThumbnails = async (offers: UserItemOfferResponse[]) => {
     const newThumbnails = new Map<string, string>();
     await Promise.all(
@@ -82,6 +84,7 @@ const OffersPage = () => {
     );
     setThumbnails(newThumbnails);
   };
+
 
   const finishLoading = async() => {
     setIsLoading(false);
@@ -107,6 +110,7 @@ const OffersPage = () => {
     return <div className={styles.container}>Loading...</div>;
   }
 
+  
   return (
     <div className={styles.container}>
       {loadingState === 'refreshing' && (

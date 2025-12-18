@@ -13,7 +13,6 @@ const UserItemsPage = () => {
   const { accessToken, setAccessToken } = useAuth();
   const { setIsLoading } = useLoading();
 
-  const [items, setItems] = useState<UserItemResponse[]>([]);
   const [pagedResponse, setPagedResponse] = useState<PagedResponse<UserItemResponse> | null>(null);
   const [thumbnails, setThumbnails] = useState<Map<string, string>>(new Map());
 
@@ -29,51 +28,57 @@ const UserItemsPage = () => {
   const [sellPrice, setSellPrice] = useState('');
   const [sellError, setSellError] = useState('');
 
+
   useEffect(() => {
+    fetchData();
+  }, [query]);
+
+
+  const fetchData = async () => {
+    setError('');
     let loadingTimer: ReturnType<typeof setTimeout> | null = null;
-    
-    const fetchItems = async () => {
-      if (initialLoading) {
-        setInitialLoading(true);
-        setIsLoading(true);
-        loadingTimer = setTimeout(() => setShowLoading(true), 200);
-        query.sortBy = "Name"
-      } else {
-        setIsRefreshing(true);
-      }
-      setError('');
 
-      const result = await getCurrentUserItemsAPI(accessToken, setAccessToken, query);
-
-      if (result.success) {
-        setPagedResponse(result.data);
-        setItems(result.data.items);
-
-        const newThumbnails = new Map<string, string>();
-        await Promise.all(
-          result.data.items.map(async (userItem) => {
-            const thumbnailUrl = await fetchImageWithCache(userItem.item.thumbnailUrl, accessToken);
-            if (thumbnailUrl) {
-              newThumbnails.set(userItem.id, thumbnailUrl);
-            }
-          })
-        );
-        setThumbnails(newThumbnails);
-      } else {
-        setError(result.problem.title || 'Failed to load items');
-      }
-
-      if (initialLoading && loadingTimer) {
-        clearTimeout(loadingTimer);
-        setShowLoading(false);
-      }
-      setInitialLoading(false);
-      setIsRefreshing(false);
-      setIsLoading(false);
+    if (initialLoading) {
+      setInitialLoading(true);
+      setIsLoading(true);
+      loadingTimer = setTimeout(() => setShowLoading(true), 200);
+      query.sortBy = "Name"
+    } else {
+      setIsRefreshing(true);
     }
 
-    fetchItems();
-  }, [query]);
+    const userItemsResult = await getCurrentUserItemsAPI(accessToken, setAccessToken, query);
+
+    if (userItemsResult.success) {
+      setPagedResponse(userItemsResult.data);
+      await loadThumbnails(userItemsResult.data.items);
+    } else {
+      setError(userItemsResult.problem.title || 'Failed to load items');
+    }
+
+    if (initialLoading && loadingTimer) {
+      clearTimeout(loadingTimer);
+      setShowLoading(false);
+    }
+    setInitialLoading(false);
+    setIsRefreshing(false);
+    setIsLoading(false);
+  };
+  
+
+  const loadThumbnails = async (userItems: UserItemResponse[]) => {
+    const newThumbnails = new Map<string, string>();
+    await Promise.all(
+      userItems.map(async (userItem) => {
+        const thumbnailUrl = await fetchImageWithCache(userItem.item.thumbnailUrl, accessToken);
+        if (thumbnailUrl) {
+          newThumbnails.set(userItem.id, thumbnailUrl);
+        }
+      })
+    );
+    setThumbnails(newThumbnails);
+  };
+
 
   const handleSellClick = (itemId: string) => {
     setSellingItemId(itemId);
@@ -81,11 +86,11 @@ const UserItemsPage = () => {
     setSellError('');
   };
 
+
   const handleCancelSell = () => {
-    setSellingItemId(null);
-    setSellPrice('');
-    setSellError('');
+    resetItemBeingSold();
   };
+
 
   const handleAcceptSell = async (userItemId: string) => {
     const price = parseFloat(sellPrice);
@@ -101,20 +106,21 @@ const UserItemsPage = () => {
     );
 
     if (result.success) {
-      setSellingItemId(null);
-      setSellPrice('');
-      setSellError('');
+      resetItemBeingSold();
       
-      // Refresh items
       const itemsResult = await getCurrentUserItemsAPI(accessToken, setAccessToken, query);
-      if (itemsResult.success) {
-        setPagedResponse(itemsResult.data);
-        setItems(itemsResult.data.items);
-      }
+      itemsResult.success && setPagedResponse(itemsResult.data);
     } else {
       setSellError(result.problem.title || 'Failed to create offer');
     }
   };
+
+  const resetItemBeingSold = () => {
+    setSellingItemId(null);
+    setSellPrice('');
+    setSellError('');
+  }
+
 
   const handleCancelOffer = async (offerId: string) => {
     setError('');
@@ -123,12 +129,8 @@ const UserItemsPage = () => {
     const result = await deleteUserItemOfferAPI(accessToken, setAccessToken, offerId);
 
     if (result.success) {
-      // Refresh items
       const itemsResult = await getCurrentUserItemsAPI(accessToken, setAccessToken, query);
-      if (itemsResult.success) {
-        setPagedResponse(itemsResult.data);
-        setItems(itemsResult.data.items);
-      }
+      itemsResult.success && setPagedResponse(itemsResult.data);
     } else {
       setError(result.problem.title || 'Failed to cancel offer');
     }
@@ -136,9 +138,11 @@ const UserItemsPage = () => {
     setIsLoading(false);
   };
 
+
   if (showLoading) {
     return <div className={styles.container}>Loading...</div>;
   }
+
 
   return (
     <div className={styles.container}>
@@ -211,11 +215,11 @@ const UserItemsPage = () => {
         </div>
       </div>
       
-      {items.length === 0 ? (
+      {pagedResponse && pagedResponse.items.length === 0 ? (
         <p>No items found.</p>
       ) : (
         <ul>
-          {items.map((userItem) => (
+          {pagedResponse && pagedResponse.items.map((userItem) => (
             <li key={userItem.id}>
               <div className={styles.thumbnailWrapper}>
                 {thumbnails.get(userItem.id) && (
