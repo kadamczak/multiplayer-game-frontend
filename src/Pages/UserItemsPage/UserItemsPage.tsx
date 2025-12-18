@@ -23,9 +23,11 @@ const UserItemsPage = () => {
   const [showLoading, setShowLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const [sellingItemId, setSellingItemId] = useState<string | null>(null);
-  const [sellPrice, setSellPrice] = useState('');
-  const [sellError, setSellError] = useState('');
+  const [itemBeingSoldState, setItemBeingSoldState] = useState<{
+    itemId: string | null;
+    price: string;
+    error: string;
+  }>({ itemId: null, price: '', error: '' });
 
 
   useEffect(() => {
@@ -78,9 +80,7 @@ const UserItemsPage = () => {
 
 
   const handleSellClick = (itemId: string) => {
-    setSellingItemId(itemId);
-    setSellPrice('');
-    setSellError('');
+    setItemBeingSoldState({ itemId, price: '', error: '' });
   };
 
 
@@ -90,9 +90,9 @@ const UserItemsPage = () => {
 
 
   const handleAcceptSell = async (userItemId: string) => {
-    const price = parseFloat(sellPrice);
+    const price = parseFloat(itemBeingSoldState.price);
     if (isNaN(price) || price <= 0) {
-      setSellError('Please enter a valid price');
+      setItemBeingSoldState({ ...itemBeingSoldState, error: 'Please enter a valid price' });
       return;
     }
 
@@ -108,14 +108,12 @@ const UserItemsPage = () => {
       const itemsResult = await getCurrentUserItemsAPI(accessToken, setAccessToken, query);
       itemsResult.success && setPagedResponse(itemsResult.data);
     } else {
-      setSellError(result.problem.title || 'Failed to create offer');
+      setItemBeingSoldState({ ...itemBeingSoldState, error: result.problem.title || 'Failed to create offer' });
     }
   };
 
   const resetItemBeingSold = () => {
-    setSellingItemId(null);
-    setSellPrice('');
-    setSellError('');
+    setItemBeingSoldState({ itemId: null, price: '', error: '' });
   }
 
 
@@ -246,7 +244,7 @@ const UserItemsPage = () => {
                 </div>
               )}
 
-              {!userItem.activeOfferId && sellingItemId !== userItem.id && (
+              {!userItem.activeOfferId && itemBeingSoldState.itemId !== userItem.id && (
                 <div className={styles.priceSection}>
                   <button 
                     className={styles.sellButton}
@@ -257,7 +255,7 @@ const UserItemsPage = () => {
                 </div>
               )}
 
-              {sellingItemId === userItem.id && (
+              {itemBeingSoldState.itemId === userItem.id && (
                 <div className={styles.priceSection}>
                   <div className={styles.sellBox}>
                     <div className={styles.sellInputGroup}>
@@ -267,13 +265,13 @@ const UserItemsPage = () => {
                         type="number"
                         min="0"
                         step="1"
-                        value={sellPrice}
-                        onChange={(e) => setSellPrice(e.target.value)}
+                        value={itemBeingSoldState.price}
+                        onChange={(e) => setItemBeingSoldState({ ...itemBeingSoldState, price: e.target.value })}
                         className={styles.sellInput}
                         placeholder="Enter price"
                       />
                     </div>
-                    {sellError && <p className={styles.sellError}>{sellError}</p>}
+                    {itemBeingSoldState.error && <p className={styles.sellError}>{itemBeingSoldState.error}</p>}
                     <div className={styles.sellActions}>
                       <button 
                         className={styles.acceptButton}
