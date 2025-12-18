@@ -16,7 +16,6 @@ const OffersPage = () => {
   const { accessToken, setAccessToken } = useAuth();
   const { setIsLoading } = useLoading();
 
-  const [offers, setOffers] = useState<UserItemOfferResponse[]>([]);
   const [pagedResponse, setPagedResponse] = useState<PagedResponse<UserItemOfferResponse> | null>(null);
   const [userInfo, setUserInfo] = useState<UserGameInfoResponse | null>(null);
   const [thumbnails, setThumbnails] = useState<Map<string, string>>(new Map());
@@ -24,23 +23,22 @@ const OffersPage = () => {
   const [query, setQuery] = useState<PagedQuery>({ ...defaultPagedQuery });
   const [searchInput, setSearchInput] = useState('');
   
-  const [initialLoading, setInitialLoading] = useState(true);
+  const [loadingState, setLoadingState] = useState<'initial' | 'loaded' | 'refreshing'>('initial');
   const [showLoading, setShowLoading] = useState(false);
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState('');
 
   useEffect(() => {
     let loadingTimer: ReturnType<typeof setTimeout> | null = null;
     
     const fetchData = async () => {
-      if (initialLoading) {
-        setInitialLoading(true);
+      const isInitialLoad = loadingState === 'initial';
+      
+      if (isInitialLoad) {
         setIsLoading(true);
         loadingTimer = setTimeout(() => setShowLoading(true), 200);
-
         query.sortBy = "Name";
       } else {
-        setIsRefreshing(true);
+        setLoadingState('refreshing');
       }
       setError('');
 
@@ -55,7 +53,6 @@ const OffersPage = () => {
 
       if (offersResult.success) {
         setPagedResponse(offersResult.data);
-        setOffers(offersResult.data.items);
         
         // Load thumbnails for all offers
         const newThumbnails = new Map<string, string>();
@@ -76,12 +73,11 @@ const OffersPage = () => {
         setUserInfo(userInfoResult.data);
       }
 
-      if (initialLoading && loadingTimer) {
+      if (loadingTimer) {
         clearTimeout(loadingTimer);
-        setShowLoading(false);
       }
-      setInitialLoading(false);
-      setIsRefreshing(false);
+      setShowLoading(false);
+      setLoadingState('loaded');
       setIsLoading(false);
     }
 
@@ -99,7 +95,6 @@ const OffersPage = () => {
 
       if (offersResult.success) {
         setPagedResponse(offersResult.data);
-        setOffers(offersResult.data.items);
       }
       if (userInfoResult.success) {
         setUserInfo(userInfoResult.data);
@@ -116,7 +111,7 @@ const OffersPage = () => {
 
   return (
     <div className={styles.container}>
-      {isRefreshing && (
+      {loadingState === 'refreshing' && (
         <div className={styles.refreshIndicator}>
           Updating...
         </div>
@@ -196,11 +191,11 @@ const OffersPage = () => {
         </div>
       </div>
   
-      {offers.length === 0 ? (
+      {pagedResponse && pagedResponse.items.length === 0 ? (
         <p>No active offers available.</p>
       ) : (
         <ul className={styles.offersList}>
-          {offers.map((offer) => {
+          {pagedResponse && pagedResponse.items.map((offer) => {
             const isOwnOffer = userInfo?.id === offer.sellerId;
             const canAfford = userInfo ? userInfo.balance >= offer.price : false;
 
