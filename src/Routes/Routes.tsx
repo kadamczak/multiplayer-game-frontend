@@ -12,6 +12,7 @@ import AccountActionsPage from "../Pages/AccountActionsPage/AccountActionsPage";
 import ForgotPasswordPage from "../Pages/ForgotPasswordPage/ForgotPasswordPage";
 import ResetPasswordPage from "../Pages/ResetPasswordPage/ResetPasswordPage";
 import ConfirmEmailPage from "../Pages/ConfirmEmailPage/ConfirmEmailPage";
+import FriendsPage from "../Pages/FriendsPage/FriendsPage";
 
 export const router = createBrowserRouter([
   {
@@ -37,6 +38,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <OffersPage />
+          </ProtectedRoute>
+        )
+      },
+
+      { path: "friends",
+        element: (
+          <ProtectedRoute>
+            <FriendsPage />
           </ProtectedRoute>
         )
       },
