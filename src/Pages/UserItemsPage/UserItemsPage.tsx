@@ -19,9 +19,8 @@ const UserItemsPage = () => {
   const [query, setQuery] = useState<PagedQuery>({ ...defaultPagedQuery, sortBy: 'Name' });
   const [searchInput, setSearchInput] = useState('');
 
-  const [initialLoading, setInitialLoading] = useState(true);
+  const [loadingState, setLoadingState] = useState<'initial' | 'loaded' | 'refreshing'>('initial');
   const [showLoading, setShowLoading] = useState(false);
-  const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState('');
 
   const [sellingItemId, setSellingItemId] = useState<string | null>(null);
@@ -38,13 +37,12 @@ const UserItemsPage = () => {
     setError('');
     let loadingTimer: ReturnType<typeof setTimeout> | null = null;
 
-    if (initialLoading) {
-      setInitialLoading(true);
+    if (loadingState === 'initial') {
       setIsLoading(true);
       loadingTimer = setTimeout(() => setShowLoading(true), 200);
       query.sortBy = "Name"
     } else {
-      setIsRefreshing(true);
+      setLoadingState('refreshing');
     }
 
     const userItemsResult = await getCurrentUserItemsAPI(accessToken, setAccessToken, query);
@@ -56,12 +54,11 @@ const UserItemsPage = () => {
       setError(userItemsResult.problem.title || 'Failed to load items');
     }
 
-    if (initialLoading && loadingTimer) {
+    if (loadingState === 'initial' && loadingTimer) {
       clearTimeout(loadingTimer);
       setShowLoading(false);
     }
-    setInitialLoading(false);
-    setIsRefreshing(false);
+    setLoadingState('loaded');
     setIsLoading(false);
   };
   
@@ -146,7 +143,7 @@ const UserItemsPage = () => {
 
   return (
     <div className={styles.container}>
-      {isRefreshing && (
+      {loadingState === 'refreshing' && (
         <div className={styles.refreshIndicator}>
           Updating...
         </div>
