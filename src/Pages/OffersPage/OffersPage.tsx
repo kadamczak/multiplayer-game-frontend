@@ -15,7 +15,7 @@ import type { PagedResponse } from '../../Models/PagedResponse'
 const OffersPage = () => {
   const { accessToken, setAccessToken } = useAuth();
   const { setIsLoading } = useLoading();
-
+  
   const [pagedResponse, setPagedResponse] = useState<PagedResponse<UserItemOfferResponse> | null>(null);
   const [userInfo, setUserInfo] = useState<UserGameInfoResponse | null>(null);
   const [thumbnails, setThumbnails] = useState<Map<string, string>>(new Map());
@@ -27,71 +27,81 @@ const OffersPage = () => {
   const [showLoading, setShowLoading] = useState(false);
   const [error, setError] = useState('');
 
+  
   useEffect(() => {
-    let loadingTimer: ReturnType<typeof setTimeout> | null = null;
-    
-    const fetchData = async () => {
-      const isInitialLoad = loadingState === 'initial';
-      
-      if (isInitialLoad) {
-        setIsLoading(true);
-        loadingTimer = setTimeout(() => setShowLoading(true), 200);
-        query.sortBy = "Name";
-      } else {
-        setLoadingState('refreshing');
-      }
-      setError('');
-
-      const [offersResult, userInfoResult] = await Promise.all([
-        getOffersAPI(accessToken, (newToken) => {
-          setAccessToken(newToken);
-        }, query, true),
-        getUserGameInfoAPI(accessToken, (newToken) => {
-          setAccessToken(newToken);
-        })
-      ]);
-
-      if (offersResult.success) {
-        setPagedResponse(offersResult.data);
-        
-        // Load thumbnails for all offers
-        const newThumbnails = new Map<string, string>();
-        await Promise.all(
-          offersResult.data.items.map(async (offer) => {
-            const thumbnailUrl = await fetchImageWithCache(offer.userItem.item.thumbnailUrl, accessToken);
-            if (thumbnailUrl) {
-              newThumbnails.set(offer.id, thumbnailUrl);
-            }
-          })
-        );
-        setThumbnails(newThumbnails);
-      } else {
-        setError(offersResult.problem.title || 'Failed to load offers');
-      }
-
-      if (userInfoResult.success) {
-        setUserInfo(userInfoResult.data);
-      }
-
-      if (loadingTimer) {
-        clearTimeout(loadingTimer);
-      }
-      setShowLoading(false);
-      setLoadingState('loaded');
-      setIsLoading(false);
-    }
-
     fetchData();
   }, [query]);
+
+  const fetchData = async () => {
+    let loadingTimer: ReturnType<typeof setTimeout> | null = null;
+    const isInitialLoad = loadingState === 'initial';
+      
+    if (isInitialLoad) {
+      setIsLoading(true);
+      loadingTimer = setTimeout(() => setShowLoading(true), 200);
+      query.sortBy = "Name";
+    } else {
+      setLoadingState('refreshing');
+    }
+
+    setError('');
+
+    const [offersResult, userInfoResult] = await fetchOffersAndUserInfo(query);
+
+    if (offersResult.success) {
+      setPagedResponse(offersResult.data);
+      await loadThumbnails(offersResult.data.items);
+    } else {
+      setError(offersResult.problem.title || 'Failed to load offers');
+    }
+
+    if (userInfoResult.success) {
+       setUserInfo(userInfoResult.data);
+    }
+
+    if (loadingTimer) {
+      clearTimeout(loadingTimer);
+    }
+
+    finishLoading();
+  };
+
+
+  const fetchOffersAndUserInfo = async (query: PagedQuery) => await Promise.all([
+    getOffersAPI(accessToken, (newToken) => {
+      setAccessToken(newToken)
+    }, query, true),
+
+    getUserGameInfoAPI(accessToken, (newToken) => {
+      setAccessToken(newToken)
+    })
+  ]);
+
+  const loadThumbnails = async (offers: UserItemOfferResponse[]) => {
+    const newThumbnails = new Map<string, string>();
+    await Promise.all(
+      offers.map(async (offer) => {
+        const thumbnailUrl = await fetchImageWithCache(offer.userItem.item.thumbnailUrl, accessToken);
+        if (thumbnailUrl) {
+          newThumbnails.set(offer.id, thumbnailUrl);
+        }
+      })
+    );
+    setThumbnails(newThumbnails);
+  };
+
+  const finishLoading = async() => {
+    setIsLoading(false);
+    setLoadingState('loaded');
+    setShowLoading(false);
+  }
+
 
   const handleBuy = async (offerId: string) => {
     const result = await purchaseUserItemOfferAPI(accessToken, setAccessToken, offerId);
 
     if (result.success) {
-      const [offersResult, userInfoResult] = await Promise.all([
-        getOffersAPI(accessToken, setAccessToken, query, true),
-        getUserGameInfoAPI(accessToken, setAccessToken),
-      ]);
+      const [offersResult, userInfoResult] = await fetchOffersAndUserInfo(query);
 
       if (offersResult.success) {
         setPagedResponse(offersResult.data);
