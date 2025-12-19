@@ -9,6 +9,7 @@ import type { PagedQuery } from '../../../Models/PagedQuery'
 import { defaultPagedQuery } from '../../../Models/PagedQuery'
 import { SortDirection } from '../../../Constants/SortDirection'
 import type { PagedResponse } from '../../../Models/PagedResponse'
+import { Link } from 'react-router-dom'
 
 const FriendsPage = () => {
   const { accessToken, setAccessToken } = useAuth();
@@ -156,9 +157,9 @@ const FriendsPage = () => {
       <div className={styles.header}>
         <h1>Friends</h1>
         <div className={styles.headerRight}>
-          <button className={styles.sentRequestsButton}>
+          <Link to="/friends/requests/sent" className={styles.sentRequestsButton}>
             Sent Requests
-          </button>
+          </Link>
         </div>
       </div>
 

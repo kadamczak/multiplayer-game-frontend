@@ -12,6 +12,7 @@ import ForgotPasswordPage from "../Pages/Account/ForgotPasswordPage/ForgotPasswo
 import ResetPasswordPage from "../Pages/Account/ResetPasswordPage/ResetPasswordPage";
 import ConfirmEmailPage from "../Pages/Account/ConfirmEmailPage/ConfirmEmailPage";
 import FriendsPage from "../Pages/Friends/FriendsPage/FriendsPage";
+import SentFriendRequestsPage from "../Pages/Friends/SentFriendRequestsPage/SentFriendRequestsPage";
 
 export const router = createBrowserRouter([
   {
@@ -45,6 +46,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <FriendsPage />
+          </ProtectedRoute>
+        )
+      },
+
+      { path: "friends/requests/sent",
+        element: (
+          <ProtectedRoute>
+            <SentFriendRequestsPage />
           </ProtectedRoute>
         )
       },
