@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import styles from './LoginPage.module.css'
-import { USER_VALIDATION_RULES } from '../../Constants/Validation/UserValidationRules'
-import { useAuth } from '../../Context/useAuth'
-import { useLoading } from '../../Context/useLoading'
+import { USER_VALIDATION_RULES } from '../../../Constants/Validation/UserValidationRules'
+import { useAuth } from '../../../Context/useAuth'
+import { useLoading } from '../../../Context/useLoading'
 import { useForm } from 'react-hook-form'
-import { getFieldErrors } from '../../Models/ApiResponse'
-import { applyServerFieldErrors } from '../../Helpers/FormHelpers'
+import { getFieldErrors } from '../../../Models/ApiResponse'
+import { applyServerFieldErrors } from '../../../Helpers/FormHelpers'
 
 type LoginFormData = {
   userName: string

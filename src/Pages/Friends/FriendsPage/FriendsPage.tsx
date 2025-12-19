@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import styles from './FriendsPage.module.css'
-import { useAuth } from '../../Context/useAuth'
-import { useLoading } from '../../Context/useLoading'
-import { getReceivedFriendRequestsAPI, getFriendsAPI } from '../../Services/FriendService'
-import { fetchImageWithCache } from '../../Services/ApiMethodHelpers'
-import type { FriendRequestResponse, FriendResponse } from '../../Models/FriendModels'
-import type { PagedQuery } from '../../Models/PagedQuery'
-import { defaultPagedQuery } from '../../Models/PagedQuery'
-import { SortDirection } from '../../Constants/SortDirection'
-import type { PagedResponse } from '../../Models/PagedResponse'
+import { useAuth } from '../../../Context/useAuth'
+import { useLoading } from '../../../Context/useLoading'
+import { getReceivedFriendRequestsAPI, getFriendsAPI } from '../../../Services/FriendService'
+import { fetchImageWithCache } from '../../../Services/ApiMethodHelpers'
+import type { FriendRequestResponse, FriendResponse } from '../../../Models/FriendModels'
+import type { PagedQuery } from '../../../Models/PagedQuery'
+import { defaultPagedQuery } from '../../../Models/PagedQuery'
+import { SortDirection } from '../../../Constants/SortDirection'
+import type { PagedResponse } from '../../../Models/PagedResponse'
 
 const FriendsPage = () => {
   const { accessToken, setAccessToken } = useAuth();

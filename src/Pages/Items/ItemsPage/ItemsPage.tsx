@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
 import styles from './ItemsPage.module.css'
-import { useAuth } from '../../Context/useAuth'
-import { useLoading } from '../../Context/useLoading'
-import { getItemsAPI, createItemAPI, updateItemAPI, deleteItemAPI } from '../../Services/ItemService'
-import type { ItemResponse } from '../../Models/ItemModels'
+import { useAuth } from '../../../Context/useAuth'
+import { useLoading } from '../../../Context/useLoading'
+import { getItemsAPI, createItemAPI, updateItemAPI, deleteItemAPI } from '../../../Services/ItemService'
+import type { ItemResponse } from '../../../Models/ItemModels'
 
 const ItemsPage = () => {
   const { accessToken, setAccessToken } = useAuth();

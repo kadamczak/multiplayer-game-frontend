@@ -1,11 +1,11 @@
 import { useEffect, useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
 import styles from './ProfilePage.module.css'
-import { useAuth } from '../../Context/useAuth'
-import { useLoading } from '../../Context/useLoading'
-import { getUserGameInfoAPI, uploadProfilePictureAPI, deleteProfilePictureAPI } from '../../Services/UserService'
-import { fetchImageWithCache } from '../../Services/ApiMethodHelpers'
-import type { UserGameInfoResponse } from '../../Models/UserModels'
+import { useAuth } from '../../../Context/useAuth'
+import { useLoading } from '../../../Context/useLoading'
+import { getUserGameInfoAPI, uploadProfilePictureAPI, deleteProfilePictureAPI } from '../../../Services/UserService'
+import { fetchImageWithCache } from '../../../Services/ApiMethodHelpers'
+import type { UserGameInfoResponse } from '../../../Models/UserModels'
 
 const ProfilePage = () => {
   const { accessToken, setAccessToken, userName } = useAuth();

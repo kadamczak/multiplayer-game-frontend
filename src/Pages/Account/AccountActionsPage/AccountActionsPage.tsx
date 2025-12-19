@@ -1,12 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
 import styles from './AccountActionsPage.module.css'
-import { useAuth } from '../../Context/useAuth'
-import { useLoading } from '../../Context/useLoading'
-import { changePasswordAPI, deleteAccountAPI } from '../../Services/AuthService'
-import { USER_VALIDATION_RULES } from '../../Constants/Validation/UserValidationRules'
-import { getFieldErrors } from '../../Models/ApiResponse'
-import { applyServerFieldErrors } from '../../Helpers/FormHelpers'
+import { useAuth } from '../../../Context/useAuth'
+import { useLoading } from '../../../Context/useLoading'
+import { changePasswordAPI, deleteAccountAPI } from '../../../Services/AuthService'
+import { USER_VALIDATION_RULES } from '../../../Constants/Validation/UserValidationRules'
+import { getFieldErrors } from '../../../Models/ApiResponse'
+import { applyServerFieldErrors } from '../../../Helpers/FormHelpers'
 
 type ChangePasswordFormData = {
   currentPassword: string

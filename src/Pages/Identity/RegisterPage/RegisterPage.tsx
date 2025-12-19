@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import styles from './RegisterPage.module.css'
-import { useAuth } from '../../Context/useAuth'
-import { useLoading } from '../../Context/useLoading'
-import { USER_VALIDATION_RULES } from '../../Constants/Validation/UserValidationRules'
-import { getFieldErrors } from '../../Models/ApiResponse'
-import { applyServerFieldErrors } from '../../Helpers/FormHelpers'
+import { useAuth } from '../../../Context/useAuth'
+import { useLoading } from '../../../Context/useLoading'
+import { USER_VALIDATION_RULES } from '../../../Constants/Validation/UserValidationRules'
+import { getFieldErrors } from '../../../Models/ApiResponse'
+import { applyServerFieldErrors } from '../../../Helpers/FormHelpers'
 
 type RegisterFormData = {
   userName: string

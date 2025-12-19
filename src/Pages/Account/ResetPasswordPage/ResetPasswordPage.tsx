@@ -2,11 +2,11 @@ import { useState, useEffect } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
 import styles from './ResetPasswordPage.module.css'
-import { useLoading } from '../../Context/useLoading'
-import { resetPasswordAPI } from '../../Services/AuthService'
-import { USER_VALIDATION_RULES } from '../../Constants/Validation/UserValidationRules'
-import { getFieldErrors } from '../../Models/ApiResponse'
-import { applyServerFieldErrors } from '../../Helpers/FormHelpers'
+import { useLoading } from '../../../Context/useLoading'
+import { resetPasswordAPI } from '../../../Services/AuthService'
+import { USER_VALIDATION_RULES } from '../../../Constants/Validation/UserValidationRules'
+import { getFieldErrors } from '../../../Models/ApiResponse'
+import { applyServerFieldErrors } from '../../../Helpers/FormHelpers'
 
 type ResetPasswordFormData = {
   newPassword: string

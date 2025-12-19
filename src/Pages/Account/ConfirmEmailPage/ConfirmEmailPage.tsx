@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
 import styles from './ConfirmEmailPage.module.css'
-import { useLoading } from '../../Context/useLoading'
-import { confirmEmailAPI } from '../../Services/AuthService'
+import { useLoading } from '../../../Context/useLoading'
+import { confirmEmailAPI } from '../../../Services/AuthService'
 
 const ConfirmEmailPage = () => {
   const [searchParams] = useSearchParams();
