@@ -59,3 +59,108 @@ export const getFriendsAPI = async (
     }
   );
 };
+
+
+export const sendFriendRequestAPI = async (
+  accessToken: string | null,
+  onTokenRefresh: (newToken: string) => void,
+  receiverId: string
+): Promise<ApiResponse<void>> => {
+
+  return authenticatedRequestWithRefresh<void>(
+    `${API_BASE_URL}/v1/friends/requests`,
+    accessToken,
+    onTokenRefresh,
+    {
+      method: 'POST',
+      body: JSON.stringify({ receiverId }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+}
+
+
+export const cancelFriendRequestAPI = async (
+  accessToken: string | null,
+  onTokenRefresh: (newToken: string) => void,
+  requestId: string
+): Promise<ApiResponse<void>> => {
+
+  return authenticatedRequestWithRefresh<void>(
+    `${API_BASE_URL}/v1/friends/requests/${requestId}`,
+    accessToken,
+    onTokenRefresh,
+    {
+      method: 'DELETE',
+      body: JSON.stringify({ requestId }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+}
+
+
+export const acceptFriendRequestAPI = async (
+  accessToken: string | null,
+  onTokenRefresh: (newToken: string) => void,
+  requestId: string
+): Promise<ApiResponse<void>> => {
+
+  return authenticatedRequestWithRefresh<void>(
+    `${API_BASE_URL}/v1/friends/requests/${requestId}/accept`,
+    accessToken,
+    onTokenRefresh,
+    {
+      method: 'POST',
+      body: JSON.stringify({ requestId }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+}
+
+
+export const rejectFriendRequestAPI = async (
+  accessToken: string | null,
+  onTokenRefresh: (newToken: string) => void,
+  requestId: string
+): Promise<ApiResponse<void>> => {
+
+  return authenticatedRequestWithRefresh<void>(
+    `${API_BASE_URL}/v1/friends/requests/${requestId}/reject`,
+    accessToken,
+    onTokenRefresh,
+    {
+      method: 'POST',
+      body: JSON.stringify({ requestId }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+}
+
+
+export const removeFriendAPI = async (
+  accessToken: string | null,
+  onTokenRefresh: (newToken: string) => void,
+  friendUserId: string
+): Promise<ApiResponse<void>> => {
+
+  return authenticatedRequestWithRefresh<void>(
+    `${API_BASE_URL}/v1/friends/${friendUserId}`,
+    accessToken,
+    onTokenRefresh,
+    {
+      method: 'DELETE',
+      body: JSON.stringify({ friendUserId }),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+  );
+}
