@@ -5,12 +5,13 @@ import { useLoading } from '../../../Context/useLoading'
 import { getOffersAPI, purchaseUserItemOfferAPI } from '../../../Services/ItemService'
 import { getUserGameInfoAPI } from '../../../Services/UserService'
 import { fetchImageWithCache } from '../../../Services/ApiMethodHelpers'
-import { type UserItemOfferResponse, ItemTypeDisplay } from '../../../Models/ItemModels'
+import { type UserItemOfferResponse } from '../../../Models/ItemModels'
 import type { UserGameInfoResponse } from '../../../Models/UserModels'
 import type { PagedQuery } from '../../../Models/PagedQuery'
 import { usePagedData } from '../../../Helpers/usePagedData'
 import FilterControls, { type SortOption } from '../../../Components/ResultFiltering/FilterControls/FilterControls'
 import Pagination from '../../../Components/ResultFiltering/Pagination/Pagination'
+import OfferListItem from '../../../Components/Offers/OfferListItem/OfferListItem'
 
 const SORT_OPTIONS: SortOption[] = [
   { value: 'Name', label: 'Name' },
@@ -81,7 +82,6 @@ const OffersPage = () => {
       const userInfoResult = await getUserGameInfoAPI(accessToken, setAccessToken);
       userInfoResult.success && setUserInfo(userInfoResult.data);
       // Refresh the offers list
-      // The usePagedData hook will automatically refetch when query changes
       setQuery({ ...query });
     } else {
       setError(result.problem.title || 'Failed to purchase offer');
@@ -132,38 +132,14 @@ const OffersPage = () => {
             const canAfford = userInfo ? userInfo.balance >= offer.price : false;
 
             return (
-              <li key={offer.id}>
-                <div className={styles.thumbnailContainer}>
-                  {thumbnails.get(offer.id) ? (
-                    <img 
-                      src={thumbnails.get(offer.id)} 
-                      alt={offer.userItem.item.name}
-                      className={styles.thumbnail}
-                    />
-                  ) : (
-                    <div className={styles.thumbnailPlaceholder} />
-                  )}
-                </div>
-                <div className={styles.itemInfo}>
-                  <strong>{offer.userItem.item.name}</strong>
-                  <p>{ItemTypeDisplay[offer.userItem.item.type]}</p>
-                  <p>{offer.userItem.item.description}</p>
-                  <p className={styles.seller}>Seller: {offer.sellerUsername}</p>
-                </div>
-                <div className={styles.priceSection}>
-                  <span className={styles.priceLabel}>Price</span>
-                  <span className={styles.price}>{offer.price} Gems</span>
-                  {!isOwnOffer && (
-                    <button
-                      className={styles.buyButton}
-                      onClick={() => handleBuy(offer.id)}
-                      disabled={!canAfford}
-                    >
-                      {canAfford ? 'Buy' : 'Insufficient Funds'}
-                    </button>
-                  )}
-                </div>
-              </li>
+              <OfferListItem
+                key={offer.id}
+                offer={offer}
+                thumbnailUrl={thumbnails.get(offer.id)}
+                isOwnOffer={isOwnOffer}
+                canAfford={canAfford}
+                onBuy={handleBuy}
+              />
             );
           })}
         </ul>
