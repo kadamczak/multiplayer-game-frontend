@@ -90,6 +90,7 @@
     "pageSize": "Items per page",
     "page": "Page",
     "of": "of",
+    "paginationInfo": "Page {{page}} of {{totalPages}} ({{from}}-{{to}} of {{total}} results)",
     "confirmRemove": "Are you sure you want to remove",
     "previous": "Previous",
     "next": "Next",

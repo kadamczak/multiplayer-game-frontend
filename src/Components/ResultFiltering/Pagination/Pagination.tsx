@@ -6,10 +6,9 @@ interface PaginationProps {
   pagedResponse: PagedResponse<any>;
   currentPage: number;
   onPageChange: (page: number) => void;
-  itemLabel?: string;
 }
 
-const Pagination = ({ pagedResponse, currentPage, onPageChange, itemLabel = 'items' }: PaginationProps) => {
+const Pagination = ({ pagedResponse, currentPage, onPageChange }: PaginationProps) => {
   const { t } = useTranslation();
 
   if (pagedResponse.totalPages <= 1) {
@@ -27,8 +26,7 @@ const Pagination = ({ pagedResponse, currentPage, onPageChange, itemLabel = 'ite
       </button>
       
       <span className={styles.pageInfo}>
-        {t('common.page')} {currentPage} {t('common.of')} {pagedResponse.totalPages}
-        {' '}({pagedResponse.itemsFrom}-{pagedResponse.itemsTo} {t('common.of')} {pagedResponse.totalItemsCount} {itemLabel})
+        {t('common.paginationInfo', { page: currentPage, totalPages: pagedResponse.totalPages, from: pagedResponse.itemsFrom, to: pagedResponse.itemsTo, total: pagedResponse.totalItemsCount })}
       </span>
       
       <button

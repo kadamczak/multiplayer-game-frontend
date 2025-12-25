@@ -90,6 +90,7 @@
     "pageSize": "Elementów na stronę",
     "page": "Strona",
     "of": "z",
+    "paginationInfo": "Strona {{page}} z {{totalPages}} ({{from}}-{{to}} z {{total}} wyników)",
     "confirmRemove": "Czy na pewno chcesz usunąć ze znajomych",
     "previous": "Poprzednia",
     "next": "Następna",
