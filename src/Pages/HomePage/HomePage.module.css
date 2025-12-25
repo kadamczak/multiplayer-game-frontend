@@ -20,16 +20,6 @@
   padding-bottom: var(--spacing-md);
 }
 
-.title::after {
-  content: '✦';
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  bottom: -10px;
-  font-size: var(--font-size-lg);
-  color: var(--primary-500);
-  opacity: 0.6;
-}
 
 .description {
   font-size: var(--font-size-lg);
