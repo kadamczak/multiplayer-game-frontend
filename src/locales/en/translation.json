@@ -1,0 +1,86 @@
+{
+  "nav": {
+    "home": "Home",
+    "marketplace": "Marketplace",
+    "myItems": "My Items",
+    "friends": "Friends",
+    "profile": "Profile",
+    "logout": "Logout",
+    "login": "Login",
+    "register": "Register"
+  },
+  "friends": {
+    "title": "Friends",
+    "requests": "Friend Requests",
+    "sentRequests": "Sent Requests",
+    "searchUsers": "Search Users",
+    "myFriends": "My Friends",
+    "noRequests": "No pending friend requests.",
+    "noFriends": "No friends yet. Start by accepting friend requests!",
+    "accept": "Accept",
+    "decline": "Decline",
+    "remove": "Remove",
+    "cancel": "Cancel",
+    "send": "Send Friend Request",
+    "sent": "Sent",
+    "receivedDate": "Received:",
+    "friendsSince": "Friends since:",
+    "sentDate": "Sent:",
+    "respondedDate": "Responded:",
+    "searchPlaceholder": "Enter username to search...",
+    "noResults": "No users found matching",
+    "emptySearch": "Enter a username to search for users to add as friends.",
+    "goBack": "← Go Back",
+    "updating": "Updating...",
+    "searching": "Searching...",
+    "sending": "Sending...",
+    "canceling": "Canceling..."
+  },
+  "items": {
+    "myItems": "My Items",
+    "marketplace": "Marketplace",
+    "buy": "Buy",
+    "sell": "Sell",
+    "cancelOffer": "Cancel Offer",
+    "price": "Price",
+    "balance": "Balance",
+    "searching": "Searching...",
+    "updating": "Updating..."
+  },
+  "profile": {
+    "title": "Profile",
+    "userName": "Username",
+    "email": "Email",
+    "balance": "Balance",
+    "uploadPicture": "Upload Profile Picture",
+    "deletePicture": "Delete Profile Picture"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "userName": "Username",
+    "forgotPassword": "Forgot Password?",
+    "dontHaveAccount": "Don't have an account?",
+    "alreadyHaveAccount": "Already have an account?"
+  },
+  "common": {
+    "loading": "Loading...",
+    "error": "Error",
+    "success": "Success",
+    "search": "Search",
+    "sort": "Sort by",
+    "pageSize": "Items per page",
+    "page": "Page",
+    "of": "of",
+    "confirmRemove": "Are you sure you want to remove"
+  },
+  "language": {
+    "english": "English",
+    "polish": "Polski",
+    "selectLanguage": "Select Language"
+  }
+}

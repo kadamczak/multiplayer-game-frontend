@@ -1,0 +1,86 @@
+{
+  "nav": {
+    "home": "Strona główna",
+    "marketplace": "Rynek",
+    "myItems": "Moje przedmioty",
+    "friends": "Znajomi",
+    "profile": "Profil",
+    "logout": "Wyloguj",
+    "login": "Zaloguj",
+    "register": "Zarejestruj"
+  },
+  "friends": {
+    "title": "Znajomi",
+    "requests": "Zaproszenia do znajomych",
+    "sentRequests": "Wysłane zaproszenia",
+    "searchUsers": "Szukaj użytkowników",
+    "myFriends": "Moi znajomi",
+    "noRequests": "Brak oczekujących zaproszeń.",
+    "noFriends": "Nie masz jeszcze znajomych. Zacznij od akceptowania zaproszeń!",
+    "accept": "Akceptuj",
+    "decline": "Odrzuć",
+    "remove": "Usuń",
+    "cancel": "Anuluj",
+    "send": "Wyślij zaproszenie",
+    "sent": "Wysłano",
+    "receivedDate": "Otrzymano:",
+    "friendsSince": "Znajomi od:",
+    "sentDate": "Wysłano:",
+    "respondedDate": "Odpowiedziano:",
+    "searchPlaceholder": "Wpisz nazwę użytkownika...",
+    "noResults": "Nie znaleziono użytkowników pasujących do",
+    "emptySearch": "Wpisz nazwę użytkownika, aby wyszukać użytkowników do dodania jako znajomych.",
+    "goBack": "← Wróć",
+    "updating": "Aktualizowanie...",
+    "searching": "Wyszukiwanie...",
+    "sending": "Wysyłanie...",
+    "canceling": "Anulowanie..."
+  },
+  "items": {
+    "myItems": "Moje przedmioty",
+    "marketplace": "Rynek",
+    "buy": "Kup",
+    "sell": "Sprzedaj",
+    "cancelOffer": "Anuluj ofertę",
+    "price": "Cena",
+    "balance": "Saldo",
+    "searching": "Wyszukiwanie...",
+    "updating": "Aktualizowanie..."
+  },
+  "profile": {
+    "title": "Profil",
+    "userName": "Nazwa użytkownika",
+    "email": "Email",
+    "balance": "Saldo",
+    "uploadPicture": "Prześlij zdjęcie profilowe",
+    "deletePicture": "Usuń zdjęcie profilowe"
+  },
+  "auth": {
+    "login": "Zaloguj",
+    "register": "Zarejestruj",
+    "logout": "Wyloguj",
+    "email": "Email",
+    "password": "Hasło",
+    "confirmPassword": "Potwierdź hasło",
+    "userName": "Nazwa użytkownika",
+    "forgotPassword": "Zapomniałeś hasła?",
+    "dontHaveAccount": "Nie masz konta?",
+    "alreadyHaveAccount": "Masz już konto?"
+  },
+  "common": {
+    "loading": "Ładowanie...",
+    "error": "Błąd",
+    "success": "Sukces",
+    "search": "Szukaj",
+    "sort": "Sortuj według",
+    "pageSize": "Elementów na stronę",
+    "page": "Strona",
+    "of": "z",
+    "confirmRemove": "Czy na pewno chcesz usunąć"
+  },
+  "language": {
+    "english": "English",
+    "polish": "Polski",
+    "selectLanguage": "Wybierz język"
+  }
+}

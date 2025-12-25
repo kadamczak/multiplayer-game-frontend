@@ -30,6 +30,62 @@
 .rightLinks {
     display: flex;
     gap: var(--spacing-sm, 1rem);
+    align-items: center;
+}
+
+.languageSelector {
+    position: relative;
+}
+
+.languageButton {
+    color: var(--gray-100);
+    background: none;
+    border: 1px solid var(--primary-500);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    font-size: var(--font-size-sm);
+    font-family: var(--font-serif);
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.languageButton:hover {
+    background-color: rgba(255, 255, 255, 0.08);
+    border-color: var(--primary-300);
+    color: var(--primary-200);
+}
+
+.languageDropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    margin-top: var(--spacing-xs);
+    background-color: var(--bg-card);
+    border: 1px solid var(--primary-700);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    min-width: 150px;
+    z-index: 1000;
+    overflow: hidden;
+}
+
+.languageOption {
+    width: 100%;
+    padding: var(--spacing-sm) var(--spacing-md);
+    background: none;
+    border: none;
+    color: var(--gray-100);
+    text-align: left;
+    cursor: pointer;
+    font-size: var(--font-size-sm);
+    font-family: var(--font-serif);
+    transition: all 0.2s ease;
+}
+
+.languageOption:hover {
+    background-color: var(--primary-700);
+    color: var(--primary-100);
 }
 
 .link {
