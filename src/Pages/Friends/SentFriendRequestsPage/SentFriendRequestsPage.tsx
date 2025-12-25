@@ -10,7 +10,7 @@ import { usePagedData } from '../../../Helpers/usePagedData'
 import FilterControls, { type SortOption } from '../../../Components/ResultFiltering/FilterControls/FilterControls'
 import Pagination from '../../../Components/ResultFiltering/Pagination/Pagination'
 import SentFriendRequestListItem from '../../../Components/Friends/SentFriendRequestListItem/SentFriendRequestListItem'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const SORT_OPTIONS: SortOption[] = [
   { value: 'UserName', label: 'Recipient' },
@@ -20,6 +20,7 @@ const SORT_OPTIONS: SortOption[] = [
 const SentFriendRequestsPage = () => {
   const { accessToken, setAccessToken } = useAuth();
   const { setIsLoading } = useLoading();
+  const navigate = useNavigate();
   
   const [profilePictures, setProfilePictures] = useState<Map<string, string>>(new Map());
 
@@ -88,6 +89,10 @@ const SentFriendRequestsPage = () => {
           Updating...
         </div>
       )}
+
+      <button onClick={() => navigate(-1)} className={styles.backButton}>
+        ← Go Back
+      </button>
 
       <div className={styles.header}>
         <h1>Sent Friend Requests</h1>

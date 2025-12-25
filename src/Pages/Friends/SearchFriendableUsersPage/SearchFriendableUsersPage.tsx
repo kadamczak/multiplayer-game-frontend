@@ -3,7 +3,7 @@ import styles from './SearchFriendableUsersPage.module.css'
 import { useAuth } from '../../../Context/useAuth'
 import { useLoading } from '../../../Context/useLoading'
 import { searchFriendableUsersAPI } from '../../../Services/UserService'
-import { sendFriendRequestAPI, cancelFriendRequestAPI } from '../../../Services/FriendService'
+import { sendFriendRequestAPI } from '../../../Services/FriendService'
 import { fetchImageWithCache } from '../../../Services/ApiMethodHelpers'
 import type { UserSearchResultResponse } from '../../../Models/UserModels'
 import type { PagedQuery } from '../../../Models/PagedQuery'
@@ -11,6 +11,7 @@ import { usePagedData } from '../../../Helpers/usePagedData'
 import FilterControls, { type SortOption } from '../../../Components/ResultFiltering/FilterControls/FilterControls'
 import Pagination from '../../../Components/ResultFiltering/Pagination/Pagination'
 import SearchableUserListItem from '../../../Components/Friends/SearchableUserListItem/SearchableUserListItem'
+import { useNavigate } from 'react-router-dom'
 
 const SORT_OPTIONS: SortOption[] = [
   { value: 'UserName', label: 'Username' },
@@ -19,6 +20,7 @@ const SORT_OPTIONS: SortOption[] = [
 const SearchFriendableUsersPage = () => {
   const { accessToken, setAccessToken } = useAuth();
   const { setIsLoading } = useLoading();
+  const navigate = useNavigate();
   
   const [profilePictures, setProfilePictures] = useState<Map<string, string>>(new Map());
 
@@ -99,6 +101,10 @@ const SearchFriendableUsersPage = () => {
           Searching...
         </div>
       )}
+
+      <button onClick={() => navigate(-1)} className={styles.backButton}>
+        ← Go Back
+      </button>
 
       <div className={styles.header}>
         <h1>Search Users</h1>

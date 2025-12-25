@@ -5,6 +5,24 @@
   min-height: 100vh;
 }
 
+.backButton {
+  background: none;
+  border: none;
+  color: var(--primary-300);
+  font-size: var(--font-size-base);
+  cursor: pointer;
+  padding: var(--spacing-sm) 0;
+  margin-bottom: var(--spacing-md);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  transition: color 0.2s ease;
+}
+
+.backButton:hover {
+  color: var(--primary-200);
+}
+
 .header {
   display: flex;
   justify-content: space-between;
