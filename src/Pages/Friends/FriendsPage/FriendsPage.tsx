@@ -194,7 +194,6 @@ const FriendsPage = () => {
             pagedResponse={requestsData.pagedResponse}
             currentPage={requestsData.query.pageNumber || 1}
             onPageChange={(page) => requestsData.setQuery({ ...requestsData.query, pageNumber: page })}
-            itemLabel="requests"
           />
         )}
       </div>
@@ -230,7 +229,6 @@ const FriendsPage = () => {
             pagedResponse={friendsData.pagedResponse}
             currentPage={friendsData.query.pageNumber || 1}
             onPageChange={(page) => friendsData.setQuery({ ...friendsData.query, pageNumber: page })}
-            itemLabel="friends"
           />
         )}
       </div>

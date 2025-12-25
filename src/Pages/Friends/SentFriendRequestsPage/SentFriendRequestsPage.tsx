@@ -136,7 +136,6 @@ const SentFriendRequestsPage = () => {
           pagedResponse={pagedResponse}
           currentPage={query.pageNumber || 1}
           onPageChange={(page) => setQuery({ ...query, pageNumber: page })}
-          itemLabel="requests"
         />
       )}
     </div>
