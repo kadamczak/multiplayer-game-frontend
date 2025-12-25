@@ -9,6 +9,8 @@ import type { PagedQuery } from '../../../Models/PagedQuery'
 import { usePagedData } from '../../../Helpers/usePagedData'
 import FilterControls, { type SortOption } from '../../../Components/ResultFiltering/FilterControls/FilterControls'
 import Pagination from '../../../Components/ResultFiltering/Pagination/Pagination'
+import ReceivedFriendRequestListItem from '../../../Components/Friends/ReceivedFriendRequestListItem/ReceivedFriendRequestListItem'
+import FriendListItem from '../../../Components/Friends/FriendListItem/FriendListItem'
 import { Link } from 'react-router-dom'
 
 const REQUESTS_SORT_OPTIONS: SortOption[] = [
@@ -174,39 +176,13 @@ const FriendsPage = () => {
         ) : (
           <ul className={styles.list}>
             {requestsData.pagedResponse && requestsData.pagedResponse.items.map((request) => (
-              <li key={request.id}>
-                {requestProfilePictures.get(request.id) ? (
-                  <img 
-                    src={requestProfilePictures.get(request.id)} 
-                    alt={request.requesterUserName}
-                    className={styles.profilePicture}
-                  />
-                ) : (
-                  <div className={styles.profilePicturePlaceholder}>
-                    {request.requesterUserName.charAt(0).toUpperCase()}
-                  </div>
-                )}
-                <div className={styles.userInfo}>
-                  <h3 className={styles.userName}>{request.requesterUserName}</h3>
-                  <p className={styles.userDetail}>
-                    Received: {new Date(request.createdAt).toLocaleDateString()}
-                  </p>
-                </div>
-                <div className={styles.requestActions}>
-                  <button
-                    className={styles.acceptButton}
-                    onClick={() => handleAcceptRequest(request.id)}
-                  >
-                    Accept
-                  </button>
-                  <button
-                    className={styles.declineButton}
-                    onClick={() => handleRejectRequest(request.id)}
-                  >
-                    Decline
-                  </button>
-                </div>
-              </li>
+              <ReceivedFriendRequestListItem
+                key={request.id}
+                request={request}
+                profilePictureUrl={requestProfilePictures.get(request.id)}
+                onAccept={handleAcceptRequest}
+                onReject={handleRejectRequest}
+              />
             ))}
           </ul>
         )}
@@ -237,33 +213,12 @@ const FriendsPage = () => {
         ) : (
           <ul className={styles.list}>
             {friendsData.pagedResponse && friendsData.pagedResponse.items.map((friend) => (
-              <li key={friend.userId}>
-                {friendProfilePictures.get(friend.userId) ? (
-                  <img 
-                    src={friendProfilePictures.get(friend.userId)} 
-                    alt={friend.userName}
-                    className={styles.profilePicture}
-                  />
-                ) : (
-                  <div className={styles.profilePicturePlaceholder}>
-                    {friend.userName.charAt(0).toUpperCase()}
-                  </div>
-                )}
-                <div className={styles.userInfo}>
-                  <h3 className={styles.userName}>{friend.userName}</h3>
-                  <p className={styles.userDetail}>
-                    Friends since: {new Date(friend.friendsSince).toLocaleDateString()}
-                  </p>
-                </div>
-                <div className={styles.requestActions}>
-                  <button
-                    className={styles.declineButton}
-                    onClick={() => handleRemoveFriend(friend.userId, friend.userName)}
-                  >
-                    Remove
-                  </button>
-                </div>
-              </li>
+              <FriendListItem
+                key={friend.userId}
+                friend={friend}
+                profilePictureUrl={friendProfilePictures.get(friend.userId)}
+                onRemove={handleRemoveFriend}
+              />
             ))}
           </ul>
         )}
