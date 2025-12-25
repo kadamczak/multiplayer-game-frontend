@@ -10,6 +10,7 @@ import { usePagedData } from '../../../Helpers/usePagedData'
 import FilterControls, { type SortOption } from '../../../Components/ResultFiltering/FilterControls/FilterControls'
 import Pagination from '../../../Components/ResultFiltering/Pagination/Pagination'
 import SentFriendRequestListItem from '../../../Components/Friends/SentFriendRequestListItem/SentFriendRequestListItem'
+import { Link } from 'react-router-dom'
 
 const SORT_OPTIONS: SortOption[] = [
   { value: 'UserName', label: 'Recipient' },
@@ -91,9 +92,9 @@ const SentFriendRequestsPage = () => {
       <div className={styles.header}>
         <h1>Sent Friend Requests</h1>
         <div className={styles.headerRight}>
-          <button className={styles.sendRequestButton}>
+          <Link to="/friends/discover" className={styles.sendRequestButton}>
             Send Friend Request
-          </button>
+          </Link>
         </div>
       </div>
 

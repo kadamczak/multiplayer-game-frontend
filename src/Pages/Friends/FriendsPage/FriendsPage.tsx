@@ -20,7 +20,7 @@ const REQUESTS_SORT_OPTIONS: SortOption[] = [
 
 const FRIENDS_SORT_OPTIONS: SortOption[] = [
   { value: 'UserName', label: 'Username' },
-  { value: 'FriendsSince', label: 'Friends Since' },
+  { value: 'RespondedAt', label: 'Friends Since' },
 ];
 
 const FriendsPage = () => {
