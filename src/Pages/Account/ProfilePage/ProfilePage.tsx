@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import { Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import styles from './ProfilePage.module.css'
 import { useAuth } from '../../../Context/useAuth'
 import { useLoading } from '../../../Context/useLoading'
@@ -8,6 +9,7 @@ import { fetchImageWithCache } from '../../../Services/ApiMethodHelpers'
 import type { UserGameInfoResponse } from '../../../Models/UserModels'
 
 const ProfilePage = () => {
+  const { t } = useTranslation();
   const { accessToken, setAccessToken, userName } = useAuth();
   const { setIsLoading } = useLoading();
 
@@ -41,7 +43,7 @@ const ProfilePage = () => {
           setProfilePictureUrl('/emptyprofilepicture.png');
         }
       } else {
-        setError(result.problem.title || 'Failed to load user information');
+        setError(result.problem.title || t('common.error'));
       }
 
       clearTimeout(loadingTimer);
@@ -76,7 +78,7 @@ const ProfilePage = () => {
         }
       }
     } else {
-      setUploadError(result.problem.title || 'Failed to upload picture');
+      setUploadError(result.problem.title || t('common.error'));
     }
 
     // Reset file input
@@ -100,29 +102,29 @@ const ProfilePage = () => {
       }
       setProfilePictureUrl('/emptyprofilepicture.png');
     } else {
-      setUploadError(result.problem.title || 'Failed to remove picture');
+      setUploadError(result.problem.title || t('common.error'));
     }
   };
 
   if (showLoading) {
-    return <div className={styles.profileContainer}>Loading...</div>;
+    return <div className={styles.profileContainer}>{t('common.loading')}</div>;
   }
 
   if (error) {
-    return <div className={styles.profileContainer}>Error: {error}</div>;
+    return <div className={styles.profileContainer}>{t('common.error')}: {error}</div>;
   }
 
   if (!userInfo) {
-    return <div className={styles.profileContainer}>No user information available</div>;
+    return <div className={styles.profileContainer}>{t('profile.noUserInfo')}</div>;
   }
 
   return (
     <div className={styles.profileContainer}>
       <div className={styles.profileHeader}>
-        <h1>Profile</h1>
+        <h1>{t('profile.title')}</h1>
         {userName === userInfo.userName && (
           <Link to="/account-actions" className={styles.manageAccountLink}>
-            Manage Account
+            {t('profile.manageAccount')}
           </Link>
         )}
       </div>
@@ -131,7 +133,7 @@ const ProfilePage = () => {
         <div className={styles.profilePictureContainer}>
           <img 
             src={profilePictureUrl || '/emptyprofilepicture.png'} 
-            alt="Profile Picture"
+            alt={t('profile.title')}
             className={styles.profilePicture}
           />
           {userName === userInfo.userName && (
@@ -144,11 +146,11 @@ const ProfilePage = () => {
                 className={styles.fileInput}
               />
               <button onClick={handleChangePicture} className={styles.changePictureButton}>
-                Change Picture
+                {t('profile.changePicture')}
               </button>
               {userInfo.profilePictureUrl && (
                 <button onClick={handleRemovePicture} className={styles.removePictureButton}>
-                  Remove
+                  {t('profile.remove')}
                 </button>
               )}
               {uploadError && <p className={styles.uploadError}>{uploadError}</p>}
@@ -158,13 +160,13 @@ const ProfilePage = () => {
         
         <div className={styles.profileInfo}>
           <div className={styles.profileSection}>
-            <label>Username</label>
+            <label>{t('profile.userName')}</label>
             <p className={styles.profileValue}>{userInfo.userName}</p>
           </div>
 
           <div className={styles.profileSection}>
-            <label>Account Balance</label>
-            <p className={`${styles.profileValue} ${styles.balance}`}>{userInfo.balance} Gems</p>
+            <label>{t('profile.accountBalance')}</label>
+            <p className={`${styles.profileValue} ${styles.balance}`}>{userInfo.balance} {t('profile.gems')}</p>
           </div>
         </div>
       </div>

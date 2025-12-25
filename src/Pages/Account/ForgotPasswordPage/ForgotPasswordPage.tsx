@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import styles from './ForgotPasswordPage.module.css'
 import { useLoading } from '../../../Context/useLoading'
 import { forgotPasswordAPI } from '../../../Services/AuthService'
@@ -13,6 +14,7 @@ type ForgotPasswordFormData = {
 }
 
 const ForgotPasswordPage = () => {
+  const { t } = useTranslation();
   const { setIsLoading } = useLoading();
   const [generalError, setGeneralError] = useState('');
   const [success, setSuccess] = useState(false);
@@ -54,31 +56,31 @@ const ForgotPasswordPage = () => {
   return (
     <div className={styles.container}>
       <div className={styles.formWrapper}>
-        <h1 className={styles.title}>Forgot Password</h1>
+        <h1 className={styles.title}>{t('forgotPassword.title')}</h1>
         
         {!success ? (
           <>
             <p className={styles.description}>
-              Enter your email address and we'll send you a link to reset your password.
+              {t('forgotPassword.description')}
             </p>
             
             <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
               <div className={styles.inputGroup}>
                 <label htmlFor="email" className={styles.label}>
-                  Email Address
+                  {t('forgotPassword.emailAddress')}
                 </label>
                 <input
                   type="email"
                   id="email"
                   {...register('email', {
-                    required: 'Email is required',
+                    required: t('forgotPassword.emailRequired'),
                     maxLength: {
                       value: USER_VALIDATION_RULES.EMAIL.MAX_LENGTH,
-                      message: `Email must not exceed ${USER_VALIDATION_RULES.EMAIL.MAX_LENGTH} characters`
+                      message: t('forgotPassword.emailMaxLength', { max: USER_VALIDATION_RULES.EMAIL.MAX_LENGTH })
                     }
                   })}
                   className={styles.input}
-                  placeholder="your.email@example.com"
+                  placeholder={t('forgotPassword.emailPlaceholder')}
                 />
                 {errors.email && <p className={styles.fieldError}>{errors.email.message}</p>}
               </div>
@@ -86,24 +88,24 @@ const ForgotPasswordPage = () => {
               {generalError && <p className={styles.error}>{generalError}</p>}
 
               <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
-                {isSubmitting ? 'Sending...' : 'Send Reset Link'}
+                {isSubmitting ? t('forgotPassword.sending') : t('forgotPassword.sendResetLink')}
               </button>
             </form>
           </>
         ) : (
           <div className={styles.successContainer}>
             <p className={styles.success}>
-              Success! If your email is registered with us, you will receive a password reset link shortly.
+              {t('forgotPassword.successMessage')}
             </p>
             <p className={styles.note}>
-              If you don't receive an email within a few minutes, please check your spam folder.
+              {t('forgotPassword.successNote')}
             </p>
           </div>
         )}
 
         <p className={styles.loginPrompt}>
           <Link to="/login" className={styles.loginLink}>
-            Back to Login
+            {t('forgotPassword.backToLogin')}
           </Link>
         </p>
       </div>
