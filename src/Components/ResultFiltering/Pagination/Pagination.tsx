@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import styles from './Pagination.module.css'
 import type { PagedResponse } from '../../../Models/PagedResponse'
 
@@ -9,6 +10,8 @@ interface PaginationProps {
 }
 
 const Pagination = ({ pagedResponse, currentPage, onPageChange, itemLabel = 'items' }: PaginationProps) => {
+  const { t } = useTranslation();
+
   if (pagedResponse.totalPages <= 1) {
     return null;
   }
@@ -20,12 +23,12 @@ const Pagination = ({ pagedResponse, currentPage, onPageChange, itemLabel = 'ite
         disabled={currentPage <= 1}
         className={styles.pageButton}
       >
-        Previous
+        {t('common.previous')}
       </button>
       
       <span className={styles.pageInfo}>
-        Page {currentPage} of {pagedResponse.totalPages}
-        {' '}({pagedResponse.itemsFrom}-{pagedResponse.itemsTo} of {pagedResponse.totalItemsCount} {itemLabel})
+        {t('common.page')} {currentPage} {t('common.of')} {pagedResponse.totalPages}
+        {' '}({pagedResponse.itemsFrom}-{pagedResponse.itemsTo} {t('common.of')} {pagedResponse.totalItemsCount} {itemLabel})
       </span>
       
       <button
@@ -33,7 +36,7 @@ const Pagination = ({ pagedResponse, currentPage, onPageChange, itemLabel = 'ite
         disabled={currentPage >= pagedResponse.totalPages}
         className={styles.pageButton}
       >
-        Next
+        {t('common.next')}
       </button>
     </div>
   );

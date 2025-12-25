@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import type { FriendResponse } from '../../../Models/FriendModels';
 import styles from './FriendListItem.module.css';
 
@@ -8,6 +9,8 @@ interface FriendListItemProps {
 }
 
 const FriendListItem = ({ friend, profilePictureUrl, onRemove }: FriendListItemProps) => {
+  const { t } = useTranslation();
+
   return (
     <li className={styles.listItem}>
       {profilePictureUrl ? (
@@ -24,7 +27,7 @@ const FriendListItem = ({ friend, profilePictureUrl, onRemove }: FriendListItemP
       <div className={styles.userInfo}>
         <h3 className={styles.userName}>{friend.userName}</h3>
         <p className={styles.userDetail}>
-          Friends since: {new Date(friend.friendsSince).toLocaleDateString()}
+          {t('friends.friendsSince')} {new Date(friend.friendsSince).toLocaleDateString()}
         </p>
       </div>
       <div className={styles.requestActions}>
@@ -32,7 +35,7 @@ const FriendListItem = ({ friend, profilePictureUrl, onRemove }: FriendListItemP
           className={styles.removeButton}
           onClick={() => onRemove(friend.userId, friend.userName)}
         >
-          Remove
+          {t('friends.remove')}
         </button>
       </div>
     </li>

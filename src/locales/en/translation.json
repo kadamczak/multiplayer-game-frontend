@@ -17,6 +17,7 @@
     "myFriends": "My Friends",
     "noRequests": "No pending friend requests.",
     "noFriends": "No friends yet. Start by accepting friend requests!",
+    "noSentRequests": "No sent friend requests. Send a request to connect with other players!",
     "accept": "Accept",
     "decline": "Decline",
     "remove": "Remove",
@@ -28,13 +29,21 @@
     "sentDate": "Sent:",
     "respondedDate": "Responded:",
     "searchPlaceholder": "Enter username to search...",
+    "searchRequestsPlaceholder": "Search friend requests...",
+    "searchFriendsPlaceholder": "Search friends...",
+    "searchSentPlaceholder": "Search sent requests...",
     "noResults": "No users found matching",
     "emptySearch": "Enter a username to search for users to add as friends.",
     "goBack": "← Go Back",
     "updating": "Updating...",
     "searching": "Searching...",
     "sending": "Sending...",
-    "canceling": "Canceling..."
+    "canceling": "Canceling...",
+    "sortByUsername": "Username",
+    "sortByDate": "Date Received",
+    "sortByFriendsSince": "Friends Since",
+    "sortByDateSent": "Date Sent",
+    "pending": "Pending"
   },
   "items": {
     "myItems": "My Items",
@@ -73,10 +82,21 @@
     "success": "Success",
     "search": "Search",
     "sort": "Sort by",
+    "sortBy": "Sort By:",
+    "direction": "Direction:",
+    "perPage": "Per Page:",
+    "ascending": "Ascending",
+    "descending": "Descending",
     "pageSize": "Items per page",
     "page": "Page",
     "of": "of",
-    "confirmRemove": "Are you sure you want to remove"
+    "confirmRemove": "Are you sure you want to remove",
+    "previous": "Previous",
+    "next": "Next",
+    "searchPlaceholder": "Search..."
+  },
+  "footer": {
+    "copyright": "All rights reserved."
   },
   "language": {
     "english": "English",

@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import type { FriendRequestResponse } from '../../../Models/FriendModels';
 import styles from './SentFriendRequestListItem.module.css';
 
@@ -8,7 +9,7 @@ interface SentFriendRequestListItemProps {
 }
 
 const SentFriendRequestListItem = ({ request, profilePictureUrl, onCancel }: SentFriendRequestListItemProps) => {
-  const isPending = request.status.toLowerCase() === 'pending';
+  const { t } = useTranslation();
 
   return (
     <li className={styles.listItem}>
@@ -26,24 +27,23 @@ const SentFriendRequestListItem = ({ request, profilePictureUrl, onCancel }: Sen
       <div className={styles.userInfo}>
         <h3 className={styles.userName}>{request.receiverUserName}</h3>
         <p className={styles.userDetail}>
-          Sent: {new Date(request.createdAt).toLocaleDateString()}
+          {t('friends.sentDate')} {new Date(request.createdAt).toLocaleDateString()}
         </p>
         {request.respondedAt && (
           <p className={styles.userDetail}>
-            Responded: {new Date(request.respondedAt).toLocaleDateString()}
+            {t('friends.respondedDate')} {new Date(request.respondedAt).toLocaleDateString()}
           </p>
         )}
         <span className={`${styles.statusBadge} ${styles.statusPending}`}>
-          {request.status}
+          {t('friends.pending')}
         </span>
       </div>
       <div className={styles.requestActions}>
         <button
           className={styles.cancelButton}
           onClick={() => onCancel(request.id)}
-          disabled={!isPending}
         >
-          {isPending ? 'Cancel' : 'Remove'}
+          {t('friends.cancel')}
         </button>
       </div>
     </li>

@@ -17,6 +17,7 @@
     "myFriends": "Moi znajomi",
     "noRequests": "Brak oczekujących zaproszeń.",
     "noFriends": "Nie masz jeszcze znajomych. Zacznij od akceptowania zaproszeń!",
+    "noSentRequests": "Brak wysłanych zaproszeń. Wyślij zaproszenie, aby połączyć się z innymi graczami!",
     "accept": "Akceptuj",
     "decline": "Odrzuć",
     "remove": "Usuń",
@@ -28,13 +29,21 @@
     "sentDate": "Wysłano:",
     "respondedDate": "Odpowiedziano:",
     "searchPlaceholder": "Wpisz nazwę użytkownika...",
+    "searchRequestsPlaceholder": "Szukaj zaproszeń...",
+    "searchFriendsPlaceholder": "Szukaj znajomych...",
+    "searchSentPlaceholder": "Szukaj wysłanych zaproszeń...",
     "noResults": "Nie znaleziono użytkowników pasujących do",
     "emptySearch": "Wpisz nazwę użytkownika, aby wyszukać użytkowników do dodania jako znajomych.",
     "goBack": "← Wróć",
     "updating": "Aktualizowanie...",
     "searching": "Wyszukiwanie...",
     "sending": "Wysyłanie...",
-    "canceling": "Anulowanie..."
+    "canceling": "Anulowanie...",
+    "sortByUsername": "Nazwa użytkownika",
+    "sortByDate": "Data otrzymania",
+    "sortByFriendsSince": "Znajomi od",
+    "sortByDateSent": "Data wysłania",
+    "pending": "Oczekujące"
   },
   "items": {
     "myItems": "Moje przedmioty",
@@ -73,10 +82,21 @@
     "success": "Sukces",
     "search": "Szukaj",
     "sort": "Sortuj według",
+    "sortBy": "Sortuj według:",
+    "direction": "Kierunek:",
+    "perPage": "Na stronę:",
+    "ascending": "Rosnąco",
+    "descending": "Malejąco",
     "pageSize": "Elementów na stronę",
     "page": "Strona",
     "of": "z",
-    "confirmRemove": "Czy na pewno chcesz usunąć"
+    "confirmRemove": "Czy na pewno chcesz usunąć ze znajomych",
+    "previous": "Poprzednia",
+    "next": "Następna",
+    "searchPlaceholder": "Szukaj..."
+  },
+  "footer": {
+    "copyright": "Wszelkie prawa zastrzeżone."
   },
   "language": {
     "english": "English",
