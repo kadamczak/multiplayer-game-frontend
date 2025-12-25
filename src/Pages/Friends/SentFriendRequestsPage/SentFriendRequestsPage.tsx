@@ -9,6 +9,7 @@ import type { PagedQuery } from '../../../Models/PagedQuery'
 import { usePagedData } from '../../../Helpers/usePagedData'
 import FilterControls, { type SortOption } from '../../../Components/ResultFiltering/FilterControls/FilterControls'
 import Pagination from '../../../Components/ResultFiltering/Pagination/Pagination'
+import SentFriendRequestListItem from '../../../Components/Friends/SentFriendRequestListItem/SentFriendRequestListItem'
 
 const SORT_OPTIONS: SortOption[] = [
   { value: 'UserName', label: 'Recipient' },
@@ -111,48 +112,14 @@ const SentFriendRequestsPage = () => {
         </div>
       ) : (
         <ul className={styles.list}>
-          {pagedResponse && pagedResponse.items.map((request) => {
-            const isPending = request.status.toLowerCase() === 'pending';
-            
-            return (
-              <li key={request.id}>
-                {profilePictures.get(request.id) ? (
-                  <img 
-                    src={profilePictures.get(request.id)} 
-                    alt={request.receiverUserName}
-                    className={styles.profilePicture}
-                  />
-                ) : (
-                  <div className={styles.profilePicturePlaceholder}>
-                    {request.receiverUserName.charAt(0).toUpperCase()}
-                  </div>
-                )}
-                <div className={styles.userInfo}>
-                  <h3 className={styles.userName}>{request.receiverUserName}</h3>
-                  <p className={styles.userDetail}>
-                    Sent: {new Date(request.createdAt).toLocaleDateString()}
-                  </p>
-                  {request.respondedAt && (
-                    <p className={styles.userDetail}>
-                      Responded: {new Date(request.respondedAt).toLocaleDateString()}
-                    </p>
-                  )}
-                  <span className={`${styles.statusBadge} styles.statusPending`}>
-                    {request.status}
-                  </span>
-                </div>
-                <div className={styles.requestActions}>
-                  <button
-                    className={styles.cancelButton}
-                    onClick={() => handleCancelRequest(request.id)}
-                    disabled={!isPending}
-                  >
-                    {isPending ? 'Cancel' : 'Remove'}
-                  </button>
-                </div>
-              </li>
-            );
-          })}
+          {pagedResponse && pagedResponse.items.map((request) => (
+            <SentFriendRequestListItem
+              key={request.id}
+              request={request}
+              profilePictureUrl={profilePictures.get(request.id)}
+              onCancel={handleCancelRequest}
+            />
+          ))}
         </ul>
       )}
 
