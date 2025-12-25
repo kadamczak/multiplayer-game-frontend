@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react'
 import styles from './FriendsPage.module.css'
 import { useAuth } from '../../../Context/useAuth'
 import { useLoading } from '../../../Context/useLoading'
-import { getReceivedFriendRequestsAPI, getFriendsAPI } from '../../../Services/FriendService'
+import { getReceivedFriendRequestsAPI, getFriendsAPI, acceptFriendRequestAPI, rejectFriendRequestAPI } from '../../../Services/FriendService'
 import { fetchImageWithCache } from '../../../Services/ApiMethodHelpers'
 import type { FriendRequestResponse, FriendResponse } from '../../../Models/FriendModels'
 import type { PagedQuery } from '../../../Models/PagedQuery'
@@ -95,13 +95,26 @@ const FriendsPage = () => {
   };
 
   const handleAcceptRequest = async (requestId: string) => {
-    // TODO: Implement accept request API call
-    console.log('Accept request:', requestId);
+    const result = await acceptFriendRequestAPI(accessToken, setAccessToken, requestId);
+
+    if (result.success) {
+      // Refresh both lists - the request will be removed and the friend will be added
+      requestsData.setQuery({ ...requestsData.query });
+      friendsData.setQuery({ ...friendsData.query });
+    } else {
+      requestsData.setError(result.problem.title || 'Failed to accept friend request');
+    }
   };
 
-  const handleDeclineRequest = async (requestId: string) => {
-    // TODO: Implement decline request API call
-    console.log('Decline request:', requestId);
+  const handleRejectRequest = async (requestId: string) => {
+    const result = await rejectFriendRequestAPI(accessToken, setAccessToken, requestId);
+
+    if (result.success) {
+      // Refresh the requests list
+      requestsData.setQuery({ ...requestsData.query });
+    } else {
+      requestsData.setError(result.problem.title || 'Failed to reject friend request');
+    }
   };
 
   if (requestsData.showLoading || friendsData.showLoading) {
@@ -171,7 +184,7 @@ const FriendsPage = () => {
                   </button>
                   <button
                     className={styles.declineButton}
-                    onClick={() => handleDeclineRequest(request.id)}
+                    onClick={() => handleRejectRequest(request.id)}
                   >
                     Decline
                   </button>
