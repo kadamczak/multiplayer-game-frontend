@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import styles from './FilterControls.module.css'
-import type { PagedQuery } from '../../Models/PagedQuery'
-import { SortDirection } from '../../Constants/SortDirection'
+import type { PagedQuery } from '../../../Models/PagedQuery'
+import { SortDirection } from '../../../Constants/SortDirection'
 
 interface SortOption {
   value: string;

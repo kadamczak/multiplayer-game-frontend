@@ -9,8 +9,8 @@ import { type UserItemOfferResponse, ItemTypeDisplay } from '../../../Models/Ite
 import type { UserGameInfoResponse } from '../../../Models/UserModels'
 import type { PagedQuery } from '../../../Models/PagedQuery'
 import { usePagedData } from '../../../Helpers/usePagedData'
-import FilterControls, { type SortOption } from '../../../Components/FilterControls/FilterControls'
-import Pagination from '../../../Components/Pagination/Pagination'
+import FilterControls, { type SortOption } from '../../../Components/ResultFiltering/FilterControls/FilterControls'
+import Pagination from '../../../Components/ResultFiltering/Pagination/Pagination'
 
 const SORT_OPTIONS: SortOption[] = [
   { value: 'Name', label: 'Name' },

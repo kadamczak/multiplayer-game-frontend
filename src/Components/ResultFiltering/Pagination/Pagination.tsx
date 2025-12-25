@@ -1,5 +1,5 @@
 import styles from './Pagination.module.css'
-import type { PagedResponse } from '../../Models/PagedResponse'
+import type { PagedResponse } from '../../../Models/PagedResponse'
 
 interface PaginationProps {
   pagedResponse: PagedResponse<any>;
