@@ -1,5 +1,7 @@
 import type { ApiResponse } from "../Models/ApiResponse";
-import type { UserGameInfoResponse } from "../Models/UserModels";
+import { pagedQueryToParams, type PagedQuery } from "../Models/PagedQuery";
+import type { PagedResponse } from "../Models/PagedResponse";
+import type { UserGameInfoResponse, UserSearchResultResponse } from "../Models/UserModels";
 import { authenticatedRequestWithRefresh } from "./ApiMethodHelpers";
 
 const API_BASE_URL = import.meta.env.VITE_API_URL;
@@ -49,6 +51,24 @@ export const uploadProfilePictureAPI = async (
     {
       method: 'POST',
       body: formData,
+    }
+  );
+};
+
+
+export const searchFriendableUsersAPI = async (
+  accessToken: string | null,
+  onTokenRefresh: (newToken: string) => void,
+  query: PagedQuery
+): Promise<ApiResponse<PagedResponse<UserSearchResultResponse>>> => {
+  const params = pagedQueryToParams(query, true);
+
+  return authenticatedRequestWithRefresh<PagedResponse<UserSearchResultResponse>>(
+    `${API_BASE_URL}/v1/users/friendable?${params.toString()}`,
+    accessToken,
+    onTokenRefresh,
+    {
+      method: 'GET',
     }
   );
 };

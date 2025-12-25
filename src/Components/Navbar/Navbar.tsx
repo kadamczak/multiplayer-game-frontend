@@ -11,6 +11,7 @@ const Navbar = () => {
         <Link to="/" className={styles.link}>Home</Link>
         <Link to="/my-items" className={styles.link}>My Items</Link>
         <Link to="/marketplace" className={styles.link}>Marketplace</Link>
+        <Link to="/friends" className={styles.link}>Friends</Link>
       </div>
       <div className={styles.rightLinks}>
         {isLoggedIn() ? (

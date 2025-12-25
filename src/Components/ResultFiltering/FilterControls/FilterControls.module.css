@@ -1,0 +1,103 @@
+.filtersSection {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-lg);
+  padding: var(--spacing-md);
+  background-color: var(--bg-card);
+  border: var(--border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.searchGroup {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.searchInput {
+  flex: 1;
+  padding: var(--spacing-sm);
+  border: var(--border-subtle);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  background-color: var(--bg-secondary);
+  color: var(--gray-100);
+  font-family: var(--font-sans);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.searchInput::placeholder {
+  color: var(--gray-400);
+}
+
+.searchInput:focus {
+  outline: none;
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 2px rgba(184, 115, 115, 0.15);
+}
+
+.searchButton {
+  padding: var(--spacing-sm) var(--spacing-md);
+  background-color: var(--primary-700);
+  color: var(--gray-50);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  font-family: var(--font-decorative);
+  transition: background-color 0.2s, box-shadow 0.2s;
+  letter-spacing: 0.05em;
+}
+
+.searchButton:hover {
+  background-color: var(--primary-800);
+  box-shadow: var(--shadow-md);
+}
+
+.searchButton:active {
+  background-color: var(--primary-900);
+}
+
+.filterControls {
+  display: flex;
+  gap: var(--spacing-md);
+  flex-wrap: wrap;
+}
+
+.filterGroup {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.filterGroup label {
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  color: var(--gray-200);
+  font-family: var(--font-decorative);
+  letter-spacing: 0.03em;
+}
+
+.select {
+  padding: var(--spacing-sm);
+  border: var(--border-subtle);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  background-color: var(--bg-secondary);
+  color: var(--gray-100);
+  cursor: pointer;
+  font-family: var(--font-sans);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.select:focus {
+  outline: none;
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 2px rgba(184, 115, 115, 0.15);
+}
+
+.select:hover {
+  border-color: var(--primary-300);
+}

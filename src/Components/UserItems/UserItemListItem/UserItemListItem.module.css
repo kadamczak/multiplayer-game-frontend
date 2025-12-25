@@ -1,0 +1,214 @@
+.userItem {
+  padding: var(--spacing-md);
+  margin-bottom: var(--spacing-sm);
+  background: linear-gradient(135deg, #1a1612 0%, #221d19 100%);
+  background-image: 
+    var(--texture-pattern),
+    linear-gradient(135deg, rgba(255, 255, 255, 0.01) 0%, transparent 100%),
+    linear-gradient(135deg, #1a1612 0%, #221d19 100%);
+  border-radius: var(--radius-lg);
+  color: var(--gray-100);
+  display: flex;
+  gap: var(--spacing-md);
+  align-items: flex-start;
+  border: 2px solid var(--gray-700);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.userItem::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-lg);
+  background-image: 
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 2px,
+      rgba(184, 115, 127, 0.015) 2px,
+      rgba(184, 115, 127, 0.015) 4px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(184, 115, 127, 0.015) 2px,
+      rgba(184, 115, 127, 0.015) 4px
+    );
+  pointer-events: none;
+}
+
+.userItem:hover {
+  border-color: var(--primary-700);
+  box-shadow: 0 6px 16px rgba(184, 115, 127, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  transform: translateY(-2px);
+}
+
+.thumbnailWrapper {
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.thumbnail {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  display: block;
+}
+
+.itemContent {
+  flex: 1;
+}
+
+.itemContent strong {
+  font-family: var(--font-serif);
+  color: var(--primary-300);
+}
+
+.itemContent p {
+  margin: var(--spacing-xs) 0;
+  color: var(--gray-300);
+}
+
+.priceSection {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--spacing-xs);
+}
+
+.priceLabel {
+  font-size: var(--font-size-sm);
+  color: var(--gray-500);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.price {
+  font-size: var(--font-size-2xl);
+  font-family: var(--font-serif);
+  color: var(--primary-500);
+  font-weight: 700;
+}
+
+.sellButton {
+  margin-top: var(--spacing-md);
+  background: linear-gradient(135deg, var(--primary-700) 0%, var(--primary-900) 100%);
+  color: white;
+  border: none;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  font-family: var(--font-serif);
+  transition: all 0.3s ease;
+}
+
+.sellButton:hover {
+  background: linear-gradient(135deg, var(--primary-800) 0%, #5a3040 100%);
+  transform: translateY(-1px);
+}
+
+.cancelOfferButton {
+  background-color: var(--error-600);
+  color: var(--gray-100);
+  border: none;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  transition: background-color 0.2s ease;
+  margin-top: var(--spacing-xs);
+}
+
+.cancelOfferButton:hover {
+  background-color: var(--error-700);
+}
+
+.sellBox {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-md);
+  background-color: var(--bg-tertiary);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--gray-700);
+}
+
+.sellInputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  margin-bottom: var(--spacing-sm);
+}
+
+.sellInputGroup label {
+  font-size: var(--font-size-sm);
+  color: var(--gray-300);
+  font-weight: 500;
+}
+
+.sellInput {
+  padding: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+  background-color: var(--bg-primary);
+  color: var(--gray-100);
+  border: 1px solid var(--gray-600);
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.sellInput:focus {
+  border-color: var(--primary-500);
+}
+
+.sellError {
+  color: var(--error-500);
+  font-size: var(--font-size-xs);
+  margin: var(--spacing-xs) 0;
+}
+
+.sellActions {
+  display: flex;
+  gap: var(--spacing-sm);
+}
+
+.acceptButton {
+  background-color: var(--primary-800);
+  color: white;
+  border: none;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+.acceptButton:hover {
+  background-color: var(--primary-900);
+}
+
+.cancelButton {
+  background-color: var(--gray-700);
+  color: white;
+  border: none;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  transition: background-color 0.2s;
+}
+
+.cancelButton:hover {
+  background-color: var(--gray-800);
+}

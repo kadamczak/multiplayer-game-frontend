@@ -4,3 +4,10 @@ export type UserGameInfoResponse = {
   balance: number;
   profilePictureUrl?: string;
 }
+
+
+export type UserSearchResultResponse = {
+  id: string;
+  userName: string;
+  profilePictureUrl?: string;
+}
