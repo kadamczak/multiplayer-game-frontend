@@ -251,18 +251,6 @@
   border: 1px solid var(--warning-500);
 }
 
-.statusAccepted {
-  background: rgba(129, 201, 149, 0.2);
-  color: var(--success-400);
-  border: 1px solid var(--success-500);
-}
-
-.statusRejected {
-  background: rgba(232, 138, 138, 0.2);
-  color: var(--error-400);
-  border: 1px solid var(--error-500);
-}
-
 .requestActions {
   display: flex;
   gap: var(--spacing-sm);

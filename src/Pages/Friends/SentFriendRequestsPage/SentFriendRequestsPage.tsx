@@ -74,21 +74,6 @@ const SentFriendRequestsPage = () => {
   };
 
 
-  const getStatusBadgeClass = (status: string) => {
-    switch (status.toLowerCase()) {
-      case 'pending':
-        return styles.statusPending;
-      case 'accepted':
-        return styles.statusAccepted;
-      case 'rejected':
-      case 'declined':
-        return styles.statusRejected;
-      default:
-        return styles.statusPending;
-    }
-  };
-
-
   if (showLoading) {
     return <div className={styles.container}>Loading...</div>;
   }
@@ -152,7 +137,7 @@ const SentFriendRequestsPage = () => {
                       Responded: {new Date(request.respondedAt).toLocaleDateString()}
                     </p>
                   )}
-                  <span className={`${styles.statusBadge} ${getStatusBadgeClass(request.status)}`}>
+                  <span className={`${styles.statusBadge} styles.statusPending`}>
                     {request.status}
                   </span>
                 </div>
