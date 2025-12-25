@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next'
 import styles from './UserItemListItem.module.css'
 import { type UserItemResponse, ItemTypeDisplay } from '../../../Models/ItemModels'
 
@@ -26,6 +27,8 @@ const UserItemListItem = ({
   onCancelOffer,
   onPriceChange,
 }: UserItemListItemProps) => {
+  const { t } = useTranslation();
+  
   return (
     <li className={styles.userItem}>
       <div className={styles.thumbnailWrapper}>
@@ -45,13 +48,13 @@ const UserItemListItem = ({
       
       {userItem.activeOfferId && (
         <div className={styles.priceSection}>
-          <span className={styles.priceLabel}>Awaiting Trade</span>
-          <span className={styles.price}>{userItem.activeOfferPrice} Gems</span>
+          <span className={styles.priceLabel}>{t('items.awaitingTrade')}</span>
+          <span className={styles.price}>{userItem.activeOfferPrice} {t('items.gems')}</span>
           <button 
             className={styles.cancelOfferButton}
             onClick={() => onCancelOffer(userItem.activeOfferId!)}
           >
-            Cancel
+            {t('items.cancel')}
           </button>
         </div>
       )}
@@ -62,7 +65,7 @@ const UserItemListItem = ({
             className={styles.sellButton}
             onClick={() => onSellClick(userItem.id)}
           >
-            Sell
+            {t('items.sell')}
           </button>
         </div>
       )}
@@ -71,7 +74,7 @@ const UserItemListItem = ({
         <div className={styles.priceSection}>
           <div className={styles.sellBox}>
             <div className={styles.sellInputGroup}>
-              <label htmlFor={`price-${userItem.id}`}>Price (Gems):</label>
+              <label htmlFor={`price-${userItem.id}`}>{t('items.priceGems')}</label>
               <input
                 id={`price-${userItem.id}`}
                 type="number"
@@ -80,7 +83,7 @@ const UserItemListItem = ({
                 value={sellPrice}
                 onChange={(e) => onPriceChange(e.target.value)}
                 className={styles.sellInput}
-                placeholder="Enter price"
+                placeholder={t('items.enterPrice')}
               />
             </div>
             {sellError && <p className={styles.sellError}>{sellError}</p>}
@@ -89,13 +92,13 @@ const UserItemListItem = ({
                 className={styles.acceptButton}
                 onClick={() => onAcceptSell(userItem.id)}
               >
-                Accept
+                {t('items.accept')}
               </button>
               <button 
                 className={styles.cancelButton}
                 onClick={onCancelSell}
               >
-                Cancel
+                {t('items.cancel')}
               </button>
             </div>
           </div>

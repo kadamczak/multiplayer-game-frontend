@@ -1,8 +1,10 @@
 import { useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import styles from './HomePage.module.css'
 import { useLoading } from '../../Context/useLoading'
 
 const HomePage = () => {
+  const { t } = useTranslation();
   const { setIsLoading } = useLoading();
 
   useEffect(() => {
@@ -11,9 +13,9 @@ const HomePage = () => {
 
   return (
     <div className={styles.container}>
-      <h1 className={styles.title}>Welcome to Barvon</h1>
+      <h1 className={styles.title}>{t('home.welcome')}</h1>
       <p className={styles.description}>
-        Join players from around the world in an exciting gaming experience.
+        {t('home.description')}
       </p>
     </div>
   )
