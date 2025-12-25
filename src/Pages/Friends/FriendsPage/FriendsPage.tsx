@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react'
 import styles from './FriendsPage.module.css'
 import { useAuth } from '../../../Context/useAuth'
 import { useLoading } from '../../../Context/useLoading'
-import { getReceivedFriendRequestsAPI, getFriendsAPI, acceptFriendRequestAPI, rejectFriendRequestAPI } from '../../../Services/FriendService'
+import { getReceivedFriendRequestsAPI, getFriendsAPI, acceptFriendRequestAPI, rejectFriendRequestAPI, removeFriendAPI } from '../../../Services/FriendService'
 import { fetchImageWithCache } from '../../../Services/ApiMethodHelpers'
 import type { FriendRequestResponse, FriendResponse } from '../../../Models/FriendModels'
 import type { PagedQuery } from '../../../Models/PagedQuery'
@@ -114,6 +114,23 @@ const FriendsPage = () => {
       requestsData.setQuery({ ...requestsData.query });
     } else {
       requestsData.setError(result.problem.title || 'Failed to reject friend request');
+    }
+  };
+
+  const handleRemoveFriend = async (friendUserId: string, friendUserName: string) => {
+    const confirmed = window.confirm(`Are you sure you want to remove ${friendUserName} from your friends?`);
+    
+    if (!confirmed) {
+      return;
+    }
+
+    const result = await removeFriendAPI(accessToken, setAccessToken, friendUserId);
+
+    if (result.success) {
+      // Refresh the friends list
+      friendsData.setQuery({ ...friendsData.query });
+    } else {
+      friendsData.setError(result.problem.title || 'Failed to remove friend');
     }
   };
 
@@ -237,6 +254,14 @@ const FriendsPage = () => {
                   <p className={styles.userDetail}>
                     Friends since: {new Date(friend.friendsSince).toLocaleDateString()}
                   </p>
+                </div>
+                <div className={styles.requestActions}>
+                  <button
+                    className={styles.declineButton}
+                    onClick={() => handleRemoveFriend(friend.userId, friend.userName)}
+                  >
+                    Remove
+                  </button>
                 </div>
               </li>
             ))}
