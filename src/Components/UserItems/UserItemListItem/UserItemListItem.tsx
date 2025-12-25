@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import styles from './UserItemListItem.module.css'
-import { type UserItemResponse, ItemTypeDisplay } from '../../../Models/ItemModels'
+import { type UserItemResponse, getItemTypeTranslation } from '../../../Models/ItemModels'
 
 interface UserItemListItemProps {
   userItem: UserItemResponse;
@@ -42,7 +42,7 @@ const UserItemListItem = ({
       </div>
       <div className={styles.itemContent}>
         <strong>{userItem.item.name}</strong>
-        <p>{ItemTypeDisplay[userItem.item.type]}</p>
+        <p>{getItemTypeTranslation(userItem.item.type, t)}</p>
         <p>{userItem.item.description}</p>
       </div>
       

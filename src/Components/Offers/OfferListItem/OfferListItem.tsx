@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next'
 import styles from './OfferListItem.module.css'
-import { type UserItemOfferResponse, ItemTypeDisplay } from '../../../Models/ItemModels'
+import { type UserItemOfferResponse, getItemTypeTranslation } from '../../../Models/ItemModels'
 
 interface OfferListItemProps {
   offer: UserItemOfferResponse;
@@ -28,7 +28,7 @@ const OfferListItem = ({ offer, thumbnailUrl, isOwnOffer, canAfford, onBuy }: Of
       </div>
       <div className={styles.itemInfo}>
         <strong>{offer.userItem.item.name}</strong>
-        <p>{ItemTypeDisplay[offer.userItem.item.type]}</p>
+        <p>{getItemTypeTranslation(offer.userItem.item.type, t)}</p>
         <p>{offer.userItem.item.description}</p>
         <p className={styles.seller}>{t('items.seller')} {offer.sellerUsername}</p>
       </div>

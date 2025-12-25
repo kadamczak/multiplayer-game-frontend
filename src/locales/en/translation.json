@@ -77,7 +77,10 @@
     "priceGems": "Price (Gems):",
     "enterPrice": "Enter price",
     "accept": "Accept",
-    "cancel": "Cancel"
+    "cancel": "Cancel",
+    "typeConsumable": "Consumable",
+    "typeEquippableOnHead": "Equippable on Head",
+    "typeEquippableOnBody": "Equippable on Body"
   },
   "home": {
     "welcome": "Welcome to Barvon",

@@ -13,6 +13,19 @@ export const ItemTypeDisplay: Record<ItemType, string> = {
   [ItemType.EquippableOnBody]: "Equippable on Body"
 };
 
+export const getItemTypeTranslation = (itemType: string, t: (key: string) => string): string => {
+  switch (itemType) {
+    case ItemType.Consumable:
+      return t('items.typeConsumable');
+    case ItemType.EquippableOnHead:
+      return t('items.typeEquippableOnHead');
+    case ItemType.EquippableOnBody:
+      return t('items.typeEquippableOnBody');
+    default:
+      return itemType;
+  }
+};
+
 export type ItemResponse = {
   id: number;
   name: string;

@@ -77,7 +77,10 @@
     "priceGems": "Cena (Klejnoty):",
     "enterPrice": "Wprowadź cenę",
     "accept": "Akceptuj",
-    "cancel": "Anuluj"
+    "cancel": "Anuluj",
+    "typeConsumable": "Używalne",
+    "typeEquippableOnHead": "Wyposażenie na Głowę",
+    "typeEquippableOnBody": "Wyposażenie na Tułów"
   },
   "home": {
     "welcome": "Witaj w Barvon",
