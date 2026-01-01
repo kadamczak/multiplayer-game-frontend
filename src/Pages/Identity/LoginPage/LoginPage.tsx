@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import styles from './LoginPage.module.css'
 import { USER_VALIDATION_RULES } from '../../../Constants/Validation/UserValidationRules'
 import { useAuth } from '../../../Context/useAuth'
 import { useLoading } from '../../../Context/useLoading'
-import { useForm } from 'react-hook-form'
 import { getFieldErrors } from '../../../Models/ApiResponse'
 import { applyServerFieldErrors } from '../../../Helpers/FormHelpers'
 
@@ -15,6 +16,7 @@ type LoginFormData = {
 
 
 const LoginPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const {loginUser} = useAuth();
   const { setIsLoading } = useLoading();
@@ -66,26 +68,25 @@ const LoginPage = () => {
   return (
     <div className={styles.container}>
       <div className={styles.formWrapper}>
-        <h1 className={styles.title}>Login</h1>
+        <h1 className={styles.title}>{t('auth.login')}</h1>
         
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
           <div className={styles.inputGroup}>
             <label htmlFor="userName" className={styles.label}>
-              Username
+              {t('auth.userName')}
             </label>
             <input
               type="text"
               id="userName"
               {...register('userName', {
-                required: 'Username is required',
-                // pattern: regex
+                required: t('auth.usernameRequired'),
                 minLength: {
                   value: USER_VALIDATION_RULES.USERNAME.MIN_LENGTH,
-                  message: `Username must be at least ${USER_VALIDATION_RULES.USERNAME.MIN_LENGTH} characters`
+                  message: t('auth.usernameMinLength', { min: USER_VALIDATION_RULES.USERNAME.MIN_LENGTH })
                 },
                 maxLength: {
                   value: USER_VALIDATION_RULES.USERNAME.MAX_LENGTH,
-                  message: `Username must not exceed ${USER_VALIDATION_RULES.USERNAME.MAX_LENGTH} characters`
+                  message: t('auth.usernameMaxLength', { max: USER_VALIDATION_RULES.USERNAME.MAX_LENGTH })
                 }
               })}
               className={styles.input}
@@ -95,16 +96,16 @@ const LoginPage = () => {
 
           <div className={styles.inputGroup}>
             <label htmlFor="password" className={styles.label}>
-              Password
+              {t('auth.password')}
             </label>
             <input
               type="password"
               id="password"
               {...register('password', {
-                required: 'Password is required',
+                required: t('auth.passwordRequired'),
                 maxLength: {
                   value: USER_VALIDATION_RULES.PASSWORD.MAX_LENGTH,
-                  message: `Password must not exceed ${USER_VALIDATION_RULES.PASSWORD.MAX_LENGTH} characters`
+                  message: t('auth.passwordMaxLength', { max: USER_VALIDATION_RULES.PASSWORD.MAX_LENGTH })
                 }
               })}
               className={styles.input}
@@ -113,23 +114,23 @@ const LoginPage = () => {
           </div>
 
           {generalError && <p className={styles.error}>{generalError}</p>}
-          {success && <p className={styles.success}>Login successful!</p>}
+          {success && <p className={styles.success}>{t('auth.loginSuccessful')}</p>}
 
           <button type="submit" className={styles.submitButton} disabled={isSubmitting || success}>
-            {isSubmitting ? 'Logging in...' : 'Login'}
+            {isSubmitting ? t('auth.loggingIn') : t('auth.login')}
           </button>
         </form>
 
         <p className={styles.forgotPasswordPrompt}>
           <Link to="/forgot-password" className={styles.forgotPasswordLink}>
-            Forgot your password?
+            {t('auth.forgotYourPassword')}
           </Link>
         </p>
 
         <p className={styles.registerPrompt}>
-          Don't have an account?{' '}
+          {t('auth.dontHaveAccount')}{' '}
           <Link to="/register" className={styles.registerLink}>
-            Register here
+            {t('auth.registerHere')}
           </Link>
         </p>
       </div>

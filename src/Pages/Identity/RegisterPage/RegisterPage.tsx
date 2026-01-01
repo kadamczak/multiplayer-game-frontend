@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import styles from './RegisterPage.module.css'
 import { useAuth } from '../../../Context/useAuth'
 import { useLoading } from '../../../Context/useLoading'
@@ -16,6 +17,7 @@ type RegisterFormData = {
 }
 
 const RegisterPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const { registerUser } = useAuth();
   const { setIsLoading } = useLoading();
@@ -69,25 +71,25 @@ const RegisterPage = () => {
   return (
     <div className={styles.container}>
       <div className={styles.formWrapper}>
-        <h1 className={styles.title}>Register</h1>
+        <h1 className={styles.title}>{t('auth.register')}</h1>
         
         <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
           <div className={styles.inputGroup}>
             <label htmlFor="userName" className={styles.label}>
-              Username
+              {t('auth.userName')}
             </label>
             <input
               type="text"
               id="userName"
               {...register('userName', {
-                required: 'Username is required',
+                required: t('auth.usernameRequired'),
                 minLength: {
                   value: USER_VALIDATION_RULES.USERNAME.MIN_LENGTH,
-                  message: `Username must be at least ${USER_VALIDATION_RULES.USERNAME.MIN_LENGTH} characters`
+                  message: t('auth.usernameMinLength', { min: USER_VALIDATION_RULES.USERNAME.MIN_LENGTH })
                 },
                 maxLength: {
                   value: USER_VALIDATION_RULES.USERNAME.MAX_LENGTH,
-                  message: `Username must not exceed ${USER_VALIDATION_RULES.USERNAME.MAX_LENGTH} characters`
+                  message: t('auth.usernameMaxLength', { max: USER_VALIDATION_RULES.USERNAME.MAX_LENGTH })
                 }
               })}
               className={styles.input}
@@ -97,16 +99,16 @@ const RegisterPage = () => {
 
           <div className={styles.inputGroup}>
             <label htmlFor="email" className={styles.label}>
-              Email
+              {t('auth.email')}
             </label>
             <input
               type="email"
               id="email"
               {...register('email', {
-                required: 'Email is required',
+                required: t('auth.emailRequired'),
                 maxLength: {
                   value: USER_VALIDATION_RULES.EMAIL.MAX_LENGTH,
-                  message: `Email must not exceed ${USER_VALIDATION_RULES.EMAIL.MAX_LENGTH} characters`
+                  message: t('auth.emailMaxLength', { max: USER_VALIDATION_RULES.EMAIL.MAX_LENGTH })
                 }
               })}
               className={styles.input}
@@ -116,20 +118,20 @@ const RegisterPage = () => {
 
           <div className={styles.inputGroup}>
             <label htmlFor="password" className={styles.label}>
-              Password
+              {t('auth.password')}
             </label>
             <input
               type="password"
               id="password"
               {...register('password', {
-                required: 'Password is required',
+                required: t('auth.passwordRequired'),
                 minLength: {
                   value: USER_VALIDATION_RULES.PASSWORD.MIN_LENGTH,
-                  message: `Password must be at least ${USER_VALIDATION_RULES.PASSWORD.MIN_LENGTH} characters`
+                  message: t('auth.passwordMinLength', { min: USER_VALIDATION_RULES.PASSWORD.MIN_LENGTH })
                 },
                 maxLength: {
                   value: USER_VALIDATION_RULES.PASSWORD.MAX_LENGTH,
-                  message: `Password must not exceed ${USER_VALIDATION_RULES.PASSWORD.MAX_LENGTH} characters`
+                  message: t('auth.passwordMaxLength', { max: USER_VALIDATION_RULES.PASSWORD.MAX_LENGTH })
                 }
               })}
               className={styles.input}
@@ -139,14 +141,14 @@ const RegisterPage = () => {
 
           <div className={styles.inputGroup}>
             <label htmlFor="confirmPassword" className={styles.label}>
-              Confirm Password
+              {t('auth.confirmPassword')}
             </label>
             <input
               type="password"
               id="confirmPassword"
               {...register('confirmPassword', {
-                required: 'Please confirm your password',
-                validate: value => value === password || 'Passwords do not match'
+                required: t('auth.confirmPasswordRequired'),
+                validate: value => value === password || t('auth.passwordsNoMatch')
               })}
               className={styles.input}
             />
@@ -154,17 +156,17 @@ const RegisterPage = () => {
           </div>
 
           {generalError && <p className={styles.error}>{generalError}</p>}
-          {success && <p className={styles.success}>Account activation link has been sent to your mail! Redirecting to login...</p>}
+          {success && <p className={styles.success}>{t('auth.registrationSuccessful')}</p>}
 
           <button type="submit" className={styles.submitButton} disabled={isSubmitting || success}>
-            {isSubmitting ? 'Registering...' : 'Register'}
+            {isSubmitting ? t('auth.registering') : t('auth.register')}
           </button>
         </form>
 
         <p className={styles.loginPrompt}>
-          Already have an account?{' '}
+          {t('auth.alreadyHaveAccount')}{' '}
           <Link to="/login" className={styles.loginLink}>
-            Login here
+            {t('auth.loginHere')}
           </Link>
         </p>
       </div>

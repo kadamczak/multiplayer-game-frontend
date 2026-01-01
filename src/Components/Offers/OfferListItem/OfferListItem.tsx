@@ -1,5 +1,6 @@
+import { useTranslation } from 'react-i18next'
 import styles from './OfferListItem.module.css'
-import { type UserItemOfferResponse, ItemTypeDisplay } from '../../../Models/ItemModels'
+import { type UserItemOfferResponse, getItemTypeTranslation } from '../../../Models/ItemModels'
 
 interface OfferListItemProps {
   offer: UserItemOfferResponse;
@@ -10,6 +11,8 @@ interface OfferListItemProps {
 }
 
 const OfferListItem = ({ offer, thumbnailUrl, isOwnOffer, canAfford, onBuy }: OfferListItemProps) => {
+  const { t } = useTranslation();
+  
   return (
     <li className={styles.offerItem}>
       <div className={styles.thumbnailContainer}>
@@ -25,20 +28,20 @@ const OfferListItem = ({ offer, thumbnailUrl, isOwnOffer, canAfford, onBuy }: Of
       </div>
       <div className={styles.itemInfo}>
         <strong>{offer.userItem.item.name}</strong>
-        <p>{ItemTypeDisplay[offer.userItem.item.type]}</p>
+        <p>{getItemTypeTranslation(offer.userItem.item.type, t)}</p>
         <p>{offer.userItem.item.description}</p>
-        <p className={styles.seller}>Seller: {offer.sellerUsername}</p>
+        <p className={styles.seller}>{t('items.seller')} {offer.sellerUsername}</p>
       </div>
       <div className={styles.priceSection}>
-        <span className={styles.priceLabel}>Price</span>
-        <span className={styles.price}>{offer.price} Gems</span>
+        <span className={styles.priceLabel}>{t('items.price')}</span>
+        <span className={styles.price}>{offer.price} {t('items.gems')}</span>
         {!isOwnOffer && (
           <button
             className={styles.buyButton}
             onClick={() => onBuy(offer.id)}
             disabled={!canAfford}
           >
-            {canAfford ? 'Buy' : 'Insufficient Funds'}
+            {canAfford ? t('items.buy') : t('items.insufficientFunds')}
           </button>
         )}
       </div>

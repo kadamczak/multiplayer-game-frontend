@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import styles from './ResetPasswordPage.module.css'
 import { useLoading } from '../../../Context/useLoading'
 import { resetPasswordAPI } from '../../../Services/AuthService'
@@ -14,6 +15,7 @@ type ResetPasswordFormData = {
 }
 
 const ResetPasswordPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { setIsLoading } = useLoading();
@@ -48,7 +50,7 @@ const ResetPasswordPage = () => {
 
   const onSubmit = async (data: ResetPasswordFormData) => {
     if (!token || !email) {
-      setGeneralError('Invalid reset link');
+      setGeneralError(t('resetPassword.invalidResetLink'));
       return;
     }
 
@@ -84,13 +86,13 @@ const ResetPasswordPage = () => {
     return (
       <div className={styles.container}>
         <div className={styles.formWrapper}>
-          <h1 className={styles.title}>Invalid Reset Link</h1>
+          <h1 className={styles.title}>{t('resetPassword.invalidLink')}</h1>
           <p className={styles.error}>
-            This password reset link is invalid or has expired.
+            {t('resetPassword.invalidLinkMessage')}
           </p>
           <p className={styles.loginPrompt}>
             <Link to="/forgot-password" className={styles.loginLink}>
-              Request a new reset link
+              {t('resetPassword.requestNewLink')}
             </Link>
           </p>
         </div>
@@ -101,31 +103,31 @@ const ResetPasswordPage = () => {
   return (
     <div className={styles.container}>
       <div className={styles.formWrapper}>
-        <h1 className={styles.title}>Reset Password</h1>
+        <h1 className={styles.title}>{t('resetPassword.title')}</h1>
         
         {!success ? (
           <>
             <p className={styles.description}>
-              Enter your new password below.
+              {t('resetPassword.description')}
             </p>
             
             <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
               <div className={styles.inputGroup}>
                 <label htmlFor="newPassword" className={styles.label}>
-                  New Password
+                  {t('resetPassword.newPassword')}
                 </label>
                 <input
                   type="password"
                   id="newPassword"
                   {...register('newPassword', {
-                    required: 'Password is required',
+                    required: t('resetPassword.passwordRequired'),
                     minLength: {
                       value: USER_VALIDATION_RULES.PASSWORD.MIN_LENGTH,
-                      message: `Password must be at least ${USER_VALIDATION_RULES.PASSWORD.MIN_LENGTH} characters`
+                      message: t('resetPassword.passwordMinLength', { min: USER_VALIDATION_RULES.PASSWORD.MIN_LENGTH })
                     },
                     maxLength: {
                       value: USER_VALIDATION_RULES.PASSWORD.MAX_LENGTH,
-                      message: `Password must not exceed ${USER_VALIDATION_RULES.PASSWORD.MAX_LENGTH} characters`
+                      message: t('resetPassword.passwordMaxLength', { max: USER_VALIDATION_RULES.PASSWORD.MAX_LENGTH })
                     }
                   })}
                   className={styles.input}
@@ -137,14 +139,14 @@ const ResetPasswordPage = () => {
 
               <div className={styles.inputGroup}>
                 <label htmlFor="confirmPassword" className={styles.label}>
-                  Confirm New Password
+                  {t('resetPassword.confirmNewPassword')}
                 </label>
                 <input
                   type="password"
                   id="confirmPassword"
                   {...register('confirmPassword', {
-                    required: 'Please confirm your password',
-                    validate: value => value === newPassword || 'Passwords do not match'
+                    required: t('resetPassword.confirmPasswordRequired'),
+                    validate: value => value === newPassword || t('resetPassword.passwordsNoMatch')
                   })}
                   className={styles.input}
                 />
@@ -156,25 +158,25 @@ const ResetPasswordPage = () => {
               {generalError && <p className={styles.error}>{generalError}</p>}
 
               <button type="submit" className={styles.submitButton} disabled={isSubmitting}>
-                {isSubmitting ? 'Resetting Password...' : 'Reset Password'}
+                {isSubmitting ? t('resetPassword.resettingPassword') : t('resetPassword.resetPassword')}
               </button>
             </form>
           </>
         ) : (
           <div className={styles.successContainer}>
             <p className={styles.success}>
-              Password reset successful! You can now log in with your new password.
+              {t('resetPassword.successMessage')}
             </p>
             <p className={styles.note}>
-              Redirecting to login page...
+              {t('resetPassword.redirecting')}
             </p>
           </div>
         )}
 
         <p className={styles.loginPrompt}>
-          Remember your password?{' '}
+          {t('resetPassword.rememberPassword')}{' '}
           <Link to="/login" className={styles.loginLink}>
-            Back to Login
+            {t('resetPassword.backToLogin')}
           </Link>
         </p>
       </div>

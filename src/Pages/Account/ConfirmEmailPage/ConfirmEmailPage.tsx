@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react'
 import { Link, useSearchParams } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import styles from './ConfirmEmailPage.module.css'
 import { useLoading } from '../../../Context/useLoading'
 import { confirmEmailAPI } from '../../../Services/AuthService'
 
 const ConfirmEmailPage = () => {
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const { setIsLoading } = useLoading();
   
@@ -54,13 +56,13 @@ const ConfirmEmailPage = () => {
     return (
       <div className={styles.container}>
         <div className={styles.formWrapper}>
-          <h1 className={styles.title}>Invalid Confirmation Link</h1>
+          <h1 className={styles.title}>{t('confirmEmail.invalidLink')}</h1>
           <p className={styles.error}>
-            This email confirmation link is invalid or has expired.
+            {t('confirmEmail.invalidLinkMessage')}
           </p>
           <p className={styles.loginPrompt}>
             <Link to="/login" className={styles.loginLink}>
-              Go to Login
+              {t('confirmEmail.goToLogin')}
             </Link>
           </p>
         </div>
@@ -71,22 +73,22 @@ const ConfirmEmailPage = () => {
   return (
     <div className={styles.container}>
       <div className={styles.formWrapper}>
-        <h1 className={styles.title}>Email Confirmation</h1>
+        <h1 className={styles.title}>{t('confirmEmail.title')}</h1>
         
         {isConfirming && (
           <div className={styles.loadingContainer}>
-            <p className={styles.loading}>Confirming your email...</p>
+            <p className={styles.loading}>{t('confirmEmail.confirming')}</p>
           </div>
         )}
 
         {!isConfirming && success && (
           <div className={styles.successContainer}>
             <p className={styles.success}>
-              Your email has been successfully confirmed! You can now log in to your account.
+              {t('confirmEmail.successMessage')}
             </p>
             <p className={styles.loginPrompt}>
               <Link to="/login" className={styles.loginLink}>
-                Proceed to Login
+                {t('confirmEmail.proceedToLogin')}
               </Link>
             </p>
           </div>
@@ -97,7 +99,7 @@ const ConfirmEmailPage = () => {
             <p className={styles.error}>{error}</p>
             <p className={styles.loginPrompt}>
               <Link to="/login" className={styles.loginLink}>
-                Go to Login
+                {t('confirmEmail.goToLogin')}
               </Link>
             </p>
           </>

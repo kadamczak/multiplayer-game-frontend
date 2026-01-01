@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react'
 import { useForm } from 'react-hook-form'
+import { useTranslation } from 'react-i18next'
 import styles from './AccountActionsPage.module.css'
 import { useAuth } from '../../../Context/useAuth'
 import { useLoading } from '../../../Context/useLoading'
@@ -20,6 +21,7 @@ type DeleteAccountFormData = {
 }
 
 const AccountActionsPage = () => {
+  const { t } = useTranslation();
   const { accessToken, setAccessToken, logout } = useAuth();
   const { setIsLoading } = useLoading();
   
@@ -107,21 +109,21 @@ const AccountActionsPage = () => {
   return (
     <div className={styles.container}>
       <div className={styles.pageWrapper}>
-        <h1 className={styles.pageTitle}>Account Management</h1>
+        <h1 className={styles.pageTitle}>{t('account.management')}</h1>
 
         {/* Change Password Section */}
         <div className={styles.section}>
-          <h2 className={styles.sectionTitle}>Change Password</h2>
+          <h2 className={styles.sectionTitle}>{t('account.changePassword')}</h2>
           <form onSubmit={handleSubmitPassword(onChangePassword)} className={styles.form}>
             <div className={styles.inputGroup}>
               <label htmlFor="currentPassword" className={styles.label}>
-                Current Password
+                {t('account.currentPassword')}
               </label>
               <input
                 type="password"
                 id="currentPassword"
                 {...registerPassword('currentPassword', {
-                  required: 'Current password is required',
+                  required: t('account.currentPasswordRequired'),
                 })}
                 className={styles.input}
               />
@@ -132,20 +134,20 @@ const AccountActionsPage = () => {
 
             <div className={styles.inputGroup}>
               <label htmlFor="newPassword" className={styles.label}>
-                New Password
+                {t('account.newPassword')}
               </label>
               <input
                 type="password"
                 id="newPassword"
                 {...registerPassword('newPassword', {
-                  required: 'New password is required',
+                  required: t('account.newPasswordRequired'),
                   minLength: {
                     value: USER_VALIDATION_RULES.PASSWORD.MIN_LENGTH,
-                    message: `Password must be at least ${USER_VALIDATION_RULES.PASSWORD.MIN_LENGTH} characters`
+                    message: t('account.passwordMinLength', { min: USER_VALIDATION_RULES.PASSWORD.MIN_LENGTH })
                   },
                   maxLength: {
                     value: USER_VALIDATION_RULES.PASSWORD.MAX_LENGTH,
-                    message: `Password must not exceed ${USER_VALIDATION_RULES.PASSWORD.MAX_LENGTH} characters`
+                    message: t('account.passwordMaxLength', { max: USER_VALIDATION_RULES.PASSWORD.MAX_LENGTH })
                   }
                 })}
                 className={styles.input}
@@ -157,14 +159,14 @@ const AccountActionsPage = () => {
 
             <div className={styles.inputGroup}>
               <label htmlFor="confirmNewPassword" className={styles.label}>
-                Confirm New Password
+                {t('account.confirmNewPassword')}
               </label>
               <input
                 type="password"
                 id="confirmNewPassword"
                 {...registerPassword('confirmNewPassword', {
-                  required: 'Please confirm your new password',
-                  validate: value => value === newPassword || 'Passwords do not match'
+                  required: t('account.confirmPassword'),
+                  validate: value => value === newPassword || t('account.passwordsNoMatch')
                 })}
                 className={styles.input}
               />
@@ -175,7 +177,7 @@ const AccountActionsPage = () => {
 
             {changePasswordError && <p className={styles.error}>{changePasswordError}</p>}
             {changePasswordSuccess && (
-              <p className={styles.success}>Password changed successfully!</p>
+              <p className={styles.success}>{t('account.passwordChangedSuccess')}</p>
             )}
 
             <button 
@@ -183,16 +185,16 @@ const AccountActionsPage = () => {
               className={styles.submitButton} 
               disabled={isSubmittingPassword || changePasswordSuccess}
             >
-              {isSubmittingPassword ? 'Changing Password...' : 'Change Password'}
+              {isSubmittingPassword ? t('account.changingPassword') : t('account.changePassword')}
             </button>
           </form>
         </div>
 
         {/* Delete Account Section */}
         <div className={styles.section}>
-          <h2 className={styles.sectionTitle}>Delete Account</h2>
+          <h2 className={styles.sectionTitle}>{t('account.deleteAccount')}</h2>
           <p className={styles.warningText}>
-            Warning: This action is permanent and cannot be undone. All your data will be deleted.
+            {t('account.deleteWarning')}
           </p>
 
           {!showDeleteConfirm ? (
@@ -200,19 +202,19 @@ const AccountActionsPage = () => {
               onClick={() => setShowDeleteConfirm(true)} 
               className={styles.dangerButton}
             >
-              Delete My Account
+              {t('account.deleteMyAccount')}
             </button>
           ) : (
             <form onSubmit={handleSubmitDelete(onDeleteAccount)} className={styles.form}>
               <div className={styles.inputGroup}>
                 <label htmlFor="deleteCurrentPassword" className={styles.label}>
-                  Current Password
+                  {t('account.currentPassword')}
                 </label>
                 <input
                   type="password"
                   id="deleteCurrentPassword"
                   {...registerDelete('currentPassword', {
-                    required: 'Password is required to delete account',
+                    required: t('account.passwordRequiredToDelete'),
                   })}
                   className={styles.input}
                 />
@@ -223,17 +225,17 @@ const AccountActionsPage = () => {
 
               <div className={styles.inputGroup}>
                 <label htmlFor="confirmDelete" className={styles.label}>
-                  Type "DELETE" to confirm
+                  {t('account.confirmDelete')}
                 </label>
                 <input
                   type="text"
                   id="confirmDelete"
                   {...registerDelete('confirmDelete', {
-                    required: 'Please type DELETE to confirm',
-                    validate: value => value === 'DELETE' || 'You must type DELETE exactly to confirm'
+                    required: t('account.typeDELETEToConfirm'),
+                    validate: value => value === 'DELETE' || t('account.mustTypeDELETE')
                   })}
                   className={styles.input}
-                  placeholder="DELETE"
+                  placeholder={t('account.typeDelete')}
                 />
                 {deleteErrors.confirmDelete && (
                   <p className={styles.fieldError}>{deleteErrors.confirmDelete.message}</p>
@@ -248,7 +250,7 @@ const AccountActionsPage = () => {
                   className={styles.dangerButton} 
                   disabled={isSubmittingDelete}
                 >
-                  {isSubmittingDelete ? 'Deleting Account...' : 'Confirm Delete Account'}
+                  {isSubmittingDelete ? t('account.deletingAccount') : t('account.confirmDeleteAction')}
                 </button>
                 <button 
                   type="button" 
@@ -256,7 +258,7 @@ const AccountActionsPage = () => {
                   className={styles.cancelButton}
                   disabled={isSubmittingDelete}
                 >
-                  Cancel
+                  {t('common.cancel')}
                 </button>
               </div>
             </form>

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import type { UserSearchResultResponse } from '../../../Models/UserModels';
 import styles from './SearchableUserListItem.module.css';
 
@@ -13,6 +14,7 @@ const SearchableUserListItem = ({
   profilePictureUrl, 
   onSendRequest,
 }: SearchableUserListItemProps) => {
+  const { t } = useTranslation();
   const [requestState, setRequestState] = useState<'none' | 'pending' | 'sending' | 'canceling'>('none');
 
   const handleSendRequest = async () => {
@@ -47,19 +49,19 @@ const SearchableUserListItem = ({
             className={styles.sendButton}
             onClick={handleSendRequest}
           >
-            Send Friend Request
+            {t('friends.send')}
           </button>
         )}
         {requestState === 'sending' && (
-          <span className={styles.statusText}>Sending...</span>
+          <span className={styles.statusText}>{t('friends.sending')}</span>
         )}
         {requestState === 'pending' && (
           <>
-            <span className={styles.statusText}>Sent</span>
+            <span className={styles.statusText}>{t('friends.sent')}</span>
           </>
         )}
         {requestState === 'canceling' && (
-          <span className={styles.statusText}>Canceling...</span>
+          <span className={styles.statusText}>{t('friends.canceling')}</span>
         )}
       </div>
     </li>

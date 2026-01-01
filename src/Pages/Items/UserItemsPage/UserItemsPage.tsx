@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import styles from './UserItemsPage.module.css'
 import { useAuth } from '../../../Context/useAuth'
 import { useLoading } from '../../../Context/useLoading'
@@ -11,15 +12,16 @@ import FilterControls, { type SortOption } from '../../../Components/ResultFilte
 import Pagination from '../../../Components/ResultFiltering/Pagination/Pagination'
 import UserItemListItem from '../../../Components/UserItems/UserItemListItem/UserItemListItem'
 
-const SORT_OPTIONS: SortOption[] = [
-  { value: 'Name', label: 'Name' },
-  { value: 'Type', label: 'Type' },
-  { value: 'Description', label: 'Description' },
-];
-
 const UserItemsPage = () => {
+  const { t } = useTranslation();
   const { accessToken, setAccessToken } = useAuth();
   const { setIsLoading } = useLoading();
+
+  const SORT_OPTIONS: SortOption[] = [
+    { value: 'Name', label: t('items.sortByName') },
+    { value: 'Type', label: t('items.sortByType') },
+    { value: 'Description', label: t('items.sortByDescription') },
+  ];
 
   const [thumbnails, setThumbnails] = useState<Map<string, string>>(new Map());
   const [itemBeingSoldState, setItemBeingSoldState] = useState<{
@@ -81,7 +83,7 @@ const UserItemsPage = () => {
   const handleAcceptSell = async (userItemId: string) => {
     const price = parseFloat(itemBeingSoldState.price);
     if (isNaN(price) || price <= 0) {
-      setItemBeingSoldState({ ...itemBeingSoldState, error: 'Please enter a valid price' });
+      setItemBeingSoldState({ ...itemBeingSoldState, error: t('items.enterValidPrice') });
       return;
     }
 
@@ -96,7 +98,7 @@ const UserItemsPage = () => {
       // Refresh the items list
       setQuery({ ...query });
     } else {
-      setItemBeingSoldState({ ...itemBeingSoldState, error: result.problem.title || 'Failed to create offer' });
+      setItemBeingSoldState({ ...itemBeingSoldState, error: result.problem.title || t('items.failedToCreateOffer') });
     }
   };
 
@@ -112,13 +114,13 @@ const UserItemsPage = () => {
       // Refresh the items list
       setQuery({ ...query });
     } else {
-      setError(result.problem.title || 'Failed to cancel offer');
+      setError(result.problem.title || t('items.failedToCancelOffer'));
     }
   };
 
 
   if (showLoading) {
-    return <div className={styles.container}>Loading...</div>;
+    return <div className={styles.container}>{t('common.loading')}</div>;
   }
 
 
@@ -126,11 +128,11 @@ const UserItemsPage = () => {
     <div className={styles.container}>
       {loadingState === 'refreshing' && (
         <div className={styles.refreshIndicator}>
-          Updating...
+          {t('items.updating')}
         </div>
       )}
       
-      <h1>My Items</h1>
+      <h1>{t('items.myItems')}</h1>
 
       {error && <div className={styles.error}>{error}</div>}
 
@@ -138,11 +140,11 @@ const UserItemsPage = () => {
         query={query}
         onQueryChange={setQuery}
         sortOptions={SORT_OPTIONS}
-        searchPlaceholder="Search items..."
+        searchPlaceholder={t('items.searchItems')}
       />
       
       {pagedResponse && pagedResponse.items.length === 0 ? (
-        <p>No items found.</p>
+        <p>{t('items.noItemsFound')}</p>
       ) : (
         <ul>
           {pagedResponse && pagedResponse.items.map((userItem) => (
@@ -168,7 +170,6 @@ const UserItemsPage = () => {
           pagedResponse={pagedResponse}
           currentPage={query.pageNumber || 1}
           onPageChange={(page) => setQuery({ ...query, pageNumber: page })}
-          itemLabel="items"
         />
       )}
     </div>

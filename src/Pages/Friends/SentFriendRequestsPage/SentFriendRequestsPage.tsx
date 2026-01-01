@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import styles from './SentFriendRequestsPage.module.css'
 import { useAuth } from '../../../Context/useAuth'
 import { useLoading } from '../../../Context/useLoading'
@@ -12,15 +13,16 @@ import Pagination from '../../../Components/ResultFiltering/Pagination/Paginatio
 import SentFriendRequestListItem from '../../../Components/Friends/SentFriendRequestListItem/SentFriendRequestListItem'
 import { Link, useNavigate } from 'react-router-dom'
 
-const SORT_OPTIONS: SortOption[] = [
-  { value: 'UserName', label: 'Recipient' },
-  { value: 'CreatedAt', label: 'Date Sent' }
-];
-
 const SentFriendRequestsPage = () => {
+  const { t } = useTranslation();
   const { accessToken, setAccessToken } = useAuth();
   const { setIsLoading } = useLoading();
   const navigate = useNavigate();
+
+  const SORT_OPTIONS: SortOption[] = [
+    { value: 'UserName', label: t('friends.sortByUsername') },
+    { value: 'CreatedAt', label: t('friends.sortByDateSent') }
+  ];
   
   const [profilePictures, setProfilePictures] = useState<Map<string, string>>(new Map());
 
@@ -78,7 +80,7 @@ const SentFriendRequestsPage = () => {
 
 
   if (showLoading) {
-    return <div className={styles.container}>Loading...</div>;
+    return <div className={styles.container}>{t('common.loading')}</div>;
   }
 
   
@@ -86,19 +88,19 @@ const SentFriendRequestsPage = () => {
     <div className={styles.container}>
       {loadingState === 'refreshing' && (
         <div className={styles.refreshIndicator}>
-          Updating...
+          {t('friends.updating')}
         </div>
       )}
 
       <button onClick={() => navigate(-1)} className={styles.backButton}>
-        ← Go Back
+        {t('friends.goBack')}
       </button>
 
       <div className={styles.header}>
-        <h1>Sent Friend Requests</h1>
+        <h1>{t('friends.sentRequests')}</h1>
         <div className={styles.headerRight}>
           <Link to="/friends/discover" className={styles.sendRequestButton}>
-            Send Friend Request
+            {t('friends.send')}
           </Link>
         </div>
       </div>
@@ -109,12 +111,12 @@ const SentFriendRequestsPage = () => {
         query={query}
         onQueryChange={setQuery}
         sortOptions={SORT_OPTIONS}
-        searchPlaceholder="Search sent requests..."
+        searchPlaceholder={t('friends.searchSentPlaceholder')}
       />
 
       {pagedResponse && pagedResponse.items.length === 0 ? (
         <div className={styles.emptyState}>
-          No sent friend requests. Send a request to connect with other players!
+          {t('friends.noSentRequests')}
         </div>
       ) : (
         <ul className={styles.list}>
@@ -134,7 +136,6 @@ const SentFriendRequestsPage = () => {
           pagedResponse={pagedResponse}
           currentPage={query.pageNumber || 1}
           onPageChange={(page) => setQuery({ ...query, pageNumber: page })}
-          itemLabel="requests"
         />
       )}
     </div>

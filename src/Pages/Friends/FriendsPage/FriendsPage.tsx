@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import styles from './FriendsPage.module.css'
 import { useAuth } from '../../../Context/useAuth'
 import { useLoading } from '../../../Context/useLoading'
@@ -13,19 +14,20 @@ import ReceivedFriendRequestListItem from '../../../Components/Friends/ReceivedF
 import FriendListItem from '../../../Components/Friends/FriendListItem/FriendListItem'
 import { Link } from 'react-router-dom'
 
-const REQUESTS_SORT_OPTIONS: SortOption[] = [
-  { value: 'UserName', label: 'Username' },
-  { value: 'CreatedAt', label: 'Date Received' },
-];
-
-const FRIENDS_SORT_OPTIONS: SortOption[] = [
-  { value: 'UserName', label: 'Username' },
-  { value: 'RespondedAt', label: 'Friends Since' },
-];
-
 const FriendsPage = () => {
+  const { t } = useTranslation();
   const { accessToken, setAccessToken } = useAuth();
   const { setIsLoading } = useLoading();
+
+  const REQUESTS_SORT_OPTIONS: SortOption[] = [
+    { value: 'UserName', label: t('friends.sortByUsername') },
+    { value: 'CreatedAt', label: t('friends.sortByDate') },
+  ];
+
+  const FRIENDS_SORT_OPTIONS: SortOption[] = [
+    { value: 'UserName', label: t('friends.sortByUsername') },
+    { value: 'RespondedAt', label: t('friends.sortByFriendsSince') },
+  ];
   
   const [requestProfilePictures, setRequestProfilePictures] = useState<Map<string, string>>(new Map());
   const [friendProfilePictures, setFriendProfilePictures] = useState<Map<string, string>>(new Map());
@@ -120,7 +122,7 @@ const FriendsPage = () => {
   };
 
   const handleRemoveFriend = async (friendUserId: string, friendUserName: string) => {
-    const confirmed = window.confirm(`Are you sure you want to remove ${friendUserName} from your friends?`);
+    const confirmed = window.confirm(`${t('common.confirmRemove')} ${friendUserName}?`);
     
     if (!confirmed) {
       return;
@@ -132,27 +134,27 @@ const FriendsPage = () => {
       // Refresh the friends list
       friendsData.setQuery({ ...friendsData.query });
     } else {
-      friendsData.setError(result.problem.title || 'Failed to remove friend');
+      friendsData.setError(result.problem.title || t('common.error'));
     }
   };
 
   if (requestsData.showLoading || friendsData.showLoading) {
-    return <div className={styles.container}>Loading...</div>;
+    return <div className={styles.container}>{t('common.loading')}</div>;
   }
   
   return (
     <div className={styles.container}>
       {(requestsData.loadingState === 'refreshing' || friendsData.loadingState === 'refreshing') && (
         <div className={styles.refreshIndicator}>
-          Updating...
+          {t('friends.updating')}
         </div>
       )}
 
       <div className={styles.header}>
-        <h1>Friends</h1>
+        <h1>{t('friends.title')}</h1>
         <div className={styles.headerRight}>
           <Link to="/friends/requests/sent" className={styles.sentRequestsButton}>
-            Sent Requests
+            {t('friends.sentRequests')}
           </Link>
         </div>
       </div>
@@ -162,17 +164,17 @@ const FriendsPage = () => {
 
       {/* Friend Requests Section */}
       <div className={styles.section}>
-        <h2 className={styles.sectionHeader}>Friend Requests</h2>
+        <h2 className={styles.sectionHeader}>{t('friends.requests')}</h2>
 
         <FilterControls
           query={requestsData.query}
           onQueryChange={requestsData.setQuery}
           sortOptions={REQUESTS_SORT_OPTIONS}
-          searchPlaceholder="Search friend requests..."
+          searchPlaceholder={t('friends.searchRequestsPlaceholder')}
         />
 
         {requestsData.pagedResponse && requestsData.pagedResponse.items.length === 0 ? (
-          <div className={styles.emptyState}>No pending friend requests.</div>
+          <div className={styles.emptyState}>{t('friends.noRequests')}</div>
         ) : (
           <ul className={styles.list}>
             {requestsData.pagedResponse && requestsData.pagedResponse.items.map((request) => (
@@ -192,24 +194,23 @@ const FriendsPage = () => {
             pagedResponse={requestsData.pagedResponse}
             currentPage={requestsData.query.pageNumber || 1}
             onPageChange={(page) => requestsData.setQuery({ ...requestsData.query, pageNumber: page })}
-            itemLabel="requests"
           />
         )}
       </div>
 
       {/* Friends Section */}
       <div className={styles.section}>
-        <h2 className={styles.sectionHeader}>My Friends</h2>
+        <h2 className={styles.sectionHeader}>{t('friends.myFriends')}</h2>
 
         <FilterControls
           query={friendsData.query}
           onQueryChange={friendsData.setQuery}
           sortOptions={FRIENDS_SORT_OPTIONS}
-          searchPlaceholder="Search friends..."
+          searchPlaceholder={t('friends.searchFriendsPlaceholder')}
         />
 
         {friendsData.pagedResponse && friendsData.pagedResponse.items.length === 0 ? (
-          <div className={styles.emptyState}>No friends yet. Start by accepting friend requests!</div>
+          <div className={styles.emptyState}>{t('friends.noFriends')}</div>
         ) : (
           <ul className={styles.list}>
             {friendsData.pagedResponse && friendsData.pagedResponse.items.map((friend) => (
@@ -228,7 +229,6 @@ const FriendsPage = () => {
             pagedResponse={friendsData.pagedResponse}
             currentPage={friendsData.query.pageNumber || 1}
             onPageChange={(page) => friendsData.setQuery({ ...friendsData.query, pageNumber: page })}
-            itemLabel="friends"
           />
         )}
       </div>

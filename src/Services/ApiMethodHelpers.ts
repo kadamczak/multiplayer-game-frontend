@@ -33,7 +33,18 @@ export const apiRequest = async <T>(
   options: RequestInit
 ): Promise<ApiResponse<T>> => {
   try {
-    const response = await fetch(url, options);
+    // Add Accept-Language header for non-authenticated requests
+    const headers: Record<string, string> = {
+      ...(options.headers as Record<string, string>),
+    };
+    
+    const language = localStorage.getItem('language') || 'en';
+    headers['Accept-Language'] = language;
+
+    const response = await fetch(url, {
+      ...options,
+      headers,
+    });
 
     if (response.ok) {
       const contentType = response.headers.get('content-type');

@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import styles from './SearchFriendableUsersPage.module.css'
 import { useAuth } from '../../../Context/useAuth'
 import { useLoading } from '../../../Context/useLoading'
@@ -13,14 +14,15 @@ import Pagination from '../../../Components/ResultFiltering/Pagination/Paginatio
 import SearchableUserListItem from '../../../Components/Friends/SearchableUserListItem/SearchableUserListItem'
 import { useNavigate } from 'react-router-dom'
 
-const SORT_OPTIONS: SortOption[] = [
-  { value: 'UserName', label: 'Username' },
-];
-
 const SearchFriendableUsersPage = () => {
+  const { t } = useTranslation();
   const { accessToken, setAccessToken } = useAuth();
   const { setIsLoading } = useLoading();
   const navigate = useNavigate();
+
+  const SORT_OPTIONS: SortOption[] = [
+    { value: 'UserName', label: t('friends.sortByUsername') },
+  ];
   
   const [profilePictures, setProfilePictures] = useState<Map<string, string>>(new Map());
 
@@ -91,23 +93,23 @@ const SearchFriendableUsersPage = () => {
   };
 
   if (showLoading) {
-    return <div className={styles.container}>Loading...</div>;
+    return <div className={styles.container}>{t('common.loading')}</div>;
   }
 
   return (
     <div className={styles.container}>
       {loadingState === 'refreshing' && (
         <div className={styles.refreshIndicator}>
-          Searching...
+          {t('friends.searching')}
         </div>
       )}
 
       <button onClick={() => navigate(-1)} className={styles.backButton}>
-        ← Go Back
+        {t('friends.goBack')}
       </button>
 
       <div className={styles.header}>
-        <h1>Search Users</h1>
+        <h1>{t('friends.searchUsers')}</h1>
       </div>
 
       {error && <div className={styles.error}>{error}</div>}
@@ -116,18 +118,18 @@ const SearchFriendableUsersPage = () => {
         query={query}
         onQueryChange={setQuery}
         sortOptions={SORT_OPTIONS}
-        searchPlaceholder="Enter username to search..."
+        searchPlaceholder={t('friends.searchPlaceholder')}
         showSortDirection={false}
         showPageSize={false}
       />
 
       {!query.searchPhrase || query.searchPhrase.trim() === '' ? (
         <div className={styles.emptyState}>
-          Enter a username to search for users to add as friends.
+          {t('friends.emptySearch')}
         </div>
       ) : pagedResponse && pagedResponse.items.length === 0 ? (
         <div className={styles.emptyState}>
-          No users found matching "{query.searchPhrase}".
+          {t('friends.noResults')} "{query.searchPhrase}".
         </div>
       ) : (
         <ul className={styles.list}>
@@ -147,7 +149,6 @@ const SearchFriendableUsersPage = () => {
           pagedResponse={pagedResponse}
           currentPage={query.pageNumber || 1}
           onPageChange={(page) => setQuery({ ...query, pageNumber: page })}
-          itemLabel="users"
         />
       )}
     </div>

@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
 import styles from './OffersPage.module.css'
 import { useAuth } from '../../../Context/useAuth'
 import { useLoading } from '../../../Context/useLoading'
@@ -13,16 +14,17 @@ import FilterControls, { type SortOption } from '../../../Components/ResultFilte
 import Pagination from '../../../Components/ResultFiltering/Pagination/Pagination'
 import OfferListItem from '../../../Components/Offers/OfferListItem/OfferListItem'
 
-const SORT_OPTIONS: SortOption[] = [
-  { value: 'Name', label: 'Name' },
-  { value: 'Type', label: 'Type' },
-  { value: 'SellerUserName', label: 'Seller' },
-  { value: 'Price', label: 'Price' },
-];
-
 const OffersPage = () => {
+  const { t } = useTranslation();
   const { accessToken, setAccessToken } = useAuth();
   const { setIsLoading } = useLoading();
+  
+  const SORT_OPTIONS: SortOption[] = [
+    { value: 'Name', label: t('items.sortByName') },
+    { value: 'Type', label: t('items.sortByType') },
+    { value: 'SellerUserName', label: t('items.sortBySeller') },
+    { value: 'Price', label: t('items.sortByPrice') },
+  ];
   
   const [userInfo, setUserInfo] = useState<UserGameInfoResponse | null>(null);
   const [thumbnails, setThumbnails] = useState<Map<string, string>>(new Map());
@@ -84,13 +86,13 @@ const OffersPage = () => {
       // Refresh the offers list
       setQuery({ ...query });
     } else {
-      setError(result.problem.title || 'Failed to purchase offer');
+      setError(result.problem.title || t('items.failedToPurchase'));
     }
   };
 
 
   if (showLoading) {
-    return <div className={styles.container}>Loading...</div>;
+    return <div className={styles.container}>{t('common.loading')}</div>;
   }
 
   
@@ -98,17 +100,17 @@ const OffersPage = () => {
     <div className={styles.container}>
       {loadingState === 'refreshing' && (
         <div className={styles.refreshIndicator}>
-          Updating...
+          {t('items.updating')}
         </div>
       )}
       <div className={styles.header}>
-        <h1>Active Offers</h1>
+        <h1>{t('items.activeOffers')}</h1>
         <div className={styles.headerRight}>
 
           <div className={styles.balanceDisplay}>
-            <span className={styles.balanceLabel}>Your Balance:</span>
+            <span className={styles.balanceLabel}>{t('items.yourBalance')}</span>
             <span className={styles.balanceValue}>
-              {userInfo ? `${userInfo.balance} Gems` : 'Gems'}
+              {userInfo ? `${userInfo.balance} ${t('items.gems')}` : t('items.gems')}
             </span>
           </div>
         </div>
@@ -120,11 +122,11 @@ const OffersPage = () => {
         query={query}
         onQueryChange={setQuery}
         sortOptions={SORT_OPTIONS}
-        searchPlaceholder="Search offers..."
+        searchPlaceholder={t('items.searchOffers')}
       />
   
       {pagedResponse && pagedResponse.items.length === 0 ? (
-        <p>No active offers available.</p>
+        <p>{t('items.noActiveOffers')}</p>
       ) : (
         <ul className={styles.offersList}>
           {pagedResponse && pagedResponse.items.map((offer) => {
@@ -150,7 +152,6 @@ const OffersPage = () => {
           pagedResponse={pagedResponse}
           currentPage={query.pageNumber || 1}
           onPageChange={(page) => setQuery({ ...query, pageNumber: page })}
-          itemLabel="items"
         />
       )}
     </div>
